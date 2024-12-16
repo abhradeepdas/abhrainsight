@@ -29,15 +29,16 @@
             border: none;
         }
 
-        #editor {
+        #editor-container {
             height: 600px;
-            width: 100%;
             border: 3px solid #94d6fd;
+            border-radius: 5px;
+            overflow: hidden;
         }
 
         .divider {
             width: 2px;
-            background-color: #ccc; /* Light gray color for the divider */
+            background-color: #ccc;
             height: 100%;
         }
 
@@ -62,7 +63,6 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Mentor: Abhradeep Das</a>
                     </li>
-                   
                 </ul>
             </div>
         </div>
@@ -72,71 +72,84 @@
     <div class="container-fluid my-5">
         <div class="row">
             <!-- Dropdown to select Google Form -->
-            
-
-            <!-- Iframe in the first column (initially showing M1 form) -->
             <div class="col-md-6">
                 <div class="col-md-6 mb-4">
-               <!--  <label for="formSelector">Select Form:</label>  -->
-                <select id="formSelector" class="form-select" onchange="updateForm()">
-                    <option value="M1">M1</option>
-                    <option value="M2">M2</option>
-                    <option value="M3">M3</option>
-                    <option value="M4">M4</option>
-                </select>
-            </div>
-                <h2>Your Exam is over, so no point to visit here.</h2>
-                <!-- <iframe id="googleFormIframe" src="https://docs.google.com/forms/d/e/1FAIpQLSfePYsgyxCNcSBgwSKtcOLTJ78RCoj4s2jUevLFpTBhE7a3nA/viewform?usp=send_form&embedded=true&usp=embed_googleplus"
-                    title="Google Form"></iframe> -->
-            </div>
-
-            <!-- Divider between columns -->
-            <div class="col-md-1 d-none d-md-block">
-                <div class="divider"></div>
+                    <label for="formSelector">Select Form:</label>
+                    <select id="formSelector" class="form-select" onchange="updateForm()">
+                        <option value="M1">M1</option>
+                        <option value="M2">M2</option>
+                        <option value="M3">M3</option>
+                        <option value="M4">M4</option>
+                    </select>
+                </div>
+                <iframe id="googleFormIframe" src=" https://docs.google.com/forms/d/e/1FAIpQLSdGgHIx73RjBVwcVGJjmV-zqvgVLJup-tZiRNWOt4aiMt0Pzw/viewform?usp=send_form&embedded=true&usp=embed_googleplus"
+                    title="Google Form"></iframe>
+          
+                
             </div>
 
             <!-- Code Editor in the second column -->
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <h5>Editor of C Code</h5>
-                <div id="editor"></div>
+                <div id="editor-container"></div>
             </div>
         </div>
     </div>
 
     <!-- Monaco Editor Script -->
     <script>
-        require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.40.0/min/vs' } });
-        require(['vs/editor/editor.main'], function () {
-            var editor = monaco.editor.create(document.getElementById('editor'), {
-                value: '#include <stdio.h>\n\nint main() {\n  \n//Write your C code here to test typo error!\n//But you can not run your code right now.\n//Because your exam is now ongoing.\n\n  return 0;\n}',
-                language: 'c',
-                theme: 'vs-dark',
-                lineNumbers: 'on',
-                automaticLayout: true,
-                fontSize: 18,
-            });
-        });
-
         // Function to update iframe source based on dropdown selection
         function updateForm() {
-            var formSelector = document.getElementById('formSelector');
-            var iframe = document.getElementById('googleFormIframe');
-            var formValue = formSelector.value;
+            const formSelector = document.getElementById('formSelector');
+            const iframe = document.getElementById('googleFormIframe');
+            const formValue = formSelector.value;
 
             // Google Form URLs
-            var formUrls = {
-                M1: "https://docs.google.com/forms/d/e/1FAIpQLSfePYsgyxCNcSBgwSKtcOLTJ78RCoj4s2jUevLFpTBhE7a3nA/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
-                M2: "https://docs.google.com/forms/d/e/1FAIpQLScrczsYxMZZ_REE_tBWtX8GIKhLxZnrorWNAV1jEZWI1wtRlQ/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
+            const formUrls = {
+                M1: "https://docs.google.com/forms/d/e/1FAIpQLSepUKoOOfqWJCc1Jgyw9lMWcFppRPPPkftdJQCOHruRG1eWCg/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
+                M2: "https://docs.google.com/forms/d/e/1FAIpQLSepUKoOOfqWJCc1Jgyw9lMWcFppRPPPkftdJQCOHruRG1eWCg/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
                 M3: "https://docs.google.com/forms/d/e/1FAIpQLSdknvwlN0iIij2u4rjGReKFxfknuS33kAl9qHtL2rvE7Zpt0A/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
                 M4: "https://docs.google.com/forms/d/e/1FAIpQLSc_ytesmDpPA62W-AFJI45lYpCscq4AkDHrgkhT6I9-xsBJEQ/viewform?usp=send_form&embedded=true&usp=embed_googleplus"
             };
 
-            // Update iframe src based on selected form
             iframe.src = formUrls[formValue];
-
-            // Disable the dropdown menu after selection
-            formSelector.disabled = true;
         }
+
+        // Monaco Editor Initialization
+        require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.40.0/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+            const editor = monaco.editor.create(document.getElementById('editor-container'), {
+                value: `#include <stdio.h>\n\nint main() {\n    // Write your C code here\n    printf("Hello, World!\\n");\n    return 0;\n}`,
+                language: 'c',
+                theme: 'vs-light',
+                fontSize: 16,
+                automaticLayout: true,
+            });
+
+            // Linting for basic validation
+            function lintCCode() {
+                const code = editor.getValue();
+                const markers = [];
+
+                if (!code.includes('int main()')) {
+                    markers.push({
+                        severity: monaco.MarkerSeverity.Error,
+                        message: "C programs must include 'int main()'.",
+                        startLineNumber: 1,
+                        startColumn: 1,
+                        endLineNumber: 1,
+                        endColumn: 1,
+                    });
+                }
+
+                monaco.editor.setModelMarkers(editor.getModel(), 'linting', markers);
+            }
+
+            editor.onDidChangeModelContent(lintCCode);
+            lintCCode();
+        });
+        
+        
     </script>
 
     <!-- Bootstrap JS -->
