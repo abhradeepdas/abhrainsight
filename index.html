@@ -74,7 +74,7 @@
             <!-- Dropdown to select Google Form -->
             <div class="col-md-6">
                 <div class="col-md-6 mb-4">
-                    <label for="formSelector">Select Form:</label>
+                    <label for="formSelector">Set selection:</label>
                     <select id="formSelector" class="form-select" onchange="updateForm()">
                         <option value="M1">M1</option>
                         <option value="M2">M2</option>
@@ -106,10 +106,10 @@
 
             // Google Form URLs
             const formUrls = {
-                M1: "https://docs.google.com/forms/d/e/1FAIpQLSepUKoOOfqWJCc1Jgyw9lMWcFppRPPPkftdJQCOHruRG1eWCg/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
-                M2: "https://docs.google.com/forms/d/e/1FAIpQLSepUKoOOfqWJCc1Jgyw9lMWcFppRPPPkftdJQCOHruRG1eWCg/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
-                M3: "https://docs.google.com/forms/d/e/1FAIpQLSdknvwlN0iIij2u4rjGReKFxfknuS33kAl9qHtL2rvE7Zpt0A/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
-                M4: "https://docs.google.com/forms/d/e/1FAIpQLSc_ytesmDpPA62W-AFJI45lYpCscq4AkDHrgkhT6I9-xsBJEQ/viewform?usp=send_form&embedded=true&usp=embed_googleplus"
+                M1: "https://docs.google.com/forms/d/e/1FAIpQLSfVhBStx4RfIjTjx6b8JRtLYCB52DauHvwmdeC83fPHXNYi0A/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
+                M2: "https://docs.google.com/forms/d/e/1FAIpQLSdeR98fbDgld-5jaXxNNr5ZNdBAwC8pb5A4JsyN2jbCCxvPNw/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
+                M3: "https://docs.google.com/forms/d/e/1FAIpQLSeX1Q9QlfC9p99ReGLcXtsDDhOSJZII1Nym-8cGliQUASV0MA/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
+                M4: "https://docs.google.com/forms/d/e/1FAIpQLSdYxcV9SmxWNo5mTIG2IIC6hl-E4rXoWnuAMjBrxNFquE96sQ/viewform?usp=send_form&embedded=true&usp=embed_googleplus"
             };
 
             iframe.src = formUrls[formValue];
@@ -151,6 +151,50 @@
         
         
     </script>
+<script>
+    // Function to create the alert box
+    let alertBox;
+
+    function showConnectionAlert(status) {
+        if (!alertBox) {
+            alertBox = document.createElement('div');
+            alertBox.style.position = 'fixed';
+            alertBox.style.bottom = '20px';
+            alertBox.style.right = '20px';
+            alertBox.style.padding = '10px 20px';
+            alertBox.style.fontSize = '14px';
+            alertBox.style.color = 'white';
+            alertBox.style.borderRadius = '5px';
+            alertBox.style.zIndex = '1000';
+            alertBox.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+            document.body.appendChild(alertBox);
+        }
+
+        if (status) {
+            // User is back online
+            alertBox.textContent = "You're back online! Continue you exam!";
+            alertBox.style.backgroundColor = '#28a745'; // Green
+            setTimeout(() => {
+                alertBox.remove();
+                alertBox = null;
+            }, 5000); // Remove after 5 seconds
+        } else {
+            // No internet connection
+            alertBox.textContent = "No Internet Connection! Dont press submit, next or back button right now until you are back in online!";
+            alertBox.style.backgroundColor = '#dc3545'; // Red
+        }
+    }
+
+    // Event listeners for online and offline status
+    window.addEventListener('online', () => showConnectionAlert(true)); // Online event
+    window.addEventListener('offline', () => showConnectionAlert(false)); // Offline event
+
+    // Initial check for connection status
+    if (!navigator.onLine) {
+        showConnectionAlert(false);
+    }
+</script>
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
