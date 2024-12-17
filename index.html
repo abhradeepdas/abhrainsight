@@ -82,10 +82,10 @@
                         <option value="M4">M4</option>
                     </select>
                 </div>
-                <iframe id="googleFormIframe" src=" https://docs.google.com/forms/d/e/1FAIpQLSdGgHIx73RjBVwcVGJjmV-zqvgVLJup-tZiRNWOt4aiMt0Pzw/viewform?usp=send_form&embedded=true&usp=embed_googleplus"
+                <iframe id="googleFormIframe" src="https://docs.google.com/forms/d/e/1FAIpQLSfVhBStx4RfIjTjx6b8JRtLYCB52DauHvwmdeC83fPHXNYi0A/viewform?usp=send_form&embedded=true&usp=embed_googleplus"
                     title="Google Form"></iframe>
           
-                
+               
             </div>
 
             <!-- Code Editor in the second column -->
@@ -100,20 +100,25 @@
     <script>
         // Function to update iframe source based on dropdown selection
         function updateForm() {
-            const formSelector = document.getElementById('formSelector');
-            const iframe = document.getElementById('googleFormIframe');
-            const formValue = formSelector.value;
+    const formSelector = document.getElementById('formSelector');
+    const iframe = document.getElementById('googleFormIframe');
+    const formValue = formSelector.value;
 
-            // Google Form URLs
-            const formUrls = {
-                M1: "https://docs.google.com/forms/d/e/1FAIpQLSfVhBStx4RfIjTjx6b8JRtLYCB52DauHvwmdeC83fPHXNYi0A/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
+    // Google Form URLs
+    const formUrls = {
+        M1: "https://docs.google.com/forms/d/e/1FAIpQLSfVhBStx4RfIjTjx6b8JRtLYCB52DauHvwmdeC83fPHXNYi0A/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
                 M2: "https://docs.google.com/forms/d/e/1FAIpQLSdeR98fbDgld-5jaXxNNr5ZNdBAwC8pb5A4JsyN2jbCCxvPNw/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
                 M3: "https://docs.google.com/forms/d/e/1FAIpQLSeX1Q9QlfC9p99ReGLcXtsDDhOSJZII1Nym-8cGliQUASV0MA/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
                 M4: "https://docs.google.com/forms/d/e/1FAIpQLSdYxcV9SmxWNo5mTIG2IIC6hl-E4rXoWnuAMjBrxNFquE96sQ/viewform?usp=send_form&embedded=true&usp=embed_googleplus"
-            };
+    };
 
-            iframe.src = formUrls[formValue];
-        }
+    // Update iframe src
+    iframe.src = formUrls[formValue];
+
+    // Disable the dropdown permanently after selection
+    formSelector.disabled = true;
+}
+
 
         // Monaco Editor Initialization
         require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.40.0/min/vs' } });
