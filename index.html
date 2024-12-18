@@ -4,16 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>c-Test</title>
+    <title>Google Form + Editor Toggle</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.40.0/min/vs/loader.js"></script>
-    <style>
+   <style>
         body {
             background-color: #fff;
             color: #333;
         }
-
+      
         .navbar-brand img {
             width: 150px;
             height: auto;
@@ -50,6 +50,7 @@
 </head>
 
 <body>
+   
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
@@ -70,27 +71,29 @@
 
     <!-- Main Content -->
     <div class="container-fluid my-5">
-        <div class="row">
-            <!-- Dropdown to select Google Form -->
-            <div class="col-md-6">
-                <div class="col-md-6 mb-4">
-                    <label for="formSelector">Set selection:</label>
-                    <select id="formSelector" class="form-select" onchange="updateForm()">
-                        <option value="M1">M1</option>
-                        <option value="M2">M2</option>
-                        <option value="M3">M3</option>
-                        <option value="M4">M4</option>
-                    </select>
-                </div>
-                <iframe id="googleFormIframe" src="https://docs.google.com/forms/d/e/1FAIpQLSfVhBStx4RfIjTjx6b8JRtLYCB52DauHvwmdeC83fPHXNYi0A/viewform?usp=send_form&embedded=true&usp=embed_googleplus"
+        <div class="row ">
+            <!-- Left Column: Google Form -->
+            <div class="col-md-5 mb-4">
+                
+                <!-- <label for="formSelector">Select Form:</label>-->
+                <select id="formSelector" class="form-select mb-3" onchange="updateForm()">
+                    <option value="M1">M1</option>
+                    <option value="M2">M2</option>
+                    <option value="M3">M3</option>
+                    <option value="M4">M4</option>
+                </select>
+                <iframe id="googleFormIframe"
+                    src="https://docs.google.com/forms/d/e/1FAIpQLSevhLX-K0NWu5lJIawW3nt0_-ps3PuUxtHJPFGAvpuk3xdJMw/viewform?usp=send_form&embedded=true&usp=embed_googleplus"
                     title="Google Form"></iframe>
-          
-               
             </div>
 
-            <!-- Code Editor in the second column -->
-            <div class="col-md-6">
-                <h5>Editor of C Code</h5>
+            <!-- Right Column: Editor with Toggle -->
+            <div class="col-md-7 col-offset-2">
+               
+                <select id="editorToggle" class="form-select mb-3" onchange="toggleEditor()">
+                    <option value="c">C Editor</option>
+                    <option value="html">HTML Editor</option>
+                </select>
                 <div id="editor-container"></div>
             </div>
         </div>
@@ -98,7 +101,9 @@
 
     <!-- Monaco Editor Script -->
     <script>
-        // Function to update iframe source based on dropdown selection
+        let editor; // Declare editor globally
+
+      // Function to update iframe source based on dropdown selection
         function updateForm() {
     const formSelector = document.getElementById('formSelector');
     const iframe = document.getElementById('googleFormIframe');
@@ -106,9 +111,9 @@
 
     // Google Form URLs
     const formUrls = {
-        M1: "https://docs.google.com/forms/d/e/1FAIpQLSfVhBStx4RfIjTjx6b8JRtLYCB52DauHvwmdeC83fPHXNYi0A/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
-                M2: "https://docs.google.com/forms/d/e/1FAIpQLSdeR98fbDgld-5jaXxNNr5ZNdBAwC8pb5A4JsyN2jbCCxvPNw/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
-                M3: "https://docs.google.com/forms/d/e/1FAIpQLSeX1Q9QlfC9p99ReGLcXtsDDhOSJZII1Nym-8cGliQUASV0MA/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
+        M1: "https://docs.google.com/forms/d/e/1FAIpQLSevhLX-K0NWu5lJIawW3nt0_-ps3PuUxtHJPFGAvpuk3xdJMw/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
+                M2: "https://docs.google.com/forms/d/e/1FAIpQLSc0x7YNodpHN01gpYbW01LbKUbAWh4xi2isZfoIoujzjyCpPw/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
+                M3: "https://docs.google.com/forms/d/e/1FAIpQLSezUX0Zs_VqVD58i5DmGaD9ur_vFWvq0piukIKn7tj7X9Tiwg/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
                 M4: "https://docs.google.com/forms/d/e/1FAIpQLSdYxcV9SmxWNo5mTIG2IIC6hl-E4rXoWnuAMjBrxNFquE96sQ/viewform?usp=send_form&embedded=true&usp=embed_googleplus"
     };
 
@@ -118,45 +123,49 @@
     // Disable the dropdown permanently after selection
     formSelector.disabled = true;
 }
-
-
-        // Monaco Editor Initialization
+        // Load Monaco Editor
         require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.40.0/min/vs' } });
         require(['vs/editor/editor.main'], function () {
-            const editor = monaco.editor.create(document.getElementById('editor-container'), {
-                value: `#include <stdio.h>\n\nint main() {\n    // Write your C code here\n    printf("Hello, World!\\n");\n    return 0;\n}`,
+            // Default C editor on load
+            editor = monaco.editor.create(document.getElementById('editor-container'), {
+                value: `#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}`,
                 language: 'c',
                 theme: 'vs-light',
                 fontSize: 16,
-                automaticLayout: true,
+                automaticLayout: true
             });
+        });
 
-            // Linting for basic validation
-            function lintCCode() {
-                const code = editor.getValue();
-                const markers = [];
+        // Toggle between C Editor and HTML Editor
+        function toggleEditor() {
+            const selectedEditor = document.getElementById('editorToggle').value;
 
-                if (!code.includes('int main()')) {
-                    markers.push({
-                        severity: monaco.MarkerSeverity.Error,
-                        message: "C programs must include 'int main()'.",
-                        startLineNumber: 1,
-                        startColumn: 1,
-                        endLineNumber: 1,
-                        endColumn: 1,
-                    });
-                }
+            if (editor) editor.dispose(); // Dispose current editor instance
 
-                monaco.editor.setModelMarkers(editor.getModel(), 'linting', markers);
+            let editorContent = "";
+            let editorLanguage = "";
+
+            if (selectedEditor === 'c') {
+                editorContent = `#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}`;
+                editorLanguage = 'c';
+            } else if (selectedEditor === 'html') {
+                editorContent = `<!DOCTYPE html>\n<html>\n<head>\n    <title>My Page</title>\n</head>\n<body>\n    <h1>Hello, HTML!</h1>\n</body>\n</html>`;
+                editorLanguage = 'html';
             }
 
-            editor.onDidChangeModelContent(lintCCode);
-            lintCCode();
-        });
-        
-        
+            editor = monaco.editor.create(document.getElementById('editor-container'), {
+                value: editorContent,
+                language: editorLanguage,
+                theme: 'vs-light',
+                fontSize: 16,
+                automaticLayout: true
+            });
+        }
     </script>
-<script>
+    
+    
+    
+    <script>
     // Function to create the alert box
     let alertBox;
 
@@ -199,7 +208,6 @@
         showConnectionAlert(false);
     }
 </script>
-
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
