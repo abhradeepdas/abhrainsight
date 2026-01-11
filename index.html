@@ -243,6 +243,14 @@ document.addEventListener("contextmenu", function(e) {
     alert("Right click is disabled during the exam.");
 });
 </script>
+<script>
+document.addEventListener("keydown", function(e) {
+    if (e.key === "F11") {
+        e.preventDefault();
+        alert("Fullscreen is not allowed during the exam.");
+    }
+});
+</script>
 
 
     <!-- Bootstrap JS -->
@@ -250,6 +258,7 @@ document.addEventListener("contextmenu", function(e) {
 </body>
 
 </html>
+
 
 
 
