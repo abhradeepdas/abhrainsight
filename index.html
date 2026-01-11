@@ -237,11 +237,19 @@
         updateIndiaTime();
         setInterval(updateIndiaTime, 1000);
     </script>
+    <script>
+document.addEventListener("contextmenu", function(e) {
+    e.preventDefault();
+    alert("Right click is disabled during the exam.");
+});
+</script>
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
+
 
 
