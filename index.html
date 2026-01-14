@@ -103,12 +103,12 @@
                     <option value="M3">M3</option>
                     <option value="M4">M4</option>
                 </select>
-                <P><I>This exam contains a total of 50 questions: <b>Total 70 points</b><BR>
+                <P><I><b>Python Exam</b> [56 questions:(MCQ: 50 points and Coding questions: 30 points) <b>Total 80 points]</b><BR>
 
-45 Multiple Choice Questions (MCQs): Each correct answer carries 1 point.<BR>
+<b>HTML & DBMS Exam</b> [50 questions:(MCQ: 45 points and Coding questions: 25 points) <b>Total 70 points]</b> <BR>
 
-                    5 Coding Questions: Each coding question carries 5 points.</I></P>
-                
+                    </I></P>
+                <BR>
                 <iframe id="googleFormIframe"
                     src="https://docs.google.com/forms/d/e/1FAIpQLSevhLX-K0NWu5lJIawW3nt0_-ps3PuUxtHJPFGAvpuk3xdJMw/viewform?usp=send_form&embedded=true&usp=embed_googleplus"
                     title="Google Form"></iframe>
@@ -118,8 +118,10 @@
             <div class="col-md-7 col-offset-2">
                
                 <select id="editorToggle" class="form-select mb-3" onchange="toggleEditor()">
+                    
                     <option value="c">C Editor</option>
                     <option value="html">HTML Editor</option>
+                     <option value="python">Python Editor</option>
                 </select>
                 <div id="editor-container"></div>
             </div>
@@ -129,69 +131,83 @@
 
     <!-- Monaco Editor Script -->
     <script>
-        let editor; // Declare editor globally
+    let editor;            // Monaco editor instance
+    let models = {};       // Store language models
 
-      // Function to update iframe source based on dropdown selection
-        function updateForm() {
-    const formSelector = document.getElementById('formSelector');
-    const iframe = document.getElementById('googleFormIframe');
-    const formValue = formSelector.value;
+    // ---------------- FORM SWITCH SCRIPT (UNCHANGED) ----------------
+    function updateForm() {
+        const formSelector = document.getElementById('formSelector');
+        const iframe = document.getElementById('googleFormIframe');
+        const formValue = formSelector.value;
 
-    // Google Form URLs
-    const formUrls = {
-       
-        M1: "https://docs.google.com/forms/d/e/1FAIpQLSfhfTu1zfwCf1lX3qja6Jy0ntLy9NKQNUOFv-UeHUWYLLd5Ug/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
-                M2: "https://docs.google.com/forms/d/e/1FAIpQLSfhfTu1zfwCf1lX3qja6Jy0ntLy9NKQNUOFv-UeHUWYLLd5Ug/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
-                M3: "https://docs.google.com/forms/d/e/1FAIpQLSfhfTu1zfwCf1lX3qja6Jy0ntLy9NKQNUOFv-UeHUWYLLd5Ug/viewform?usp=send_form&embedded=true&usp=embed_googleplus",
-                M4: "https://docs.google.com/forms/d/e/1FAIpQLSfhfTu1zfwCf1lX3qja6Jy0ntLy9NKQNUOFv-UeHUWYLLd5Ug/viewform?usp=send_form&embedded=true&usp=embed_googleplus"
-    };
+        const formUrls = {
+        
+            M1: "https://docs.google.com/forms/d/e/1FAIpQLSfhfTu1zfwCf1lX3qja6Jy0ntLy9NKQNUOFv-UeHUWYLLd5Ug/viewform?embedded=true",
+            M2: "https://docs.google.com/forms/d/e/1FAIpQLSfhfTu1zfwCf1lX3qja6Jy0ntLy9NKQNUOFv-UeHUWYLLd5Ug/viewform?embedded=true",
+            M3: "https://docs.google.com/forms/d/e/1FAIpQLSfhfTu1zfwCf1lX3qja6Jy0ntLy9NKQNUOFv-UeHUWYLLd5Ug/viewform?embedded=true",
+            M4: "https://docs.google.com/forms/d/e/1FAIpQLSefkpxQNPOpfMkkLygtbKb1J9xgSNRuQC-z_yFq1MFWgRAquQ/viewform?embedded=true"
+        };
 
-    // Update iframe src
-    iframe.src = formUrls[formValue];
+        iframe.src = formUrls[formValue];
+        formSelector.disabled = true;
+    }
 
-    // Disable the dropdown permanently after selection
-    formSelector.disabled = true;
-}
-        // Load Monaco Editor
-        require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.40.0/min/vs' } });
-        require(['vs/editor/editor.main'], function () {
-            // Default C editor on load
-            editor = monaco.editor.create(document.getElementById('editor-container'), {
-                value: `#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}`,
-                language: 'c',
-                theme: 'vs-light',
-                fontSize: 16,
-                automaticLayout: true
-            });
-        });
-
-        // Toggle between C Editor and HTML Editor
-        function toggleEditor() {
-            const selectedEditor = document.getElementById('editorToggle').value;
-
-            if (editor) editor.dispose(); // Dispose current editor instance
-
-            let editorContent = "";
-            let editorLanguage = "";
-
-            if (selectedEditor === 'c') {
-                editorContent = `#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}`;
-                editorLanguage = 'c';
-            } else if (selectedEditor === 'html') {
-                editorContent = `<!DOCTYPE html>\n<html>\n<head>\n    <title>My Page</title>\n</head>\n<body>\n    <h1>Hello, HTML!</h1>\n</body>\n</html>`;
-                editorLanguage = 'html';
-            }
-
-            editor = monaco.editor.create(document.getElementById('editor-container'), {
-                value: editorContent,
-                language: editorLanguage,
-                theme: 'vs-light',
-                fontSize: 16,
-                automaticLayout: true
-            });
+    // ---------------- MONACO EDITOR SETUP ----------------
+    require.config({
+        paths: {
+            'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.40.0/min/vs'
         }
-    </script>
-    
+    });
+
+    require(['vs/editor/editor.main'], function () {
+
+        // C model
+        models.c = monaco.editor.createModel(
+`#include <stdio.h>
+
+int main() {
+    printf("Hello, World!");
+    return 0;
+}`, 'c');
+
+        // HTML model
+        models.html = monaco.editor.createModel(
+`<!DOCTYPE html>
+<html>
+<head>
+    <title>HTML Page</title>
+</head>
+<body>
+    <h1>Hello HTML</h1>
+</body>
+</html>`, 'html');
+
+        // PYTHON model
+        models.python = monaco.editor.createModel(
+`# Write you Python code here .....Then paste it in answer area... 
+
+
+    print("Hey ...")`, 'python');
+
+        // Create editor with C as default
+        editor = monaco.editor.create(
+            document.getElementById('editor-container'),
+            {
+                model: models.c,
+                theme: 'vs-light',
+                fontSize: 16,
+                automaticLayout: true
+            }
+        );
+    });
+
+    // ---------------- TOGGLE EDITOR ----------------
+    function toggleEditor() {
+        const selectedEditor = document.getElementById('editorToggle').value;
+        editor.setModel(models[selectedEditor]);
+    }
+</script>
+
     
     
     <script>
@@ -267,7 +283,6 @@ document.addEventListener("contextmenu", function(e) {
 </body>
 
 </html>
-
 
 
 
