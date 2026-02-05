@@ -32,10 +32,7 @@
     Students can directly copy from the green box.
   </div>
 
-  <!-- Hidden input area (only visible with secret link) -->
-  <div id="teacherPanel" style="margin-top:40px;">
-    <textarea id="teacherBox" placeholder=""></textarea>
-  </div>
+  
 </div>
 
 <!-- Firebase -->
@@ -114,7 +111,10 @@ ref.on("value", snap => {
         Practice only – return to exam after completion.
       </p>
     </div>
-  </div>
+
+<!-- Hidden input area (only visible with secret link) -->
+<div id="teacherPanel" style="margin:40px auto; max-width:900px;">
+  <textarea id="teacherBox" placeholder=""></textarea>
 </div>
 
 </body>
