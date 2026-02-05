@@ -26,7 +26,7 @@
 
   <!-- Students see this -->
   <h3>Student View (they only open this page)</h3>
-  <pre id="studentView"></pre>
+  <pre id="studentView">-- Preview will appear here --</pre>
 
   <div class="note">
     Students can directly copy from the green box.
@@ -40,6 +40,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
+window.addEventListener('DOMContentLoaded', function(){
 // 🔴 STEP 1: Create FREE Firebase project
 // 🔴 STEP 2: Paste your config below
 
@@ -58,27 +59,26 @@ const teacherBox = document.getElementById("teacherBox");
 const teacherPanel = document.getElementById("teacherPanel");
 const studentView = document.getElementById("studentView");
 
-// SIMPLE ROLE SYSTEM
-// Open page normally = student
-// Open page with ?teacher=1234 = teacher (change 1234 to your own PIN)
-
 const params = new URLSearchParams(window.location.search);
 const isTeacher = params.get("teacher") === "1234";
 
-if(isTeacher){
+if(isTeacher && teacherPanel){
   teacherPanel.style.display = "block";
 }
 
-// Teacher typing → database
-if(isTeacher){
+if(isTeacher && teacherBox){
   teacherBox.addEventListener("input", () => {
+    // Local preview (works even without Firebase)
+    studentView.textContent = teacherBox.value;
+    // Remote sync
     ref.set(teacherBox.value);
   });
 });
+}
 
-// Students auto receive
 ref.on("value", snap => {
   studentView.textContent = snap.val() || "";
+});
 });
 </script>
 
@@ -110,11 +110,13 @@ ref.on("value", snap => {
         Mentor: <b>Abhradeep Das</b><br>
         Practice only – return to exam after completion.
       </p>
-    </div>
+        </div>
+  </div>
+</div>
 
 <!-- Hidden input area (only visible with secret link) -->
-<div id="teacherPanel" style="margin:40px auto; max-width:900px;">
-  <textarea id="teacherBox" placeholder=""></textarea>
+<div id="teacherPanel" style="margin:40px auto; max-width:900px; display:none;">
+  <textarea id="teacherBox" placeholder="Type here..."></textarea>
 </div>
 
 </body>
