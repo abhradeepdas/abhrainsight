@@ -5,7 +5,8 @@
   <title>Live Code Share – Teacher → Students</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    #teacherPanel{display:none;} /* hidden by default */
+    #teacherPanel{display:none;} 
+button{padding:8px 16px;margin:5px;cursor:pointer;} /* hidden by default */
 
     body { font-family: Arial, sans-serif; background:#f4f6f8; margin:0; padding:20px; }
     h1 { text-align:center; }
@@ -18,6 +19,11 @@
 <body>
 <div class="container">
   <h1>📡 Live Code Share</h1>
+
+<div style="text-align:center;margin-bottom:15px;">
+  <button id="studentBtn">Student Mode</button>
+  <button id="teacherBtn">Teacher Mode</button>
+</div>
 
   <!-- Teacher types here -->
   
@@ -59,19 +65,29 @@ const teacherBox = document.getElementById("teacherBox");
 const teacherPanel = document.getElementById("teacherPanel");
 const studentView = document.getElementById("studentView");
 
-const params = new URLSearchParams(window.location.search);
-const isTeacher = params.get("teacher") === "1234";
+// Toggle based mode (default student)
+let isTeacher = false;
 
-if(isTeacher && teacherPanel){
+const studentBtn = document.getElementById("studentBtn");
+const teacherBtn = document.getElementById("teacherBtn");
+
+teacherBtn.addEventListener("click",()=>{
+  isTeacher = true;
   teacherPanel.style.display = "block";
-}
+});
 
-if(isTeacher && teacherBox){
+studentBtn.addEventListener("click",()=>{
+  isTeacher = false;
+  teacherPanel.style.display = "none";
+});
+
+if(teacherBox){
   teacherBox.addEventListener("input", () => {
-    // Local preview (works even without Firebase)
-    studentView.textContent = teacherBox.value;
-    // Remote sync
-    ref.set(teacherBox.value);
+    if(isTeacher){
+      studentView.textContent = teacherBox.value;
+      ref.set(teacherBox.value);
+    }
+  });
   });
 });
 }
