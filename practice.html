@@ -62,141 +62,66 @@ button{padding:8px 16px;margin:5px;cursor:pointer}
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 <script>
-// 🔐 Simple SHA-256 helper (PIN never visible in source)
+// 🔐 SHA-256 helper
 async function sha256(text){
- const buf=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+ const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
 
-window.addEventListener('DOMContentLoaded',()=>{
+window.addEventListener('DOMContentLoaded', async ()=>{
 
-let isTeacher=false;
+let isTeacher = false;
 
-const teacherPanel=document.getElementById('teacherPanel');
-const teacherBox=document.getElementById('teacherBox');
-const studentView=document.getElementById('studentView');
-const sendBtn=document.getElementById('sendBtn');
-const clearBtn=document.getElementById('clearBtn');
+const teacherPanel = document.getElementById('teacherPanel');
+const teacherBox   = document.getElementById('teacherBox');
+const studentView  = document.getElementById('studentView');
+const sendBtn      = document.getElementById('sendBtn');
+const clearBtn     = document.getElementById('clearBtn');
 
-// 🔍 MODE FROM URL (?mode=teacher)
-const params=new URLSearchParams(window.location.search);
-const mode=params.get('mode');
-
-if(mode==='teacher'){
- const pin=prompt('Enter PIN');
- const correctHash='03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4';
- sha256(pin||'').then(hash=>{
-   if(hash===correctHash){
-     isTeacher=true;
-     teacherPanel.style.display='block';
-   }else{
-     alert('Access denied');
-   }
- });
+// 🔍 Detect teacher mode from URL
+const params = new URLSearchParams(window.location.search);
+if(params.get('mode') === 'teacher'){
+  const pin = prompt('Enter PIN');
+  const correctHash = '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'; // 4321
+  const hash = await sha256(pin || '');
+  if(hash === correctHash){
+    isTeacher = true;
+    teacherPanel.style.display = 'block';
+  }else{
+    alert('Access denied');
+  }
 }
 
-// 🔑 FIREBASE CONFIG
-const firebaseConfig={
- apiKey:"AIzaSyCXvOf33UCFWjR2PBZe2d76hFEkv_5TgmU",
- authDomain:"codebroadcast.firebaseapp.com",
- databaseURL:"https://codebroadcast-default-rtdb.asia-southeast1.firebasedatabase.app",
- projectId:"codebroadcast"
+// 🔥 Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyCXvOf33UCFWjR2PBZe2d76hFEkv_5TgmU",
+  authDomain: "codebroadcast.firebaseapp.com",
+  databaseURL: "https://codebroadcast-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "codebroadcast"
 };
 
-let ref=null;
-try{
- firebase.initializeApp(firebaseConfig);
- const db=firebase.database();
- ref=db.ref('livecode');
-}catch(e){console.error(e)}
-
-sendBtn.onclick=()=>{
- if(isTeacher && ref){
-   ref.transaction(oldVal=> oldVal ? oldVal+"
-
-"+teacherBox.value : teacherBox.value);
-   teacherBox.value='';
- }
-};
-
-clearBtn.onclick=()=>{
- if(isTeacher && ref && confirm('Clear code for all students?')){
-   ref.set('');
- }
-};
-
-if(ref){
- ref.on('value',snap=>{
-   studentView.textContent=snap.val()||'-- Waiting for teacher --';
- });
-}
-
-});
-const teacherBtn=document.getElementById('teacherBtn');
-const teacherPanel=document.getElementById('teacherPanel');
-const teacherBox=document.getElementById('teacherBox');
-const studentView=document.getElementById('studentView');
-const sendBtn=document.getElementById('sendBtn');
-const clearBtn=document.getElementById('clearBtn');
-
-teacherBtn.onclick=()=>{
- const pin=prompt('Enter PIN');
- // PIN is validated via hash, not plain text
- const correctHash='03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'; // SHA-256 of 4321
- if(pin && sha256(pin)===correctHash){
-   isTeacher=true;
-   teacherPanel.style.display='block';
- }else{
-   alert('Wrong PIN');
- }
-};
-
-studentBtn.onclick=()=>{
- isTeacher=false;
- teacherPanel.style.display='none';
-};
-
-// 🔑 YOUR REAL FIREBASE CONFIG (ALREADY CORRECT DATABASE URL)
-const firebaseConfig={
- apiKey:"PASTE_FROM_FIREBASE",
- authDomain:"codebroadcast.firebaseapp.com",
- databaseURL:"https://codebroadcast-default-rtdb.asia-southeast1.firebasedatabase.app",
- projectId:"codebroadcast"
-};
-
-// Initialize Firebase safely so UI works even if config is wrong
-let ref=null;
+let ref = null;
 try{
   firebase.initializeApp(firebaseConfig);
-  const db=firebase.database();
-  ref=db.ref('livecode');
-}catch(e){
-  console.error('Firebase init error:', e);
-}
+  ref = firebase.database().ref('livecode');
+}catch(e){ console.error(e); }
 
-// Teacher sends (APPEND by default)
-sendBtn.onclick=()=>{
- if(isTeacher && ref){
-   ref.transaction(oldVal => {
-     if(!oldVal) return teacherBox.value;
-     return oldVal + "
-
-" + teacherBox.value;
-   });
-   teacherBox.value='';
- }
+// 👨‍🏫 Teacher send (append)
+sendBtn.onclick = ()=>{
+  if(isTeacher && ref){
+    ref.transaction(oldVal => oldVal ? oldVal + "\n\n" + teacherBox.value : teacherBox.value);
+    teacherBox.value = '';
+  }
 };
 
-// Clear for teacher only
-clearBtn.onclick=()=>{
- if(isTeacher && ref){
-   if(confirm('Clear code for all students?')){
-     ref.set('');
-   }
- }
+// 🧹 Clear for all
+clearBtn.onclick = ()=>{
+  if(isTeacher && ref && confirm('Clear code for all students?')){
+    ref.set('');
+  }
 };
 
-// 👀 STUDENT LIVE LISTENER (THIS WAS MISSING)
+// 👀 Student live view
 if(ref){
   ref.on('value', snap => {
     studentView.textContent = snap.val() || '-- Waiting for teacher --';
