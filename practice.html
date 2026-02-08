@@ -12,7 +12,15 @@ body{font-family:Arial,sans-serif;background:#f4f6f8;margin:0;padding:20px}
 h1{text-align:center}
 .container{max-width:900px;margin:auto}
 textarea{width:100%;height:220px;padding:10px;font-family:monospace;font-size:15px}
-pre{background:#111;color:#0f0;padding:15px;white-space:pre-wrap}
+pre{
+  background:#111;
+  color:#0f0;
+  padding:15px;
+  white-space:pre;           /* preserve formatting */
+  max-height:400px;          /* fixed height */
+  overflow:auto;             /* scrollbar for long code */
+  border-radius:6px;
+}
 .note{color:#555;margin-top:10px}
 button{padding:8px 16px;margin:5px;cursor:pointer}
 #teacherPanel{display:none;margin:30px auto;max-width:900px}
@@ -21,14 +29,48 @@ button{padding:8px 16px;margin:5px;cursor:pointer}
 </style>
 </head>
 <body>
+     
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#"><img src="my_logo.png" alt="Logo"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Mentor: Abhradeep Das</a>
+                    </li>
+
+
+                    <li class="nav-item me-2">
+    <a class="btn btn-sm btn-outline-primary"
+       href="practice.html"
+       target="_blank">
+        Exercise
+    </a>
+</li>
 
 
 
+
+
+
+                    
+                     
+                </ul>
+                    <span style="font-size:16px; font-weight:bold;">
+            &nbsp;&nbsp;&nbsp;Time:
+        </span>
+        <span id="indiaTime" style="font-size:16px; margin-left:5px;"></span>
+            </div>
+        </div>
+    </nav>
 
 <div class="container">
 <h1>📡 Live Code Share</h1>
-
-
 
 <h3>Student View</h3>
 <pre id="studentView">-- Waiting for teacher --</pre>
@@ -36,7 +78,7 @@ button{padding:8px 16px;margin:5px;cursor:pointer}
 <div class="note">Students can directly copy from the green box.</div>
 </div>
 
-<!-- Teacher typing area -->
+<!-- Teacher typing area (hidden by default) -->
 <div id="teacherPanel">
 <textarea id="teacherBox" placeholder="Type your SQL / Java / C code here..."></textarea>
 <button id="sendBtn" class="btn btn-primary mt-2">Send / Append</button>
@@ -57,12 +99,12 @@ button{padding:8px 16px;margin:5px;cursor:pointer}
 </div>
 </div>
 
-<!-- 🔥 FIREBASE LIBRARIES (REQUIRED) -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 <script>
-// 🔐 SHA-256 helper
+// SHA-256 helper
 async function sha256(text){
  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
@@ -78,21 +120,21 @@ const studentView  = document.getElementById('studentView');
 const sendBtn      = document.getElementById('sendBtn');
 const clearBtn     = document.getElementById('clearBtn');
 
-// 🔍 Detect teacher mode from URL
+// 🔐 Detect teacher mode from URL
 const params = new URLSearchParams(window.location.search);
 if(params.get('mode') === 'teacher'){
   const pin = prompt('Enter PIN');
-  const correctHash = '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'; // 4321
+  const correctHash = 'fe2592b42a727e977f055947385b709cc82b16b9a87f88c6abf3900d65d0cdc3'; // 4321
   const hash = await sha256(pin || '');
   if(hash === correctHash){
     isTeacher = true;
     teacherPanel.style.display = 'block';
-  }else{
+  } else {
     alert('Access denied');
   }
 }
 
-// 🔥 Firebase config
+// 🔥 Firebase config (keep your real key here)
 const firebaseConfig = {
   apiKey: "AIzaSyCXvOf33UCFWjR2PBZe2d76hFEkv_5TgmU",
   authDomain: "codebroadcast.firebaseapp.com",
@@ -100,15 +142,12 @@ const firebaseConfig = {
   projectId: "codebroadcast"
 };
 
-let ref = null;
-try{
-  firebase.initializeApp(firebaseConfig);
-  ref = firebase.database().ref('livecode');
-}catch(e){ console.error(e); }
+firebase.initializeApp(firebaseConfig);
+const ref = firebase.database().ref('livecode');
 
-// 👨‍🏫 Teacher send (append)
+// 👨‍🏫 Teacher send (append safely)
 sendBtn.onclick = ()=>{
-  if(isTeacher && ref){
+  if(isTeacher){
     ref.transaction(oldVal => oldVal ? oldVal + "\n\n" + teacherBox.value : teacherBox.value);
     teacherBox.value = '';
   }
@@ -116,17 +155,15 @@ sendBtn.onclick = ()=>{
 
 // 🧹 Clear for all
 clearBtn.onclick = ()=>{
-  if(isTeacher && ref && confirm('Clear code for all students?')){
+  if(isTeacher && confirm('Clear code for all students?')){
     ref.set('');
   }
 };
 
 // 👀 Student live view
-if(ref){
-  ref.on('value', snap => {
-    studentView.textContent = snap.val() || '-- Waiting for teacher --';
-  });
-}
+ref.on('value', snap => {
+  studentView.textContent = snap.val() || '-- Waiting for teacher --';
+});
 
 });
 </script>
