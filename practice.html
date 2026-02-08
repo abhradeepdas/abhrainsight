@@ -27,12 +27,13 @@ textarea{width:100%;height:220px;padding:10px;font-family:monospace;font-size:15
         }
 pre{
   background:#111;
-  color:#0f0;
+  color:#2EFFFF;
   padding:15px;
   white-space:pre;           /* preserve formatting */
   max-height:400px;          /* fixed height */
   overflow:auto;             /* scrollbar for long code */
   border-radius:6px;
+    font-size: 18px;
 }
 .note{color:#555;margin-top:10px}
 button{padding:8px 16px;margin:5px;cursor:pointer}
@@ -66,12 +67,14 @@ button{padding:8px 16px;margin:5px;cursor:pointer}
 
 
 <div class="container">
+    <br>
+    <br>
 <h1>📡 Live Code Share</h1>
 
-<h3>Student View</h3>
+<h5>Student View</h5>
 <pre id="studentView">-- Waiting for teacher --</pre>
 
-<div class="note">Students can directly copy from the green box.</div>
+<div class="note">Students can directly copy from the box. </div>
 </div>
 
 <!-- Abhradeep as Teacher typing area (hidden by default) -->
@@ -88,7 +91,7 @@ button{padding:8px 16px;margin:5px;cursor:pointer}
 <div class="card-body text-center">
 <p class="mb-3">W3Schools exercises cannot be embedded due to security restrictions.</p>
 <p class="text-muted small">Click below to open in new tab.</p>
-<a href="https://www.w3schools.com/java/exercise.asp?x=xrcise_syntax1" target="_blank" class="btn btn-success mt-2">Open Java Exercise</a>
+<a href="#" target="_blank" class="btn btn-success mt-2">Open Java Exercise</a>
 <hr>
 <p class="small text-muted">Mentor: <b>Abhradeep Das</b><br>Practice only – return to exam after completion.</p>
 </div>
@@ -132,7 +135,7 @@ if(params.get('mode') === 'teacher'){
 
 // Firebase config 
 const firebaseConfig = {
-  apiKey: "PASTE_FROM_FIREBASE",
+  apiKey: "AIzaSyCXvOf33UCFWjR2PBZe2d76hFEkv_5TgmU",
   authDomain: "codebroadcast.firebaseapp.com",
   databaseURL: "https://codebroadcast-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "codebroadcast"
