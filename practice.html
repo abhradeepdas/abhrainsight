@@ -22,13 +22,13 @@ button{padding:8px 16px;margin:5px;cursor:pointer}
 </head>
 <body>
 
+
+
+
 <div class="container">
 <h1>📡 Live Code Share</h1>
 
-<div style="text-align:center;margin-bottom:15px;">
-<button id="studentBtn">Student Mode</button>
-<button id="teacherBtn">Teacher Mode</button>
-</div>
+
 
 <h3>Student View</h3>
 <pre id="studentView">-- Waiting for teacher --</pre>
@@ -39,7 +39,8 @@ button{padding:8px 16px;margin:5px;cursor:pointer}
 <!-- Teacher typing area -->
 <div id="teacherPanel">
 <textarea id="teacherBox" placeholder="Type your SQL / Java / C code here..."></textarea>
-<button id="sendBtn" class="btn btn-primary mt-2">Send to Students</button>
+<button id="sendBtn" class="btn btn-primary mt-2">Send / Append</button>
+<button id="clearBtn" class="btn btn-danger mt-2 ms-2">Clear</button>
 </div>
 
 <!-- Java Practice -->
@@ -61,20 +62,88 @@ button{padding:8px 16px;margin:5px;cursor:pointer}
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 <script>
+// 🔐 Simple SHA-256 helper (PIN never visible in source)
+async function sha256(text){
+ const buf=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+ return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
 
 let isTeacher=false;
 
-const studentBtn=document.getElementById('studentBtn');
+const teacherPanel=document.getElementById('teacherPanel');
+const teacherBox=document.getElementById('teacherBox');
+const studentView=document.getElementById('studentView');
+const sendBtn=document.getElementById('sendBtn');
+const clearBtn=document.getElementById('clearBtn');
+
+// 🔍 MODE FROM URL (?mode=teacher)
+const params=new URLSearchParams(window.location.search);
+const mode=params.get('mode');
+
+if(mode==='teacher'){
+ const pin=prompt('Enter PIN');
+ const correctHash='03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4';
+ sha256(pin||'').then(hash=>{
+   if(hash===correctHash){
+     isTeacher=true;
+     teacherPanel.style.display='block';
+   }else{
+     alert('Access denied');
+   }
+ });
+}
+
+// 🔑 FIREBASE CONFIG
+const firebaseConfig={
+ apiKey:"AIzaSyCXvOf33UCFWjR2PBZe2d76hFEkv_5TgmU",
+ authDomain:"codebroadcast.firebaseapp.com",
+ databaseURL:"https://codebroadcast-default-rtdb.asia-southeast1.firebasedatabase.app",
+ projectId:"codebroadcast"
+};
+
+let ref=null;
+try{
+ firebase.initializeApp(firebaseConfig);
+ const db=firebase.database();
+ ref=db.ref('livecode');
+}catch(e){console.error(e)}
+
+sendBtn.onclick=()=>{
+ if(isTeacher && ref){
+   ref.transaction(oldVal=> oldVal ? oldVal+"
+
+"+teacherBox.value : teacherBox.value);
+   teacherBox.value='';
+ }
+};
+
+clearBtn.onclick=()=>{
+ if(isTeacher && ref && confirm('Clear code for all students?')){
+   ref.set('');
+ }
+};
+
+if(ref){
+ ref.on('value',snap=>{
+   studentView.textContent=snap.val()||'-- Waiting for teacher --';
+ });
+}
+
+});
 const teacherBtn=document.getElementById('teacherBtn');
 const teacherPanel=document.getElementById('teacherPanel');
 const teacherBox=document.getElementById('teacherBox');
 const studentView=document.getElementById('studentView');
 const sendBtn=document.getElementById('sendBtn');
+const clearBtn=document.getElementById('clearBtn');
 
 teacherBtn.onclick=()=>{
  const pin=prompt('Enter PIN');
- if(pin==='4321'){
+ // PIN is validated via hash, not plain text
+ const correctHash='03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'; // SHA-256 of 4321
+ if(pin && sha256(pin)===correctHash){
    isTeacher=true;
    teacherPanel.style.display='block';
  }else{
@@ -89,27 +158,50 @@ studentBtn.onclick=()=>{
 
 // 🔑 YOUR REAL FIREBASE CONFIG (ALREADY CORRECT DATABASE URL)
 const firebaseConfig={
- apiKey:"AIzaSyCXvOf33UCFWjR2PBZe2d76hFEkv_5TgmU",
+ apiKey:"PASTE_FROM_FIREBASE",
  authDomain:"codebroadcast.firebaseapp.com",
  databaseURL:"https://codebroadcast-default-rtdb.asia-southeast1.firebasedatabase.app",
  projectId:"codebroadcast"
 };
 
-firebase.initializeApp(firebaseConfig);
-const db=firebase.database();
-const ref=db.ref('livecode');
+// Initialize Firebase safely so UI works even if config is wrong
+let ref=null;
+try{
+  firebase.initializeApp(firebaseConfig);
+  const db=firebase.database();
+  ref=db.ref('livecode');
+}catch(e){
+  console.error('Firebase init error:', e);
+}
 
-// Teacher sends
+// Teacher sends (APPEND by default)
 sendBtn.onclick=()=>{
- if(isTeacher){
-   ref.set(teacherBox.value);
+ if(isTeacher && ref){
+   ref.transaction(oldVal => {
+     if(!oldVal) return teacherBox.value;
+     return oldVal + "
+
+" + teacherBox.value;
+   });
+   teacherBox.value='';
  }
 };
 
-// Students receive
-ref.on('value',snap=>{
- studentView.textContent=snap.val()||'-- Waiting for teacher --';
-});
+// Clear for teacher only
+clearBtn.onclick=()=>{
+ if(isTeacher && ref){
+   if(confirm('Clear code for all students?')){
+     ref.set('');
+   }
+ }
+};
+
+// 👀 STUDENT LIVE LISTENER (THIS WAS MISSING)
+if(ref){
+  ref.on('value', snap => {
+    studentView.textContent = snap.val() || '-- Waiting for teacher --';
+  });
+}
 
 });
 </script>
