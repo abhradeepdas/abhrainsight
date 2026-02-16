@@ -2,29 +2,57 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Live Code Share – Teacher → Students</title>
+<title>Live console</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
-body{font-family:Arial,sans-serif;background:#f4f6f8;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#fff;margin:0;padding:0;color:#333;}
 h1{text-align:center}
-.container{max-width:900px;margin:auto}
+.container{max-width:1400px;margin:auto}
 textarea{width:100%;height:220px;padding:10px;font-family:monospace;font-size:15px}
-    body {
-            background-color: #fff;
-            color: #333;
-        }
-      
-        .navbar-brand img {
-            width: 150px;
-            height: auto;
-        }
 
-        .navbar {
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+/* ===== Viewer Layout ===== */
+.viewer{
+  display:flex;
+  flex-direction:row;   /* text left, image right */
+  gap:20px;
+  align-items:flex-start;
+}
+
+/* text panel */
+.viewer pre{
+  flex:1 1 auto;
+  min-width:0;
+}
+
+/* image panel */
+#imageBox{
+  flex:0 0 40%;
+  max-width:40%;
+  text-align:center;
+}
+
+/* When NO image → text takes full width */
+.viewer.no-image pre{
+  flex:1 1 100%;
+}
+.viewer.no-image #imageBox{
+  display:none;
+}
+
+/* responsive for mobile */
+@media(max-width:768px){
+  .viewer{
+    flex-direction:column;
+  }
+  #imageBox{
+    max-width:100%;
+    flex:1;
+  }
+}
+
 pre{
   background:#111;
   color:#2EFFFF;
@@ -35,15 +63,79 @@ pre{
   border-radius:6px;
     font-size: 15px;
 }
+
+/* Image style */
+#imageBox img{
+  width:100%;
+  max-height:600px;
+  object-fit:contain;
+  border-radius:10px;
+  box-shadow:0 6px 18px rgba(0,0,0,.2);
+  cursor:pointer;
+  transition:0.3s;
+}
+#imageBox img:hover{
+  transform:scale(1.02);
+}
+
 .note{color:#555;margin-top:10px}
 button{padding:8px 16px;margin:5px;cursor:pointer}
-#teacherPanel{display:none;margin:30px auto;max-width:900px}
+#teacherPanel{display:none;margin:30px auto;max-width:1400px}
 .practice-card{margin-top:40px}
 .practice-card .card{max-width:600px;margin:auto;box-shadow:0 4px 10px rgba(0,0,0,.1)}
+
+/* ===== Fullscreen Modal ===== */
+#imgModal{
+  display:none;
+  position:fixed;
+  z-index:9999;
+  left:0;
+  top:0;
+  width:100vw;
+  height:100vh;
+  background:rgba(0,0,0,0.95);
+  align-items:center;
+  justify-content:center;
+}
+
+#imgModal img{
+  width:100vw;
+  height:100vh;
+  object-fit:contain;   /* show full image large */
+}
+
+#imgModal span{
+  position:absolute;
+  top:40px;
+  right:35px;
+
+  color:white;            /* icon color */
+  font-size:28px;
+  font-weight:bold;
+  cursor:pointer;
+
+  background:rgba(120,120,120,0.7);  /* grey background */
+  width:44px;
+  height:44px;
+  border-radius:50%;                 /* round button */
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  transition:0.2s;
+}
+
+#imgModal span:hover{
+  background:rgba(160,160,160,0.9);  /* lighter on hover */
+  transform:scale(1.05);
+}
+
 </style>
 </head>
 <body>
 
+<!-- Navigation Bar -->
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
   <div class="container-fluid">
@@ -65,20 +157,35 @@ button{padding:8px 16px;margin:5px;cursor:pointer}
   </div>
 </nav>
 
-
 <div class="container">
-    <br>
-    <br>
-<h1>📡 Live Code Share</h1>
+<br><br>
+  <h1>📡 Live Console </h1>
 
 <h5>Student View</h5>
-<pre id="studentView">-- Waiting for teacher --</pre>
-
-<div class="note">Students can directly copy from the box. </div>
+  <hr>
+<div class="viewer no-image" id="viewer">
+  <pre id="studentView">-- Waiting for teacher --</pre>
+  <div id="imageBox"></div>
 </div>
 
-<!-- Abhradeep as Teacher typing area (hidden by default) -->
+<div class="note">Students can directly copy from the box.</div>
+</div>
+
+<!-- Fullscreen Modal -->
+<div id="imgModal">
+  <span id="closeModal">&times;</span>
+  <img id="modalImg" alt="fullscreen image">
+</div>
+
+<!-- Teacher typing area (hidden by default) -->
 <div id="teacherPanel">
+<hr>
+
+<!-- Image slot (PNG/JPG only) -->
+<input type="file" id="imageInput" accept="image/png, image/jpeg" class="form-control mt-2">
+<button id="sendImageBtn" class="btn btn-warning mt-2">Send Image</button>
+<button id="clearImageBtn" class="btn btn-danger mt-2 ms-2">Clear Image</button>
+
 <textarea id="teacherBox" placeholder="Type your SQL / Java / C code here..."></textarea>
 <button id="sendBtn" class="btn btn-primary mt-2">Send / Append</button>
 <button id="clearBtn" class="btn btn-danger mt-2 ms-2">Clear</button>
@@ -87,11 +194,11 @@ button{padding:8px 16px;margin:5px;cursor:pointer}
 <!-- Java Practice -->
 <div class="container practice-card">
 <div class="card">
-<div class="card-header bg-primary text-white text-center">Java Exercise Practice</div>
+<div class="card-header bg-primary text-white text-center">Code Exercise Practice</div>
 <div class="card-body text-center">
 
 
-<a href="#" target="_blank" class="btn btn-success mt-2">Open Java Exercise</a>
+<a href="" target="_blank" class="btn btn-success mt-2">Demo Exercise</a>
 <hr>
 <p class="small text-muted">Mentor: <b>Abhradeep Das</b><br>Practice only – return to exam after completion.</p>
 </div>
@@ -103,74 +210,181 @@ button{padding:8px 16px;margin:5px;cursor:pointer}
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 <script>
-// SHA-256 helper
-async function sha256(text){
- const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
- return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
+window.addEventListener('DOMContentLoaded', ()=>{
 
-window.addEventListener('DOMContentLoaded', async ()=>{
+  let isTeacher = false;
 
-let isTeacher = false;
+  const viewer      = document.getElementById('viewer');
+  const teacherPanel = document.getElementById('teacherPanel');
+  const teacherBox   = document.getElementById('teacherBox');
+  const studentView  = document.getElementById('studentView');
+  const sendBtn      = document.getElementById('sendBtn');
+  const clearBtn     = document.getElementById('clearBtn');
 
-const teacherPanel = document.getElementById('teacherPanel');
-const teacherBox   = document.getElementById('teacherBox');
-const studentView  = document.getElementById('studentView');
-const sendBtn      = document.getElementById('sendBtn');
-const clearBtn     = document.getElementById('clearBtn');
+  const imageInput   = document.getElementById('imageInput');
+  const sendImageBtn = document.getElementById('sendImageBtn');
+  const clearImageBtn= document.getElementById('clearImageBtn');
+  const imageBox     = document.getElementById('imageBox');
 
-//Detect teacher mode from URL
-const params = new URLSearchParams(window.location.search);
-if(params.get('mode') === 'teacher'){
-  const pin = prompt('Enter PIN');
-  const correctHash = 'fe2592b42a727e977f055947385b709cc82b16b9a87f88c6abf3900d65d0cdc3'; // 4321
-  const hash = await sha256(pin || '');
-  if(hash === correctHash){
-    isTeacher = true;
-    teacherPanel.style.display = 'block';
-  } else {
-    alert('Access denied');
+  const modal        = document.getElementById('imgModal');
+  const modalImg     = document.getElementById('modalImg');
+  const closeModal   = document.getElementById('closeModal');
+
+  // Detect teacher mode from URL (PIN not visible in source)
+  const params = new URLSearchParams(window.location.search);
+  const mode = params.get('mode');
+
+  // simple SHA-256 helper
+  async function sha256(text){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
   }
-}
 
-// Firebase config 
-const firebaseConfig = {
-  apiKey: "AIzaSyCXvOf33UCFWjR2PBZe2d76hFEkv_5TgmU",
-  authDomain: "codebroadcast.firebaseapp.com",
-  databaseURL: "https://codebroadcast-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "codebroadcast"
-};
+  if(mode === 'teacher'){
+    const pin = prompt('Enter PIN');
 
-firebase.initializeApp(firebaseConfig);
-const ref = firebase.database().ref('livecode');
+    
+    const correctHash = 'ecdb693d9b62b5b369eee8cdef4959d57f0a505765b0fe268b0ff12ced3daab4';
 
-// Abhradeep is the Teacher send (append safely)
-sendBtn.onclick = ()=>{
-  if(isTeacher){
-    ref.transaction(oldVal => oldVal ? oldVal + "\n\n" + teacherBox.value : teacherBox.value);
+    sha256(pin || '').then(hash => {
+      if(hash === correctHash){
+        isTeacher = true;
+        teacherPanel.style.display = 'block';
+      } else {
+        alert('Access denied');
+      }
+    });
+  }
+
+  // Firebase config (safe to be public; security is enforced via Database Rules)
+  const firebaseConfig = {
+    apiKey: "AIzaSyCXvOf33UCFWjR2PBZe2d76hFEkv_5TgmU",
+    authDomain: "codebroadcast.firebaseapp.com",
+    databaseURL: "https://codebroadcast-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "codebroadcast",
+    messagingSenderId: "648763851186",
+    appId: "1:648763851186:web:f96a13c046d13f091ce4ab"
+  };
+
+  // prevent duplicate init if script loads twice
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+
+  
+
+  const ref = firebase.database().ref('livecode');
+  const imgRef = firebase.database().ref('image');
+
+  // Abhradeep as Teacher send
+  sendBtn.onclick = ()=>{
+    if(!isTeacher){ alert('Not in teacher mode'); return; }
+
+    ref.transaction(oldVal => {
+      let oldText = oldVal && oldVal.text ? oldVal.text : "";
+      let newText = oldText ? oldText + "\n\n" + teacherBox.value : teacherBox.value;
+      return { text: newText };
+    });
+
     teacherBox.value = '';
-  }
-};
+  };
 
-// Clear for all
-clearBtn.onclick = ()=>{
-  if(isTeacher && confirm('Clear code for all students?')){
-    ref.set('');
-  }
-};
+  // Clear code
+  clearBtn.onclick = ()=>{
+    if(isTeacher && confirm('Clear code for all students?')){
+      ref.set({ text: '' });
+    }
+  };
 
-// Student live view
-ref.on('value', snap => {
-  studentView.textContent = snap.val() || '-- Waiting for teacher --';
-});
+  // Student live view (code)
+  ref.on('value', snap => {
+    const data = snap.val();
+    if(!data || !data.text){
+      studentView.textContent = '-- Waiting for teacher --';
+    } else {
+      studentView.textContent = data.text;
+    }
+  });
+
+  // Send Image
+  sendImageBtn.onclick = () => {
+    if(!isTeacher){ alert('Not in teacher mode'); return; }
+    if(!imageInput.files[0]){ alert('Select PNG or JPG'); return; }
+
+    const file = imageInput.files[0];
+    
+    
+    
+    //  2.5 MB client-side limit
+    const MAX_SIZE = 2.5 * 1024 * 1024; // 2.5MB
+    if(file.size > MAX_SIZE){
+      alert('Image too large. Max allowed size is 2.5 MB.');
+      imageInput.value = '';
+      return;
+    }
+    
+
+    const reader = new FileReader();
+    reader.onload = function(e){
+      // write to realtime DB (no SECRET needed)
+      imgRef.set({ data: e.target.result })
+        .then(()=>{
+          imageInput.value = '';
+          alert('Image sent ✔');
+        })
+        .catch(err=>{
+          console.error(err);
+          alert('Upload failed: ' + err.message);
+        });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // 🗑 Clear image
+  clearImageBtn.onclick = () => {
+    if(!isTeacher) return;
+    if(confirm('Remove image for all students?')){
+      imgRef.set({ data: '' });
+      imageBox.innerHTML = '';
+      viewer.classList.add('no-image');
+    }
+  };
+
+  //  Student image view
+  imgRef.on('value', snap => {
+    const data = snap.val();
+
+    imageBox.innerHTML = '';
+
+    if(!data || !data.data){
+      viewer.classList.add('no-image');
+      return;
+    }
+
+    viewer.classList.remove('no-image');
+
+    const img = document.createElement('img');
+    img.src = data.data;
+    img.alt = 'shared image';
+
+    imageBox.appendChild(img);
+
+    // Click to fullscreen
+    img.onclick = () => {
+      modal.style.display = 'flex';
+      modalImg.src = data.data;
+    };
+  });
+
+  // Close modal
+  closeModal.onclick = () => modal.style.display = 'none';
+  modal.onclick = () => modal.style.display = 'none';
 
 });
 </script>
 
-<!-- Bootstrap JS (REQUIRED for navbar toggle) -->
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
-
-
