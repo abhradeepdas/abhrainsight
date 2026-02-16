@@ -137,6 +137,29 @@ button{padding:8px 16px;margin:5px;cursor:pointer}
   background:rgba(160,160,160,0.9);  /* lighter on hover */
   transform:scale(1.05);
 }
+   @media(max-width:768px){
+  .viewer{
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .viewer pre{
+    width:100%;
+    max-height:350px;
+  }
+
+  #imageBox{
+    max-width:100%;
+    width:100%;
+    flex:1 1 100%;
+  }
+
+  #imageBox img{
+    width:100%;
+    max-height:420px;
+  }
+}
+
 
 </style>
 </head>
@@ -396,6 +419,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
 
 </body>
 </html>
+
 
 
 
