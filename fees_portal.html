@@ -35,6 +35,31 @@ body { background:#fff; }
 
 .status-paid { color:green; }
 .status-due { color:red; }
+    
+    
+    
+    .pay-btn {
+    background: linear-gradient(135deg, #00b09b, #96c93d);
+    border: none;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.pay-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+.pay-btn:active {
+    transform: scale(0.98);
+}
+    
+    
+    
 </style>
 </head>
 
@@ -143,13 +168,12 @@ resultDiv.innerHTML=`
 
 <p class="mb-1"><strong>💳 Payment Method</strong></p>
 
-<p class="fw-bold">${"abhradeep@upi"}</p>
+<p class="fw-bold">${"upi id: 9735236265@ybl"}</p>
 
 <a href="upi://pay?pa=9735236265@ybl&pn=Abhradeep%20Das&am=${student.due}&cu=INR"
-   class="btn btn-success w-100 mt-2">
-   Pay Now via UPI
+   class="btn pay-btn w-100 mt-3">
+   💳 Pay Securely via UPI
 </a>
-
 
 </div>
 `;
