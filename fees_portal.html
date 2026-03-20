@@ -49,13 +49,37 @@ body {background: linear-gradient(135deg, #f5f7fa, #e4ecf7); }
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
-.pay-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+
+  
+  
+  .skeleton-card {
+    border-radius: 15px;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.pay-btn:active {
-    transform: scale(0.98);
+.skeleton {
+    height: 12px;
+    background: linear-gradient(90deg, #eee, #ddd, #eee);
+    background-size: 200% 100%;
+    animation: shimmer 1.2s infinite;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.skeleton.title { height: 20px; width: 60%; }
+.skeleton.small { height: 10px; width: 40%; }
+.skeleton.box { height: 50px; width: 100%; }
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+  
+  
+  
+  
 }
     
     
@@ -147,7 +171,27 @@ let phone="+91"+phoneInput;
 let url=API_URL+"?phone="+encodeURIComponent(phone)+"&guardian="+encodeURIComponent(guardian);
 
 btn.disabled=true;
-resultDiv.innerHTML=`<div class="loading">Checking...</div>`;
+resultDiv.innerHTML = `
+<div class="skeleton-card">
+
+    <div class="skeleton title"></div>
+    <div class="skeleton small"></div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-4"><div class="skeleton box"></div></div>
+        <div class="col-4"><div class="skeleton box"></div></div>
+        <div class="col-4"><div class="skeleton box"></div></div>
+    </div>
+
+    <hr>
+
+    <div class="skeleton small"></div>
+    <div class="skeleton small"></div>
+
+</div>
+`;
 
 try{
 
@@ -234,6 +278,13 @@ this.value=this.value.replace(/[^0-9]/g,'');
         }, 2000);
     });
 }
+  
+
+  
+  
+  
+  
+  
   
 </script>
 
