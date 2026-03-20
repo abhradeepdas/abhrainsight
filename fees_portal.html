@@ -103,6 +103,11 @@ body {background: linear-gradient(135deg, #f5f7fa, #e4ecf7); }
 </div>
 
 <button id="checkBtn" class="btn btn-primary w-100" onclick="checkFees()">Check Fees</button>
+  
+  
+  
+  
+  
 
 </div>
 </div>
@@ -130,6 +135,7 @@ if(!/^[0-9]{10}$/.test(phoneInput)){
 resultDiv.innerHTML=`<div class="alert alert-warning">Enter valid 10-digit phone number</div>`;
 return;
 }
+  
 
 if(guardian===""){
 resultDiv.innerHTML=`<div class="alert alert-warning">Enter Guardian ID</div>`;
@@ -180,15 +186,21 @@ resultDiv.innerHTML=`
 
 
 
-
 <p class="mb-1"><strong>💳 Payment Method</strong></p>
 
-<p class="fw-bold">${"upi id: 9735236265@ybl"}</p>
+<!-- UPI + Copy -->
+<div class="d-flex align-items-center justify-content-between border rounded p-2 mb-2">
+    <span id="upiText" class="fw-bold">9735236265@ybl</span>
+    <button class="btn btn-sm btn-outline-primary" onclick="copyUPI()">📋</button>
+</div>
 
-<a href="upi://pay?pa=9735236265@ybl&pn=Abhradeep%20Das&am=${student.due}&cu=INR"
-   class="btn pay-btn w-100 mt-3">
-   💳 Pay Securely via UPI
-</a>
+<small id="copyMsg" class="text-success" style="display:none;">Copied!</small>
+
+
+
+<p class="mt-2 text-muted">
+After payment, please inform via WhatsApp.
+</p>
 
 </div>
 `;
@@ -208,6 +220,21 @@ document.getElementById("phone").addEventListener("input",function(){
 this.value=this.value.replace(/[^0-9]/g,'');
 });
 
+  
+  
+  function copyUPI() {
+    const upi = document.getElementById("upiText").innerText;
+
+    navigator.clipboard.writeText(upi).then(() => {
+        const msg = document.getElementById("copyMsg");
+        msg.style.display = "inline";
+
+        setTimeout(() => {
+            msg.style.display = "none";
+        }, 2000);
+    });
+}
+  
 </script>
 
 </body>
