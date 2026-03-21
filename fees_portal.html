@@ -77,10 +77,59 @@ body {background: linear-gradient(135deg, #f5f7fa, #e4ecf7); }
     100% { background-position: 200% 0; }
 }
   
-  
-  
-  
+  .custom-rules {
+    list-style: none;
+    padding: 0;
 }
+
+.custom-rules li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 14px;
+    line-height: 1.7;
+}
+
+.custom-rules li span {
+    background: #3bc7fe;
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+    min-width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    font-size: 14px;
+}
+  .check-btn {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 12px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    letter-spacing: 0.5px;
+}
+
+.check-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+.check-btn:active {
+    transform: scale(0.97);
+}
+
+.check-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+  
+  
+
     
     
     
@@ -111,7 +160,7 @@ body {background: linear-gradient(135deg, #f5f7fa, #e4ecf7); }
 
 <div class="container mt-5 text-center">
 
-<h2>Student Fees Portal</h2>
+<h4 class="text-decoration-underline">Student Fees Portal</h4>
 
 <div class="row justify-content-center mt-4">
 <div class="col-md-4">
@@ -126,7 +175,11 @@ body {background: linear-gradient(135deg, #f5f7fa, #e4ecf7); }
     <label>Guardian ID</label>
 </div>
 
-<button id="checkBtn" class="btn btn-primary w-100" onclick="checkFees()">Check Fees</button>
+
+  <button id="checkBtn" class="btn check-btn w-100 d-flex align-items-center justify-content-center gap-2" onclick="checkFees()">
+   
+    <span>Check Fees</span>
+</button>
   
   
   
@@ -191,6 +244,7 @@ resultDiv.innerHTML = `
     <div class="skeleton small"></div>
 
 </div>
+
 `;
 
 try{
@@ -247,6 +301,57 @@ After payment, please inform via WhatsApp.
 </p>
 
 </div>
+
+<!-- RULES SECTION -->
+<div class="card p-4 mt-4 text-start">
+
+    <h5 class="text-decoration-underline mb-3" >Fees Policy & Guidelines</h5>
+
+<ul class="custom-rules">
+
+    <li>
+        <span>1</span>
+        Parents/guardians are kindly requested to complete the monthly fee payment within 8 (eight) days from the beginning of each calendar month.
+    </li>
+
+    <li>
+        <span>2</span>
+        In case of admission after the 22nd day of any month, the fee will be applicable from the subsequent month.
+    </li>
+
+    <li>
+        <span>3</span>
+        If admission is taken from the 15th to 22nd day of a month, only 50% of the monthly fee shall be charged for that month.
+    </li>
+
+    <li>
+        <span>4</span>
+        If a student wishes to discontinue classes temporarily and rejoin after a gap (e.g., one month), it is mandatory to 
+        inform and consult the teacher in advance with a valid reason.
+    </li>
+
+    <li>
+        <span>5</span>
+        Regular attendance is expected from every student. The teacher is committed to providing quality education, and students are expected 
+        to maintain discipline, punctuality, and consistency in attending classes.
+    </li>
+
+    <li>
+        <span>6</span>
+        During the month of admission, if a student attends fewer than 3 (three) days of classes and does not continue, it will generally be considered as non-attendance, and no tuition fee will be charged.
+    </li>
+
+</ul>
+
+   
+</div>
+
+
+
+
+
+
+
 `;
 
 }else{
