@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PES 2026 Admin</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:#000;
+font-family:Arial,Helvetica,sans-serif;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+padding:20px;
+}
+
+.container{
+
+width:100%;
+max-width:420px;
+
+background:#111;
+
+border:1px solid #333;
+
+border-radius:12px;
+
+padding:25px;
+
+}
+
+h2{
+
+text-align:center;
+
+margin-bottom:25px;
+
+font-weight:600;
+
+}
+
+input{
+
+width:100%;
+
+padding:12px;
+
+border:none;
+
+outline:none;
+
+border-radius:6px;
+
+background:#222;
+
+color:white;
+
+font-size:16px;
+
+margin-bottom:15px;
+
+}
+
+button{
+
+width:100%;
+
+padding:12px;
+
+margin-top:10px;
+
+border:none;
+
+border-radius:6px;
+
+font-size:16px;
+
+cursor:pointer;
+
+font-weight:600;
+
+transition:.2s;
+
+}
+
+#send{
+
+background:#0066ff;
+
+color:white;
+
+}
+
+#waiting{
+
+background:#555;
+
+color:white;
+
+}
+
+#start{
+
+background:#008a2e;
+
+color:white;
+
+}
+
+#end{
+
+background:#c40000;
+
+color:white;
+
+}
+
+#clear{
+
+background:#333;
+
+color:white;
+
+}
+
+button:hover{
+
+opacity:.9;
+
+}
+
+#info{
+
+margin-top:18px;
+
+text-align:center;
+
+color:#aaa;
+
+font-size:15px;
+
+min-height:20px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>PES 2026 Admin</h2>
+
+<input
+id="msg"
+placeholder="Write Some thing">
+
+<button id="send">
+📢 Send Message
+</button>
+
+<button id="waiting">
+⏳ Waiting For Exam
+</button>
+
+<button id="start">
+▶ Start Exam
+</button>
+
+<button id="end">
+■ End Exam
+</button>
+
+<button id="clear">
+✖ Clear Message
+</button>
+
+<div id="info">
+Ready
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+getDatabase,
+ref,
+update
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDc4NGvL-IC6QwsuIRhktLFTzNy634HSyo",
+
+authDomain:"pes-clock.firebaseapp.com",
+
+databaseURL:"https://pes-clock-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+projectId:"pes-clock",
+
+storageBucket:"pes-clock.firebasestorage.app",
+
+messagingSenderId:"586966366325",
+
+appId:"1:586966366325:web:e885ea450e11e6f826e03c",
+
+measurementId:"G-TWQD24QHP6"
+
+};
+
+const app=initializeApp(firebaseConfig);
+
+const db=getDatabase(app);
+
+const examRef=ref(db,"pes2026");
+
+const info=document.getElementById("info");
+
+const msg=document.getElementById("msg");
+
+function save(data,text){
+
+update(examRef,data)
+.then(()=>{
+
+info.textContent=text;
+
+})
+.catch((e)=>{
+
+info.textContent=e.message;
+
+});
+
+}
+
+document.getElementById("send").onclick=()=>{
+
+save({
+
+message:msg.value
+
+},"Message Sent");
+
+};
+
+document.getElementById("waiting").onclick=()=>{
+
+save({
+
+examStatus:"waiting"
+
+},"Exam Yet Not Started");
+
+};
+
+document.getElementById("start").onclick=()=>{
+
+save({
+
+examStatus:"running",
+
+examStart:Date.now()
+
+},"Exam Started");
+
+};
+
+document.getElementById("end").onclick=()=>{
+
+save({
+
+examStatus:"finished",
+
+examEnd:Date.now()
+
+},"Exam Finished");
+
+};
+
+document.getElementById("clear").onclick=()=>{
+
+msg.value="";
+
+save({
+
+message:""
+
+},"Message Cleared");
+
+};
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>PES 2026</title>
+ 
+ <style>
+ 
+ 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html,body{
+width:100%;
+height:100%;
+}
+
+body{
+background:#000;
+color:#fff;
+font-family:Arial,Helvetica,sans-serif;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+overflow:hidden;
+}
+
+.container{
+width:100%;
+height:100%;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:20px;
+max-width:1600px;
+}
+
+#title{
+font-size:clamp(20px,2vw,30px);
+font-weight:600;
+letter-spacing:8px;
+color:#9baacd;
+margin-bottom:18px;
+user-select:none;
+ 
+}
+
+#message{
+min-height:40px;
+font-size:clamp(18px,2vw,30px);
+font-weight:500;
+color:#b7c0ba;
+margin-bottom:35px;
+}
+
+.clock{
+display:flex;
+justify-content:center;
+align-items:flex-end;
+gap:15px;
+}
+
+#clock{
+font-size:clamp(100px,15vw,210px);
+font-weight:700;
+line-height:0.95;
+font-family:"Segoe UI",Arial,sans-serif;
+white-space:nowrap;
+}
+
+#ampm{
+font-size:clamp(18px,2vw,30px);
+font-weight:600;
+color:#8c8c8c;
+margin-bottom:20px;
+}
+
+#status{
+margin-top:40px;
+font-size:clamp(25px,2vw,24px);
+letter-spacing:2px;
+color:#b2aaa4;
+}
+
+#countdown{
+margin-top:10px;
+font-size:clamp(36px,5vw,60px);
+font-family:Consolas,monospace;
+font-weight:700;
+color:#fff;
+}
+
+@media(max-width:700px){
+
+.container{
+padding:15px;
+}
+
+#title{
+letter-spacing:4px;
+margin-bottom:10px;
+}
+
+#message{
+margin-bottom:25px;
+font-size:22px;
+}
+
+.clock{
+gap:8px;
+}
+
+#clock{
+font-size:clamp(90px,22vw,120px);
+}
+
+#ampm{
+margin-bottom:10px;
+font-size:20px;
+}
+
+#status{
+margin-top:25px;
+}
+
+}
+ 
+ </style>
+ 
+ 
+ </head>
+ 
+<body>
+
+<div class="container">
+
+    <div id="title">
+     <b>PES 2026</b> (Edition 1)
+    </div>
+
+    <div id="message"></div>
+
+    <div class="clock">
+        <div id="clock">12:00</div>
+        <div id="ampm">AM</div>
+    </div>
+
+    <div id="status">
+        Waiting For Exam
+    </div>
+
+    <div id="countdown">
+      
+    </div>
+
+    <div style="
+        margin-top:40px;
+        color:#745bfd;
+        font-size:16px;
+        letter-spacing:1px;">
+        AbhraInsight
+    </div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyDc4NGvL-IC6QwsuIRhktLFTzNy634HSyo",
+authDomain:"pes-clock.firebaseapp.com",
+databaseURL:"https://pes-clock-default-rtdb.asia-southeast1.firebasedatabase.app",
+projectId:"pes-clock",
+storageBucket:"pes-clock.firebasestorage.app",
+messagingSenderId:"586966366325",
+appId:"1:586966366325:web:e885ea450e11e6f826e03c",
+measurementId:"G-TWQD24QHP6"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+const message=document.getElementById("message");
+const status=document.getElementById("status");
+const clock=document.getElementById("clock");
+const ampm=document.getElementById("ampm");
+
+onValue(ref(db,"pes2026"), snapshot => {
+
+    const d = snapshot.val() || {};
+
+    message.textContent = d.message || "";
+
+    switch(d.examStatus){
+
+        case "waiting":
+            status.textContent = "Exam Yet Not Started";
+            break;
+
+        case "running":
+            status.textContent = "Exam Running";
+            break;
+
+        case "finished":
+            status.textContent = "Exam Finished";
+            break;
+
+        default:
+            status.textContent = "Exam Yet Not Started";
+
+    }
+
+});
+
+function tick(){
+
+    const now=new Date();
+
+    let h=now.getHours();
+    const m=String(now.getMinutes()).padStart(2,"0");
+
+    const ap=h>=12?"PM":"AM";
+
+    h=h%12;
+    if(h===0) h=12;
+
+    clock.textContent=`${String(h).padStart(2,"0")}:${m}`;
+    ampm.textContent=ap;
+
+}
+
+tick();
+
+setInterval(tick,1000);
+
+</script>
+
+</body></html>
