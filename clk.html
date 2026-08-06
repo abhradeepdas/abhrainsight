@@ -126,7 +126,49 @@ margin-top:25px;
 }
 
 }
- 
+     
+     
+     
+     
+     .exam-over{
+
+font-size:clamp(50px,6vw,80px);
+
+font-weight:800;
+
+color:#fff;
+
+animation:slideDown .8s ease;
+
+}
+
+.submit-paper{
+
+margin-top:20px;
+
+font-size:clamp(26px,3vw,40px);
+
+font-weight:700;
+
+color:#ffeb3b;
+
+animation:softBlink 2.5s ease-in-out infinite;
+
+}
+
+@keyframes softBlink{
+
+0%{
+opacity:1;
+}
+
+50%{
+opacity:0.25;
+}
+
+100%{
+opacity:1;
+}
  </style>
  
  
@@ -194,22 +236,77 @@ onValue(ref(db,"pes2026"), snapshot => {
 
     message.textContent = d.message || "";
 
+    const title = document.getElementById("title");
+
     switch(d.examStatus){
 
         case "waiting":
+
             status.textContent = "Exam Yet Not Started";
+
+            document.body.style.background = "#F5F5F0"; // Off White
+            document.body.style.color = "#000";
+
+            title.style.color = "#333";
+            message.style.color = "#444";
+            clock.style.color = "#000";
+            ampm.style.color = "#444";
+            status.style.color = "#444";
+
             break;
 
         case "running":
+
             status.textContent = "Exam Running";
+
+            document.body.style.background = "#000";
+            document.body.style.color = "#FFF";
+
+            title.style.color = "#9baacd";
+            message.style.color = "#b7c0ba";
+            clock.style.color = "#FFF";
+            ampm.style.color = "#8c8c8c";
+            status.style.color = "#b2aaa4";
+
             break;
 
-        case "finished":
-            status.textContent = "Exam Finished";
-            break;
+     case "finished":
+
+    document.body.style.background = "#C62828";
+    document.body.style.color = "#FFF";
+
+    title.style.color = "#FFF";
+    message.style.color = "#FFF";
+    clock.style.color = "#FFF";
+    ampm.style.color = "#FFF";
+
+    status.innerHTML = `
+        <div class="exam-over">
+            EXAM IS OVER
+        </div>
+
+        <div class="submit-paper">
+            PLEASE SUBMIT YOUR ANSWER SCRIPTS QUIETLY
+        </div>
+    `;
+
+    document.querySelector(".clock").style.transform = "scale(0.55)";
+    document.querySelector(".clock").style.transition = "0.8s";
+
+    break;
 
         default:
+
             status.textContent = "Exam Yet Not Started";
+
+            document.body.style.background = "#F5F5F0";
+            document.body.style.color = "#000";
+
+            title.style.color = "#333";
+            message.style.color = "#444";
+            clock.style.color = "#000";
+            ampm.style.color = "#444";
+            status.style.color = "#444";
 
     }
 
