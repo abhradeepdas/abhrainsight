@@ -6,6 +6,11 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 console.log("LEADERBOARD JS LOADED");
+const leaderboardLoader =
+    document.getElementById("leaderboardLoader");
+
+const leaderboardContent =
+    document.getElementById("leaderboardContent");
 const updatedDate =
     document.getElementById("updatedDate");
 
@@ -53,22 +58,7 @@ const searchInput =
 
 async function loadLeaderboard() {
 
-   leaderboardTableBody.innerHTML = `
-    <tr>
-        <td colspan="4" class="text-center py-5">
-            <div class="spinner-border spinner-border-sm text-primary"
-                 role="status">
-                <span class="visually-hidden">
-                    Loading...
-                </span>
-            </div>
-
-            <div class="mt-2 text-muted small">
-                Loading leaderboard...
-            </div>
-        </td>
-    </tr>
-`;
+ 
 
 
     updatedDate.textContent =
@@ -86,19 +76,27 @@ async function loadLeaderboard() {
         leaderboardClass.value;
 
 
-    if (!selectedClass) {
+  if (!selectedClass) {
 
-        leaderboardTableBody.innerHTML = `
-            <tr>
-                <td colspan="4"
-                    class="text-center text-muted py-4">
-                    Select a class to view leaderboard.
-                </td>
-            </tr>
-        `;
+    leaderboardTableBody.innerHTML = `
+        <tr>
+            <td colspan="4"
+                class="text-center text-muted py-4">
+                Select a class to view leaderboard.
+            </td>
+        </tr>
+    `;
 
-        return;
+    if (leaderboardLoader) {
+        leaderboardLoader.style.display = "none";
     }
+
+    if (leaderboardContent) {
+        leaderboardContent.style.display = "block";
+    }
+
+    return;
+}
 
 
     try {
@@ -564,6 +562,13 @@ async function loadLeaderboard() {
          */
 
         applySearch();
+        if (leaderboardLoader) {
+    leaderboardLoader.style.display = "none";
+}
+
+if (leaderboardContent) {
+    leaderboardContent.style.display = "block";
+}
 
 
     } catch (error) {
