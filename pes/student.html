@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,289 +15,565 @@
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet"
- >
+    >
+
+    <style>
+
+        body {
+            background: #f5f7fa;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #1e293b;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================== */
+
+        .navbar {
+            background: #1e3a8a;
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+        }
+
+        /* =========================
+           CARDS
+        ========================== */
+
+        .card,
+        .profile-card,
+        .content-card {
+            background: #ffffff;
+            border: 0;
+            border-radius: 18px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        /* =========================
+           SECTION TITLES
+        ========================== */
+
+        .section-title {
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+        }
+
+        /* =========================
+           PROFILE
+        ========================== */
+
+        .avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+
+            background: #1e3a8a;
+            color: #ffffff;
+
+            font-size: 34px;
+            font-weight: 700;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin: auto;
+        }
+
+        #studentName {
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        /* =========================
+           STATISTICS
+        ========================== */
+
+        .stat-box {
+            padding: 8px;
+        }
+
+        .stat {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        .stat-label {
+            display: block;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .attendance-box {
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        /* =========================
+           TABLE
+        ========================== */
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table th {
+            background: #1e3a8a;
+            color: #ffffff;
+            white-space: nowrap;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        /* =========================
+           BONUS
+        ========================== */
+
+        .bonus-item {
+            padding: 10px 6px;
+        }
+
+        .bonus-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        .bonus-label {
+            display: block;
+            margin-top: 4px;
+            color: #64748b;
+            font-size: 13px;
+        }
 
+        /* =========================
+           ACHIEVEMENTS
+        ========================== */
+
+        .achievement-badge {
+            background: #fff3cd;
+            color: #8a6d00;
+
+            margin: 4px;
+            padding: 9px 13px;
+
+            border-radius: 20px;
+
+            display: inline-block;
+
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .achievement-empty {
+            color: #64748b;
+            text-align: center;
+            padding: 15px;
+        }
+
+        /* =================================================
+           MARKS & POINTS BREAKDOWN
+        ================================================= */
+
+        .breakdown-toggle {
+            border: 1px solid #dbe3f0;
+            background: #f8fafc;
+            color: #1e3a8a;
+
+            border-radius: 12px;
+
+            padding: 12px 16px;
+
+            font-weight: 600;
+
+            transition: all 0.2s ease;
+        }
+
+        .breakdown-toggle:hover {
+            background: #eef4ff;
+            border-color: #b9c9e8;
+        }
+
+        .breakdown-toggle .arrow {
+            transition: transform 0.2s ease;
+        }
+
+        .breakdown-toggle[aria-expanded="true"] .arrow {
+            transform: rotate(180deg);
+        }
+
+        /* Individual test breakdown */
+
+        .test-breakdown {
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .test-breakdown-header {
+            background: #f8fafc;
+            padding: 16px 18px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .test-name {
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .subject-name {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .breakdown-body {
+            padding: 18px;
+        }
+
+        .breakdown-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 10px 0;
 
-<style>
+            border-bottom: 1px solid #f1f5f9;
+        }
 
-body {
-    background: #f5f7fa;
-    font-family: "Segoe UI", Arial, sans-serif;
-}
+        .breakdown-line:last-child {
+            border-bottom: 0;
+        }
 
-/* Navbar */
+        .breakdown-label {
+            color: #64748b;
+            font-size: 14px;
+        }
 
-.navbar {
-    background: #1e3a8a;
-}
+        .breakdown-value {
+            font-weight: 600;
+            color: #1e293b;
+            text-align: right;
+        }
 
-.navbar-brand {
-    font-weight: 600;
-}
+        .calculation {
+            display: block;
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        /* Highlight important values */
 
+        .points-before-cap {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
 
-/* Cards */
+        .final-points {
+            background: #eef4ff;
+            border-radius: 12px;
 
-.card {
-    border: 0;
-    border-radius: 18px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
+            padding: 13px 10px;
 
-/* Profile and content cards */
+            margin-top: 8px;
+        }
 
-.profile-card,
-.content-card {
-    background: #ffffff;
-    border: 0;
-    border-radius: 18px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
+        .final-points .breakdown-label {
+            color: #1e3a8a;
+            font-weight: 700;
+        }
 
+        .final-points .breakdown-value {
+            color: #1e3a8a;
+            font-size: 18px;
+            font-weight: 800;
+        }
 
-/* Section headings */
+        /* Vault */
 
-.section-title {
-    font-weight: 700;
-    color: #1e293b;
-    margin-bottom: 20px;
-}
+        .vault-info {
+            margin-top: 12px;
+            padding: 12px 14px;
 
+            border-radius: 10px;
 
-/* Statistics */
+            background: #fff8e1;
+            border: 1px solid #f5df9a;
 
-.stat-box {
-    padding: 8px;
-}
+            color: #735c00;
+            font-size: 13px;
+        }
 
-.stat-label {
-    display: block;
-    color: #64748b;
-    font-size: 14px;
-}
+        /* =========================
+           RULES SECTION
+        ========================== */
 
+        .rules-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+        }
 
-/* Attendance */
+        .rule-item {
+            display: flex;
+            gap: 12px;
 
-.attendance-box {
-    margin-top: 20px;
-    padding-top: 18px;
-    border-top: 1px solid #e5e7eb;
-}
+            padding: 13px 0;
 
+            border-bottom: 1px solid #e5e7eb;
+        }
 
-/* Bonus section */
+        .rule-item:last-child {
+            border-bottom: 0;
+        }
 
-.bonus-item {
-    padding: 10px 6px;
-}
+        .rule-number {
+            width: 28px;
+            height: 28px;
 
-.bonus-value {
-    font-size: 24px;
-    font-weight: 700;
-    color: #1e3a8a;
-}
+            flex-shrink: 0;
 
-.bonus-label {
-    display: block;
-    margin-top: 4px;
-    color: #64748b;
-    font-size: 13px;
-}
+            border-radius: 50%;
 
+            background: #1e3a8a;
+            color: #ffffff;
 
-/* Footer */
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-.footer-note {
-    color: #94a3b8;
-    font-size: 13px;
-}
-
-
-/* Mobile */
-
-@media (max-width: 767px) {
-
-    .profile-card,
-    .content-card {
-        border-radius: 14px;
-    }
-
-    .bonus-value {
-        font-size: 20px;
-    }
-
-    .bonus-label {
-        font-size: 12px;
-    }
-
-    .section-title {
-        font-size: 19px;
-    }
-
-}
-/* Student avatar */
-
-.avatar {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-
-    background: #1e3a8a;
-    color: #fff;
-
-    font-size: 34px;
-    font-weight: bold;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin: auto;
-}
-
-
-/* Student name */
-
-#studentName {
-    font-weight: 700;
-    color: #1e293b;
-}
-
-
-/* Statistics */
-
-.stat {
-    font-size: 28px;
-    font-weight: bold;
-    color: #1e3a8a;
-}
-
-.stat + small {
-    color: #64748b;
-}
-
-
-/* Results table */
-
-.table {
-    margin-bottom: 0;
-}
-
-.table th {
-    background: #1e3a8a;
-    color: #fff;
-    white-space: nowrap;
-}
-
-.table td {
-    vertical-align: middle;
-}
-
-
-/* Achievement area */
-
-.achievement-badge {
-    background: #fff3cd;
-    color: #8a6d00;
-
-    margin: 4px;
-    padding: 9px 13px;
-
-    border-radius: 20px;
-
-    display: inline-block;
-
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.achievement-empty {
-    color: #64748b;
-    text-align: center;
-    padding: 15px;
-}
-
-
-/* Mobile */
-
-@media (max-width: 767px) {
-
-    .container {
-        padding-left: 14px;
-        padding-right: 14px;
-    }
-
-    .card {
-        border-radius: 14px;
-    }
-
-    .avatar {
-        width: 75px;
-        height: 75px;
-        font-size: 28px;
-    }
-
-    #studentName {
-        font-size: 22px;
-    }
-
-    .stat {
-        font-size: 23px;
-    }
-
-    .table {
-        font-size: 14px;
-    }
-
-    .table th,
-    .table td {
-        padding: 9px 7px;
-    }
-
-    /*
-       Allow the result table to scroll
-       horizontally on small screens.
-    */
-
-    .card:has(#studentResultsBody) {
-        overflow: hidden;
-    }
-
-    .card:has(#studentResultsBody) .table {
-        min-width: 430px;
-    }
-
-    .achievement-badge {
-        font-size: 13px;
-        padding: 8px 10px;
-        margin: 3px 2px;
-    }
-
-}
-
-
-/* Very small phones */
-
-@media (max-width: 400px) {
-
-    .stat {
-        font-size: 21px;
-    }
-
-    .table {
-        font-size: 13px;
-    }
-
-    .table th,
-    .table td {
-        padding: 8px 6px;
-    }
-
-}
-
-</style>
-
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .rule-title {
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .rule-description {
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        .formula-box {
+            margin-top: 12px;
+
+            padding: 12px 14px;
+
+            background: #ffffff;
+            border: 1px dashed #cbd5e1;
+
+            border-radius: 10px;
+
+            font-family: Consolas, monospace;
+            font-size: 13px;
+
+            color: #334155;
+        }
+
+        /* =========================
+           FOOTER
+        ========================== */
+
+        .footer-note {
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        /* =================================================
+           SKELETON LOADER
+        ================================================= */
+
+        .skeleton {
+            background:
+                linear-gradient(
+                    90deg,
+                    #edf1f5 25%,
+                    #f7f9fb 37%,
+                    #edf1f5 63%
+                );
+
+            background-size: 400% 100%;
+
+            animation:
+                skeleton-loading 1.4s ease infinite;
+
+            border-radius: 8px;
+        }
+
+        @keyframes skeleton-loading {
+
+            0% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0 50%;
+            }
+
+        }
+
+        .skeleton-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            margin: auto;
+        }
+
+        .skeleton-name {
+            width: 160px;
+            height: 24px;
+            margin: 18px auto 8px;
+        }
+
+        .skeleton-class {
+            width: 90px;
+            height: 16px;
+            margin: auto;
+        }
+
+        .skeleton-stat {
+            width: 65px;
+            height: 28px;
+            margin: auto;
+        }
+
+        .skeleton-label {
+            width: 80px;
+            height: 13px;
+            margin: 8px auto 0;
+        }
+
+        .skeleton-title {
+            width: 210px;
+            height: 24px;
+            margin-bottom: 20px;
+        }
+
+        .skeleton-row {
+            height: 18px;
+            margin-bottom: 14px;
+        }
+
+        .skeleton-row.long {
+            width: 95%;
+        }
+
+        .skeleton-row.medium {
+            width: 75%;
+        }
+
+        .skeleton-row.short {
+            width: 50%;
+        }
+
+        .skeleton-bonus {
+            width: 70px;
+            height: 28px;
+            margin: auto;
+        }
+
+        /* =========================
+           MOBILE
+        ========================== */
+
+        @media (max-width: 767px) {
+
+            .container {
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            .profile-card,
+            .content-card {
+                border-radius: 14px;
+            }
+
+            .avatar {
+                width: 75px;
+                height: 75px;
+                font-size: 28px;
+            }
+
+            #studentName {
+                font-size: 22px;
+            }
+
+            .stat {
+                font-size: 23px;
+            }
+
+            .bonus-value {
+                font-size: 20px;
+            }
+
+            .bonus-label {
+                font-size: 12px;
+            }
+
+            .section-title {
+                font-size: 19px;
+            }
+
+            .table {
+                font-size: 14px;
+            }
+
+            .table th,
+            .table td {
+                padding: 9px 7px;
+            }
+
+            .achievement-badge {
+                font-size: 13px;
+                padding: 8px 10px;
+                margin: 3px 2px;
+            }
+
+            .breakdown-body {
+                padding: 14px;
+            }
+
+            .breakdown-line {
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .breakdown-value {
+                max-width: 55%;
+            }
+
+        }
+
+        @media (max-width: 400px) {
+
+            .stat {
+                font-size: 21px;
+            }
+
+            .table {
+                font-size: 13px;
+            }
+
+            .table th,
+            .table td {
+                padding: 8px 6px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
@@ -306,252 +581,260 @@ body {
 <body>
 
 
-<!-- NAVBAR -->
+<!-- =====================================================
+     NAVBAR
+====================================================== -->
 
 <nav class="navbar navbar-dark">
 
-```
-<div class="container py-2 d-flex align-items-center">
+    <div class="container py-2 d-flex align-items-center">
 
-    <a
-        id="leaderboardBackButton"
-        href="leaderboard.html"
-        class="btn btn-light btn-sm px-3"
-    >
-        &larr; Leaderboard
-    </a>
+        <a
+            id="leaderboardBackButton"
+            href="leaderboard.html"
+            class="btn btn-light btn-sm px-3"
+        >
+            &larr; Leaderboard
+        </a>
 
-    <span class="navbar-brand mb-0 ms-auto">
-        Student Profile
-    </span>
+        <span class="navbar-brand mb-0 ms-auto">
+            Student Profile
+        </span>
 
-</div>
-
+    </div>
 
 </nav>
 
-<!-- MAIN -->
+
+<!-- =====================================================
+     MAIN
+====================================================== -->
 
 <div class="container py-4">
 
-<!-- LOADER -->
 
-<div
-    id="studentLoader"
-    class="text-center py-4"
->
+    <!-- =================================================
+         LOADER
+    ================================================== -->
+
+    <div id="studentLoader">
+
+        <div class="row g-4">
+
+
+            <!-- PROFILE SKELETON -->
+
+            <div class="col-lg-4">
+
+                <div class="profile-card p-4 text-center">
+
+                    <div class="skeleton skeleton-avatar"></div>
+
+                    <div class="skeleton skeleton-name"></div>
+
+                    <div class="skeleton skeleton-class"></div>
+
+                    <hr>
+
+                    <div class="row">
+
+                        <div class="col stat-box">
+
+                            <div class="skeleton skeleton-stat"></div>
+
+                            <div class="skeleton skeleton-label"></div>
+
+                        </div>
+
+                        <div class="col stat-box">
+
+                            <div class="skeleton skeleton-stat"></div>
+
+                            <div class="skeleton skeleton-label"></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="attendance-box">
+
+                        <div class="skeleton skeleton-stat"></div>
+
+                        <div class="skeleton skeleton-label"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT SKELETON -->
+
+            <div class="col-lg-8">
+
+
+                <div class="content-card p-4 mb-4">
+
+                    <div class="skeleton skeleton-title"></div>
+
+                    <div class="skeleton skeleton-row long"></div>
+                    <div class="skeleton skeleton-row long"></div>
+                    <div class="skeleton skeleton-row medium"></div>
+                    <div class="skeleton skeleton-row short"></div>
+
+                </div>
+
+
+                <div class="content-card p-4 mb-4">
+
+                    <div class="skeleton skeleton-title"></div>
+
+                    <div class="row text-center">
+
+                        <div class="col-4">
+
+                            <div class="skeleton skeleton-bonus"></div>
+
+                            <div class="skeleton skeleton-label"></div>
+
+                        </div>
+
+                        <div class="col-4">
+
+                            <div class="skeleton skeleton-bonus"></div>
+
+                            <div class="skeleton skeleton-label"></div>
+
+                        </div>
+
+                        <div class="col-4">
+
+                            <div class="skeleton skeleton-bonus"></div>
+
+                            <div class="skeleton skeleton-label"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="content-card p-4">
+
+                    <div class="skeleton skeleton-title"></div>
+
+                    <div class="skeleton skeleton-row long"></div>
+                    <div class="skeleton skeleton-row medium"></div>
+                    <div class="skeleton skeleton-row short"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         ACTUAL CONTENT
+    ================================================== -->
 
     <div
-        class="spinner-border text-primary"
-        role="status"
+        id="studentContent"
+        style="display:none;"
     >
-        <span class="visually-hidden">
-            Loading...
-        </span>
-    </div>
 
-    <div class="mt-2 text-muted small">
-        Loading student profile...
-    </div>
-
-</div>
+        <div class="row g-4">
 
 
-<!-- PROFILE CONTENT -->
+            <!-- =================================================
+                 PROFILE
+            ================================================== -->
 
-<div class="row g-4">
+            <div class="col-lg-4">
 
-    <!-- PROFILE -->
-
-    <div class="col-lg-4">
-
-        <div class="profile-card p-4 text-center">
-
-            <div class="avatar">
-                AD
-            </div>
-
-            <h3
-                class="mt-3 mb-1"
-                id="studentName"
-            >
-                Loading...
-            </h3>
-
-            <p
-                class="text-muted mb-3"
-                id="studentClass"
-            >
-                Loading...
-            </p>
+                <div class="profile-card p-4 text-center">
 
 
-
-                <hr>
-
-
-                <!-- RANK / AVERAGE -->
-
-                <div class="row">
-
-                    <div class="col stat-box">
-
-                        <div
-                            class="stat"
-                            id="studentRank"
-                        >
-                            -
-                        </div>
-
-                        <span class="stat-label">
-                            Rank
-                        </span>
-
+                    <div class="avatar">
+                        AD
                     </div>
 
 
-                    <div class="col stat-box">
-
-                        <div
-                            class="stat"
-                            id="studentAverage"
-                        >
-                            -
-                        </div>
-
-                        <span class="stat-label">
-                            Average
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <!-- ATTENDANCE -->
-
-                <div class="attendance-box">
-
-                    <div
-                        class="stat"
-                        id="studentAttendance"
+                    <h3
+                        class="mt-3 mb-1"
+                        id="studentName"
                     >
-                        -
-                    </div>
-
-                    <span class="stat-label">
-                        Attendance
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
+                        Loading...
+                    </h3>
 
 
-        <!-- RIGHT CONTENT -->
-
-        <div class="col-lg-8">
-
-
-            <!-- PERFORMANCE -->
-
-            <div class="content-card p-4 mb-4">
-
-                <h4 class="section-title">
-                    Performance Summary
-                </h4>
-
-                <div class="table-responsive">
-
-                    <table class="table align-middle">
-
-                        <thead>
-
-                            <tr>
-
-                                <th>
-                                    Test
-                                </th>
-
-                                <th>
-                                    Subject
-                                </th>
-
-                                <th class="text-end">
-                                    Points
-                                </th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody id="studentResultsBody">
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
+                    <p
+                        class="text-muted mb-3"
+                        id="studentClass"
+                    >
+                        Loading...
+                    </p>
 
 
-            <!-- BONUSES -->
-
-            <div class="content-card p-4 mb-4">
-
-                <h4 class="section-title">
-                    Bonus &amp; Points Vault
-                </h4>
-
-                <div class="row text-center">
+                    <hr>
 
 
-                    <div class="col-4 bonus-item">
+                    <!-- RANK / AVERAGE -->
 
-                        <div
-                            class="bonus-value"
-                            id="highestBonusTotal"
-                        >
-                            0.00
+                    <div class="row">
+
+                        <div class="col stat-box">
+
+                            <div
+                                class="stat"
+                                id="studentRank"
+                            >
+                                -
+                            </div>
+
+                            <span class="stat-label">
+                                Rank
+                            </span>
+
                         </div>
 
-                        <span class="bonus-label">
-                            Highest Marks Bonus
-                        </span>
+
+                        <div class="col stat-box">
+
+                            <div
+                                class="stat"
+                                id="studentAverage"
+                            >
+                                -
+                            </div>
+
+                            <span class="stat-label">
+                                Average
+                            </span>
+
+                        </div>
 
                     </div>
 
 
-                    <div class="col-4 bonus-item">
+                    <!-- ATTENDANCE -->
+
+                    <div class="attendance-box">
 
                         <div
-                            class="bonus-value"
-                            id="improveBonusTotal"
+                            class="stat"
+                            id="studentAttendance"
                         >
-                            0.00
+                            -
                         </div>
 
-                        <span class="bonus-label">
-                            Improvement Bonus
-                        </span>
-
-                    </div>
-
-
-                    <div class="col-4 bonus-item">
-
-                        <div
-                            class="bonus-value"
-                            id="pointsVault"
-                        >
-                            0.00
-                        </div>
-
-                        <span class="bonus-label">
-                            Points Vault
+                        <span class="stat-label">
+                            Attendance
                         </span>
 
                     </div>
@@ -561,46 +844,529 @@ body {
             </div>
 
 
-            <!-- ACHIEVEMENTS -->
+            <!-- =================================================
+                 RIGHT CONTENT
+            ================================================== -->
 
-            <div class="content-card p-4 mb-4">
+            <div class="col-lg-8">
 
-                <h4 class="section-title">
-                    Achievements
-                </h4>
 
-                <div id="studentAchievements">
+                <!-- =================================================
+                     PERFORMANCE SUMMARY
+                ================================================== -->
 
-                    <div class="achievement-empty">
+                <div class="content-card p-4 mb-4">
 
-                        <div class="fs-4 mb-2">
-                            🏆
+                    <h4 class="section-title">
+                        Performance Summary
+                    </h4>
+
+
+                    <p class="text-muted small mb-3">
+                        Your final points for each published test.
+                    </p>
+
+
+                    <div class="table-responsive">
+
+                        <table class="table align-middle">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Test
+                                    </th>
+
+                                    <th>
+                                        Subject
+                                    </th>
+
+                                    <th class="text-end">
+                                        Points
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="studentResultsBody">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         BREAKDOWN TOGGLE
+                    ================================================== -->
+
+                    <div class="mt-4">
+
+                        <button
+                            class="btn breakdown-toggle w-100 d-flex justify-content-between align-items-center"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#marksBreakdownSection"
+                            aria-expanded="false"
+                            aria-controls="marksBreakdownSection"
+                        >
+
+                            <span>
+                                📊 View Marks &amp; Points Breakdown
+                            </span>
+
+                            <span class="arrow">
+                                ▼
+                            </span>
+
+                        </button>
+
+
+                        <div
+                            class="collapse mt-3"
+                            id="marksBreakdownSection"
+                        >
+
+                            <div class="mb-3">
+
+                                <h5 class="fw-bold mb-1">
+                                    Marks &amp; Points Breakdown
+                                </h5>
+
+                                <p class="text-muted small mb-0">
+                                    See exactly how each test score is calculated.
+                                </p>
+
+                            </div>
+
+
+                            <!--
+                                student.js should insert
+                                individual test breakdowns here.
+                            -->
+
+                            <div
+                                id="studentMarksBreakdown"
+                            >
+
+                                <div class="text-muted text-center py-3">
+
+                                    Breakdown will appear here.
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =================================================
+                                 CALCULATION RULES
+                            ================================================== -->
+
+                            <div class="rules-card mt-4 p-3">
+
+
+                                <button
+                                    class="btn btn-link text-decoration-none p-0 w-100 text-start d-flex justify-content-between align-items-center"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#pointsRules"
+                                    aria-expanded="false"
+                                    aria-controls="pointsRules"
+                                >
+
+                                    <span class="fw-bold">
+                                        ℹ️ How Points Are Calculated
+                                    </span>
+
+                                    <span>
+                                        Show rules
+                                    </span>
+
+                                </button>
+
+
+                                <div
+                                    class="collapse"
+                                    id="pointsRules"
+                                >
+
+                                    <div class="pt-3">
+
+
+                                        <!-- RULE 1 -->
+
+                                        <div class="rule-item">
+
+                                            <div class="rule-number">
+                                                1
+                                            </div>
+
+                                            <div>
+
+                                                <div class="rule-title">
+                                                    Base Points
+                                                </div>
+
+                                                <div class="rule-description">
+                                                    Your obtained marks are converted to a score out of 10.
+                                                </div>
+
+                                                <div class="formula-box">
+                                                    Base Points = (Marks Obtained ÷ Total Marks) × 10
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <!-- RULE 2 -->
+
+                                        <div class="rule-item">
+
+                                            <div class="rule-number">
+                                                2
+                                            </div>
+
+                                            <div>
+
+                                                <div class="rule-title">
+                                                    Highest Marks Bonus
+                                                </div>
+
+                                                <div class="rule-description">
+                                                    If you qualify for the highest-marks bonus, 0.30 points are added.
+                                                </div>
+
+                                                <div class="formula-box">
+                                                    Highest Marks Bonus = +0.30 points
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <!-- RULE 3 -->
+
+                                        <div class="rule-item">
+
+                                            <div class="rule-number">
+                                                3
+                                            </div>
+
+                                            <div>
+
+                                                <div class="rule-title">
+                                                    Improvement Bonus
+                                                </div>
+
+                                                <div class="rule-description">
+                                                    If you qualify for the improvement bonus, 0.20 points are added.
+                                                </div>
+
+                                                <div class="formula-box">
+                                                    Improvement Bonus = +0.20 points
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <!-- RULE 4 -->
+
+                                        <div class="rule-item">
+
+                                            <div class="rule-number">
+                                                4
+                                            </div>
+
+                                            <div>
+
+                                                <div class="rule-title">
+                                                    Points Before Cap
+                                                </div>
+
+                                                <div class="rule-description">
+                                                    This is the total score after adding the Base Points and all eligible bonuses, before applying the 10-point maximum.
+                                                </div>
+
+                                                <div class="formula-box">
+                                                    Points Before Cap = Base Points + Highest Marks Bonus + Improvement Bonus
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <!-- RULE 5 -->
+
+                                        <div class="rule-item">
+
+                                            <div class="rule-number">
+                                                5
+                                            </div>
+
+                                            <div>
+
+                                                <div class="rule-title">
+                                                    10-Point Cap
+                                                </div>
+
+                                                <div class="rule-description">
+                                                    The active score for one test cannot be more than 10 points.
+                                                </div>
+
+                                                <div class="formula-box">
+                                                    Active Score = minimum(Points Before Cap, 10)
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <!-- RULE 6 -->
+
+                                        <div class="rule-item">
+
+                                            <div class="rule-number">
+                                                6
+                                            </div>
+
+                                            <div>
+
+                                                <div class="rule-title">
+                                                    Points Vault
+                                                </div>
+
+                                                <div class="rule-description">
+                                                    If Points Before Cap is greater than 10, the excess points are stored in the Points Vault.
+                                                </div>
+
+                                                <div class="formula-box">
+                                                    Vault Deposit = max(Points Before Cap − 10, 0)
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <!-- RULE 7 -->
+
+                                        <div class="rule-item">
+
+                                            <div class="rule-number">
+                                                7
+                                            </div>
+
+                                            <div>
+
+                                                <div class="rule-title">
+                                                    Using the Points Vault
+                                                </div>
+
+                                                <div class="rule-description">
+                                                    If a later test has a score below 10, available Vault points can be used to raise that score, up to the 10-point limit.
+                                                </div>
+
+                                                <div class="formula-box">
+                                                    Final Points = Active Score + Vault Used
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <!-- RULE 8 -->
+
+                                        <div class="rule-item">
+
+                                            <div class="rule-number">
+                                                8
+                                            </div>
+
+                                            <div>
+
+                                                <div class="rule-title">
+                                                    Final Points
+                                                </div>
+
+                                                <div class="rule-description">
+                                                    Final Points are the points recorded for that test after applying the cap and any eligible Points Vault protection.
+                                                </div>
+
+                                                <div class="formula-box">
+                                                    Final Points ≤ 10.00
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <!-- RULE 9 -->
+
+                                        <div class="rule-item">
+
+                                            <div class="rule-number">
+                                                9
+                                            </div>
+
+                                            <div>
+
+                                                <div class="rule-title">
+                                                    Student Average
+                                                </div>
+
+                                                <div class="rule-description">
+                                                    Your average is calculated from the Final Points of all published tests included in your record.
+                                                </div>
+
+                                                <div class="formula-box">
+                                                    Average = Total Final Points ÷ Number of Published Tests
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
                         </div>
-
-                        <div>
-                            Achievements will appear here.
-                        </div>
-
-                        <small>
-                            Awards are based on your academic
-                            performance and attendance.
-                        </small>
 
                     </div>
 
                 </div>
 
+
+                <!-- =================================================
+                     BONUS & POINTS VAULT
+                ================================================== -->
+
+                <div class="content-card p-4 mb-4">
+
+                    <h4 class="section-title">
+                        Bonus &amp; Points Vault
+                    </h4>
+
+
+                    <div class="row text-center">
+
+
+                        <div class="col-4 bonus-item">
+
+                            <div
+                                class="bonus-value"
+                                id="highestBonusTotal"
+                            >
+                                0.00
+                            </div>
+
+                            <span class="bonus-label">
+                                Highest Marks Bonus
+                            </span>
+
+                        </div>
+
+
+                        <div class="col-4 bonus-item">
+
+                            <div
+                                class="bonus-value"
+                                id="improveBonusTotal"
+                            >
+                                0.00
+                            </div>
+
+                            <span class="bonus-label">
+                                Improvement Bonus
+                            </span>
+
+                        </div>
+
+
+                        <div class="col-4 bonus-item">
+
+                            <div
+                                class="bonus-value"
+                                id="pointsVault"
+                            >
+                                0.00
+                            </div>
+
+                            <span class="bonus-label">
+                                Points Vault
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     ACHIEVEMENTS
+                ================================================== -->
+
+                <div class="content-card p-4 mb-4">
+
+                    <h4 class="section-title">
+                        Achievements
+                    </h4>
+
+
+                    <div id="studentAchievements">
+
+                        <div class="achievement-empty">
+
+                            <div class="fs-4 mb-2">
+                                🏆
+                            </div>
+
+                            <div>
+                                Achievements will appear here.
+                            </div>
+
+                            <small>
+                                Awards are based on your academic
+                                performance and attendance.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     FOOTER
+                ================================================== -->
+
+                <div class="text-center footer-note py-2">
+
+                    Student performance dashboard
+
+                </div>
+
+
             </div>
-
-
-            <!-- FOOTER -->
-
-            <div class="text-center footer-note py-2">
-
-                Student performance dashboard
-
-            </div>
-
 
         </div>
 
@@ -608,6 +1374,10 @@ body {
 
 </div>
 
+
+<!-- =====================================================
+     SCRIPTS
+====================================================== -->
 
 <script
     type="module"
@@ -623,4 +1393,3 @@ body {
 </body>
 
 </html>
-
