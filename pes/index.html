@@ -1,292 +1,523 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1"
->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
 
-<title>PES | Progress Evaluation Series</title>
+    <title>PES | Progress Evaluation Series</title>
 
-<link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
 
-<style>
+    <style>
 
-    body {
-        background: #f5f7fa;
-        font-family: "Segoe UI", Arial, sans-serif;
-        color: #1e293b;
-    }
+        body {
+            background: #f5f7fa;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #1e293b;
+        }
 
-    .navbar {
-        background: #1e3a8a;
-    }
 
-    .navbar-brand {
-        font-weight: 700;
-    }
+        /* =========================
+           NAVBAR
+        ========================= */
 
-    .hero {
-        background: linear-gradient(
-            135deg,
-            #1e3a8a,
-            #2563eb
-        );
-        color: white;
-        border-radius: 0 0 28px 28px;
-        padding: 70px 20px;
-    }
+        .navbar {
+            background: #1e3a8a;
+        }
 
-    .hero h1 {
-        font-weight: 800;
-        font-size: clamp(34px, 6vw, 58px);
-    }
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
 
-    .hero p {
-        font-size: 18px;
-        opacity: 0.92;
-    }
 
-    .feature-card {
-        background: white;
-        border: 0;
-        border-radius: 18px;
-        padding: 30px 22px;
-        height: 100%;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-        transition: transform 0.2s ease;
-    }
-
-    .feature-card:hover {
-        transform: translateY(-4px);
-    }
-
-    .feature-icon {
-        font-size: 40px;
-        margin-bottom: 15px;
-    }
-
-    .feature-card h4 {
-        font-weight: 700;
-    }
-
-    .section-title {
-        font-weight: 800;
-        color: #1e293b;
-    }
-
-    .footer {
-        color: #94a3b8;
-        font-size: 13px;
-    }
-
-    @media (max-width: 767px) {
+        /* =========================
+           HERO
+        ========================= */
 
         .hero {
-            padding: 55px 18px;
+            background:
+                linear-gradient(
+                    135deg,
+                    #1e3a8a,
+                    #2563eb
+                );
+
+            color: white;
+
+            border-radius: 0 0 30px 30px;
+
+            padding: 78px 20px 82px;
+
+            box-shadow:
+                0 12px 30px
+                rgba(30, 58, 138, 0.18);
         }
+
+        .hero-content {
+            max-width: 850px;
+            margin: auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+
+            background: rgba(255, 255, 255, 0.14);
+
+            border: 1px solid
+                rgba(255, 255, 255, 0.25);
+
+            padding: 7px 15px;
+
+            border-radius: 50px;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            letter-spacing: 0.4px;
+
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-weight: 800;
+
+            font-size:
+                clamp(36px, 6vw, 60px);
+
+            line-height: 1.08;
+
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 18px;
+
+            line-height: 1.7;
+
+            opacity: 0.92;
+
+            max-width: 700px;
+
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-button {
+            font-weight: 600;
+
+            padding: 12px 24px;
+
+            border-radius: 10px;
+        }
+
+
+        /* =========================
+           EXPLORE SECTION
+        ========================= */
+
+        .explore-section {
+            padding-top: 55px;
+            padding-bottom: 45px;
+        }
+
+        .section-title {
+            font-weight: 800;
+
+            color: #1e293b;
+
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            color: #64748b;
+
+            margin-bottom: 0;
+        }
+
+
+        /* =========================
+           FEATURE CARDS
+        ========================= */
 
         .feature-card {
-            padding: 25px 18px;
+            background: #ffffff;
+
+            border: 1px solid
+                #e5e7eb;
+
+            border-radius: 20px;
+
+            padding: 32px 24px;
+
+            height: 100%;
+
+            box-shadow:
+                0 6px 18px
+                rgba(15, 23, 42, 0.06);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                border-color 0.2s ease;
         }
 
-    }
+        .feature-card:hover {
+            transform: translateY(-5px);
 
-</style>
+            box-shadow:
+                0 14px 28px
+                rgba(15, 23, 42, 0.10);
 
+            border-color: #dbe4ff;
+        }
+
+        .feature-icon {
+            width: 68px;
+            height: 68px;
+
+            margin: 0 auto 20px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 18px;
+
+            background: #eef4ff;
+
+            font-size: 32px;
+        }
+
+        .feature-card h4 {
+            font-weight: 700;
+
+            margin-bottom: 12px;
+
+            color: #1e293b;
+        }
+
+        .feature-card p {
+            color: #64748b;
+
+            line-height: 1.65;
+
+            min-height: 78px;
+
+            margin-bottom: 22px;
+        }
+
+        .feature-card .btn {
+            border-radius: 9px;
+
+            font-weight: 600;
+
+            padding-left: 18px;
+            padding-right: 18px;
+        }
+
+
+        /* =========================
+           ADMIN AREA
+        ========================= */
+
+        .admin-section {
+            padding-bottom: 35px;
+        }
+
+        .admin-box {
+            background: #ffffff;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 16px;
+
+            padding: 18px 20px;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            box-shadow:
+                0 5px 15px
+                rgba(15, 23, 42, 0.04);
+        }
+
+        .admin-text {
+            color: #64748b;
+
+            font-size: 14px;
+
+            margin: 0;
+        }
+
+        .admin-box .btn {
+            border-radius: 8px;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+            color: #94a3b8;
+
+            font-size: 13px;
+
+            border-top:
+                1px solid #e5e7eb;
+
+            background: #ffffff;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 767px) {
+
+            .hero {
+                padding:
+                    58px 18px
+                    65px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .explore-section {
+                padding-top: 40px;
+            }
+
+            .feature-card {
+                padding: 28px 20px;
+            }
+
+            .feature-card p {
+                min-height: auto;
+            }
+
+            .admin-box {
+                flex-direction: column;
+
+                width: 100%;
+
+                max-width: 340px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
+
 <body>
 
-<!-- NAVBAR -->
+
+<!-- =========================
+     NAVBAR
+========================= -->
 
 <nav class="navbar navbar-dark">
 
+    <div class="container py-2">
 
-<div class="container py-2">
+        <a
+            class="navbar-brand"
+            href="index.html"
+        >
+            PES
+        </a>
 
-    <a
-        class="navbar-brand"
-        href="index.html"
-    >
-        PES
-    </a>
+        <a
+            href="leaderboard.html"
+            class="btn btn-light btn-sm px-3"
+        >
+            Leaderboard
+        </a>
 
-    <a
-        href="leaderboard.html"
-        class="btn btn-light btn-sm px-3"
-    >
-        Leaderboard
-    </a>
-
-</div>
-
+    </div>
 
 </nav>
 
-<!-- HERO -->
+
+<!-- =========================
+     HERO
+========================= -->
 
 <section class="hero">
 
+    <div class="container text-center">
 
-<div class="container text-center">
+        <div class="hero-content">
 
-    <h1>
-        Progress Evaluation Series
-    </h1>
+            <div class="hero-badge">
+                Academic Performance Dashboard
+            </div>
 
-    <p class="mt-3 mb-4">
-        Track academic performance, progress,
-        achievements and class rankings.
-    </p>
+            <h1>
+                Progress Evaluation Series
+            </h1>
 
-    <a
-        href="leaderboard.html"
-        class="btn btn-light btn-lg px-4"
-    >
-        🏆 View Leaderboard
-    </a>
+            <p class="mt-3 mb-4">
 
-</div>
+                Track academic performance,
+                progress, achievements and
+                class rankings in one place.
 
+            </p>
+
+            <a
+                href="leaderboard.html"
+                class="btn btn-light btn-lg hero-button"
+            >
+                🏆 View Leaderboard
+            </a>
+
+        </div>
+
+    </div>
 
 </section>
 
-<!-- FEATURES -->
 
-<div class="container py-5">
+<!-- =========================
+     EXPLORE PES
+========================= -->
 
+<section class="explore-section">
 
-<div class="text-center mb-4">
+    <div class="container">
 
-    <h2 class="section-title">
-        Explore PES
-    </h2>
+        <div class="text-center mb-5">
 
-    <p class="text-muted">
-        Choose an option below to continue.
-    </p>
+            <h2 class="section-title">
+                Explore PES
+            </h2>
 
-</div>
-
-
-<div class="row g-4">
-
-
-    <!-- LEADERBOARD -->
-
-    <div class="col-md-6 col-lg-4">
-
-        <div class="feature-card text-center">
-
-            <div class="feature-icon">
-                🏆
-            </div>
-
-            <h4>
-                Leaderboard
-            </h4>
-
-            <p class="text-muted">
-                View class rankings, averages
-                and performance trends.
+            <p class="section-subtitle">
+                Choose an option below to continue.
             </p>
 
-            <a
-                href="leaderboard.html"
-                class="btn btn-primary"
-            >
-                View Leaderboard
-            </a>
+        </div>
+
+
+        <div class="row g-4 justify-content-center">
+
+
+            <!-- LEADERBOARD -->
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="feature-card text-center">
+
+                    <div class="feature-icon">
+                        🏆
+                    </div>
+
+                    <h4>
+                        Leaderboard
+                    </h4>
+
+                    <p>
+                        View class rankings, student
+                        averages and performance trends
+                        across published tests.
+                    </p>
+
+                    <a
+                        href="leaderboard.html"
+                        class="btn btn-primary"
+                    >
+                        View Leaderboard
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- STUDENT PROFILE -->
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="feature-card text-center">
+
+                    <div class="feature-icon">
+                        👤
+                    </div>
+
+                    <h4>
+                        Student Profile
+                    </h4>
+
+                    <p>
+                        Open a student's profile from
+                        the leaderboard to view detailed
+                        performance and progress.
+                    </p>
+
+                    <a
+                        href="leaderboard.html"
+                        class="btn btn-primary"
+                    >
+                        Find Student
+                    </a>
+
+                </div>
+
+            </div>
+
 
         </div>
 
     </div>
 
-
-    <!-- RESULTS -->
-
-    
+</section>
 
 
-    <!-- STUDENT PROFILE -->
-
-    <div class="col-md-6 col-lg-4">
-
-        <div class="feature-card text-center">
-
-            <div class="feature-icon">
-                👤
-            </div>
-
-            <h4>
-                Student Profile
-            </h4>
-
-            <p class="text-muted">
-                Open a student's profile from
-                the leaderboard to see detailed
-                performance.
-            </p>
-
-            <a
-                href="leaderboard.html"
-                class="btn btn-primary"
-            >
-                Find Student
-            </a>
-
-        </div>
-
-    </div>
 
 
-</div>
 
 
-</div>
 
-<!-- ADMIN -->
-
-<div class="container pb-5">
-
-
-<div class="text-center">
-
-    <a
-        href="admin-login.html"
-        class="btn btn-outline-secondary btn-sm"
-    >
-        Admin Login
-    </a>
-
-</div>
-
-
-</div>
-
-<!-- FOOTER -->
+<!-- =========================
+     FOOTER
+========================= -->
 
 <footer class="text-center footer py-4">
 
-```
-Progress Evaluation Series
-```
+    Progress Evaluation Series | Teacher:Abhradeep Das 
 
 </footer>
+
 
 <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 ></script>
+
 
 </body>
 
