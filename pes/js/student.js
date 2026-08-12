@@ -114,12 +114,26 @@ loadStudent().then(async () => {
 
     await loadAchievements();
 
+    // Hide skeleton
+    if (studentLoader) {
+        studentLoader.style.display = "none";
+    }
+
+    // Show actual profile
+    if (studentContent) {
+        studentContent.style.display = "block";
+    }
+
+}).catch(error => {
+
+    console.error("Student profile loading error:", error);
+
     if (studentLoader) {
         studentLoader.style.display = "none";
     }
 
     if (studentContent) {
-        studentContent.style.display = "";
+        studentContent.style.display = "block";
     }
 
 });
@@ -134,31 +148,41 @@ async function loadStudentResults() {
         collection(db, "marks")
     );
 
+
     // Get only this student's published tests
     const studentMarks = [];
+
 
     for (const markDoc of marksSnapshot.docs) {
 
         const mark = markDoc.data();
 
+
         if (mark.published !== true) {
             continue;
         }
+
 
         if (!mark.totalMarks || mark.totalMarks <= 0) {
             continue;
         }
 
+
         if (mark.studentDocId !== studentDocId) {
             continue;
         }
 
+
         studentMarks.push(mark);
+
     }
 
-    // IMPORTANT:
-    // Process Test 1 → Test 2 → Test 3
-    studentMarks.sort(function(a, b) {
+
+    /*
+     * Test 1 → Test 2 → Test 3...
+     */
+
+    studentMarks.sort(function (a, b) {
 
         const examA =
             String(a.exam || "");
@@ -166,11 +190,13 @@ async function loadStudentResults() {
         const examB =
             String(b.exam || "");
 
+
         const numberA =
             parseInt(
                 examA.replace(/\D/g, ""),
                 10
             ) || 0;
+
 
         const numberB =
             parseInt(
@@ -178,44 +204,108 @@ async function loadStudentResults() {
                 10
             ) || 0;
 
+
         return numberA - numberB;
+
     });
 
+
     let totalScore = 0;
+
     let testCount = 0;
 
     let highestBonusSum = 0;
+
     let improveBonusSum = 0;
 
     let vaultTotal = 0;
 
+
+    /*
+     * Process every test
+     */
+
     for (const mark of studentMarks) {
 
+
+        /*
+         * BASE POINTS
+         */
+
+        const obtainedMarks =
+            Number(mark.obtainedMarks) || 0;
+
+
+        const totalMarks =
+            Number(mark.totalMarks) || 0;
+
+
         const performancePoints =
-            (mark.obtainedMarks / mark.totalMarks) * 10;
+            (
+                obtainedMarks /
+                totalMarks
+            ) * 10;
+
+
+        /*
+         * BONUSES
+         */
 
         const highestBonus =
-            mark.highestBonus ? 0.30 : 0;
+            mark.highestBonus
+                ? 0.30
+                : 0;
+
 
         const improveBonus =
-            mark.improveBonus ? 0.20 : 0;
+            mark.improveBonus
+                ? 0.20
+                : 0;
+
+
+        /*
+         * RAW TOTAL
+         */
 
         const rawTotal =
             performancePoints +
             highestBonus +
             improveBonus;
 
-        // Active score cannot exceed 10
+
+        /*
+         * ACTIVE SCORE
+         */
+
         let finalScore =
-            Math.min(rawTotal, 10);
+            Math.min(
+                rawTotal,
+                10
+            );
 
-        // Excess goes into the Vault
+
+        /*
+         * VAULT DEPOSIT
+         */
+
         const vaultDeposit =
-            Math.max(rawTotal - 10, 0);
+            Math.max(
+                rawTotal - 10,
+                0
+            );
 
-        vaultTotal += vaultDeposit;
 
-        // Use existing Vault to protect a lower score
+        vaultTotal +=
+            vaultDeposit;
+
+
+        /*
+         * VAULT USED
+         */
+
+        let vaultUsed = 0;
+
+
         if (
             finalScore < 10 &&
             vaultTotal > 0
@@ -224,53 +314,341 @@ async function loadStudentResults() {
             const roomAvailable =
                 10 - finalScore;
 
-            const vaultUsed =
+
+            vaultUsed =
                 Math.min(
                     vaultTotal,
                     roomAvailable
                 );
 
-            finalScore += vaultUsed;
 
-            vaultTotal -= vaultUsed;
+            finalScore +=
+                vaultUsed;
+
+
+            vaultTotal -=
+                vaultUsed;
+
         }
 
-        totalScore += finalScore;
+
+        /*
+         * TOTALS
+         */
+
+        totalScore +=
+            finalScore;
+
         testCount++;
 
-        highestBonusSum += highestBonus;
-        improveBonusSum += improveBonus;
+
+        highestBonusSum +=
+            highestBonus;
+
+
+        improveBonusSum +=
+            improveBonus;
+
+
+        /*
+         * Build breakdown
+         */
+
+        const highestBonusHTML =
+            highestBonus > 0
+
+                ? `
+                    <div class="breakdown-row">
+
+                        <div>
+                            <div class="breakdown-label">
+                                Highest Marks Bonus
+                            </div>
+                        </div>
+
+                        <div class="breakdown-value breakdown-bonus">
+                            +${highestBonus.toFixed(2)}
+                        </div>
+
+                    </div>
+                `
+
+                : "";
+
+
+        const improveBonusHTML =
+            improveBonus > 0
+
+                ? `
+                    <div class="breakdown-row">
+
+                        <div>
+                            <div class="breakdown-label">
+                                Improvement Bonus
+                            </div>
+                        </div>
+
+                        <div class="breakdown-value breakdown-bonus">
+                            +${improveBonus.toFixed(2)}
+                        </div>
+
+                    </div>
+                `
+
+                : "";
+
+
+        const vaultDepositHTML =
+            vaultDeposit > 0
+
+                ? `
+                    <div class="breakdown-row">
+
+                        <div>
+
+                            <div class="breakdown-label">
+                                Points Vault Deposit
+                            </div>
+
+                            <div class="breakdown-formula">
+                                Extra points above 10.00
+                            </div>
+
+                        </div>
+
+                        <div class="breakdown-value breakdown-vault">
+                            +${vaultDeposit.toFixed(2)}
+                        </div>
+
+                    </div>
+                `
+
+                : "";
+
+
+        const vaultUsedHTML =
+            vaultUsed > 0
+
+                ? `
+                    <div class="breakdown-row">
+
+                        <div>
+
+                            <div class="breakdown-label">
+                                Points Vault Used
+                            </div>
+
+                            <div class="breakdown-formula">
+                                Used to protect this lower score
+                            </div>
+
+                        </div>
+
+                        <div class="breakdown-value breakdown-vault">
+                            +${vaultUsed.toFixed(2)}
+                        </div>
+
+                    </div>
+                `
+
+                : "";
+
 
         studentResultsBody.innerHTML += `
-            <tr>
-                <td>${mark.exam || "-"}</td>
-                <td>${mark.subject || "-"}</td>
-                <td>${finalScore.toFixed(2)}</td>
-            </tr>
+
+            <div class="breakdown-card">
+
+                <!-- HEADER -->
+
+                <div class="breakdown-header">
+
+                    <div>
+
+                        <div class="breakdown-test">
+                            ${mark.exam || "Test"}
+                        </div>
+
+                        <div class="breakdown-subject">
+                            ${mark.subject || "Subject"}
+                        </div>
+
+                    </div>
+
+
+                    <div class="breakdown-final">
+
+                        <div class="breakdown-final-value">
+                            ${finalScore.toFixed(2)}
+                        </div>
+
+                        <span class="breakdown-final-label">
+                            Final Points / 10
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CALCULATION -->
+
+                <div class="breakdown-body">
+
+
+                    <!-- MARKS -->
+
+                    <div class="breakdown-row">
+
+                        <div>
+
+                            <div class="breakdown-label">
+                                Marks Obtained
+                            </div>
+
+                        </div>
+
+                        <div class="breakdown-value">
+                            ${obtainedMarks}
+                            /
+                            ${totalMarks}
+                        </div>
+
+                    </div>
+
+
+                    <!-- BASE POINTS -->
+
+                    <div class="breakdown-row">
+
+                        <div>
+
+                            <div class="breakdown-label">
+                                Base Points
+                            </div>
+
+                            <div class="breakdown-formula">
+                                (${obtainedMarks} ÷ ${totalMarks}) × 10
+                            </div>
+
+                        </div>
+
+                        <div class="breakdown-value">
+                            ${performancePoints.toFixed(2)}
+                        </div>
+
+                    </div>
+
+
+                    <!-- HIGHEST BONUS -->
+
+                    ${highestBonusHTML}
+
+
+                    <!-- IMPROVEMENT BONUS -->
+
+                    ${improveBonusHTML}
+
+
+                    <!-- RAW TOTAL -->
+
+                    <div class="breakdown-row">
+
+                        <div>
+
+                            <div class="breakdown-label">
+                                Points Before Cap
+                            </div>
+
+                            <div class="breakdown-formula">
+                                Base + eligible bonuses
+                            </div>
+
+                        </div>
+
+                        <div class="breakdown-value">
+                            ${rawTotal.toFixed(2)}
+                        </div>
+
+                    </div>
+
+
+                    <!-- VAULT DEPOSIT -->
+
+                    ${vaultDepositHTML}
+
+
+                    <!-- VAULT USED -->
+
+                    ${vaultUsedHTML}
+
+
+                    <!-- FINAL -->
+
+                    <div class="breakdown-total">
+
+                        <div class="breakdown-total-label">
+                            Final Points
+                        </div>
+
+                        <div class="breakdown-total-value">
+                            ${finalScore.toFixed(2)}
+                            / 10.00
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
         `;
+
     }
+
+
+    /*
+     * Points Vault
+     */
 
     pointsVault.textContent =
         vaultTotal.toFixed(2);
 
+
+    /*
+     * Bonus totals
+     */
+
     highestBonusTotal.textContent =
         `+${highestBonusSum.toFixed(2)}`;
+
 
     improveBonusTotal.textContent =
         `+${improveBonusSum.toFixed(2)}`;
 
+
+    /*
+     * Average
+     */
+
     if (testCount > 0) {
 
         const average =
-            totalScore / testCount;
+            totalScore /
+            testCount;
+
 
         studentAverage.textContent =
             average.toFixed(2);
 
-    } else {
-
-        studentAverage.textContent = "-";
     }
+    else {
+
+        studentAverage.textContent =
+            "-";
+
+    }
+
 }
 
 
