@@ -1,59 +1,700 @@
-<!DOCTYPE html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
-<title>PES Leaderboard</title>
-<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet'>
-<style>
-body{background:#f5f7fa;font-family:Segoe UI,Arial}
-.navbar{background:#1e3a8a}
-.card{border:0;border-radius:18px;box-shadow:0 8px 20px rgba(0,0,0,.08)}
-.table thead{background:#1e3a8a;color:#fff}
-.table tbody tr{transition:.2s;cursor:pointer}
-.table tbody tr:hover{background:#eef4ff}
-.student{font-weight:600;color:#1f2937}
-.badge-top{background:#fff3cd;color:#8a6d00;padding:4px 10px;border-radius:20px}
-</style></head>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>AbhraInsight | PES Leaderboard</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        /* =========================
+           BASE
+           ========================= */
+
+        body {
+            background: #f5f7fa;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #1e293b;
+        }
+
+
+        /* =========================
+           NAVBAR
+           ========================= */
+
+        .navbar {
+            background: #1e3a8a;
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            letter-spacing: .2px;
+        }
+
+
+        /* =========================
+           CARDS
+           ========================= */
+
+        .card {
+            border: 0;
+            border-radius: 18px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+        }
+
+
+        /* =========================
+           HEADER
+           ========================= */
+
+        #leaderboardTitle {
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           UPDATED BADGE
+           ========================= */
+
+        .badge-top {
+            background: #fff3cd;
+            color: #8a6d00;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+
+        /* =========================
+           FORM
+           ========================= */
+
+        .form-label {
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .form-select,
+        .search-input {
+            border-radius: 10px;
+            border: 1px solid #dbe2ea;
+            padding: 10px 13px;
+        }
+
+        .form-select:focus,
+        .search-input:focus {
+            border-color: #1e3a8a;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, .10);
+        }
+
+
+        /* =========================
+           SEARCH
+           ========================= */
+
+        .search-wrapper {
+            margin-bottom: 14px;
+        }
+
+
+        /* =========================
+           TABLE
+           ========================= */
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead {
+            background: #1e3a8a;
+            color: #fff;
+        }
+
+        .table thead th {
+            background: #1e3a8a;
+            color: #fff;
+            border: 0;
+            white-space: nowrap;
+            padding: 13px 12px;
+        }
+
+        .table tbody td {
+            padding: 13px 12px;
+            vertical-align: middle;
+        }
+
+        .table tbody tr {
+            transition:
+                background-color .2s ease,
+                transform .15s ease;
+            cursor: pointer;
+        }
+
+        .table tbody tr:hover {
+            background: #eef4ff;
+        }
+
+        .student {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+
+        /* =========================
+           SKELETON
+           ========================= */
+
+        .skeleton {
+            position: relative;
+            overflow: hidden;
+            background: #e5e7eb;
+            border-radius: 8px;
+        }
+
+        .skeleton::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            transform: translateX(-100%);
+
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, .75),
+                transparent
+            );
+
+            animation: skeletonShimmer 1.4s infinite;
+        }
+
+        @keyframes skeletonShimmer {
+
+            100% {
+                transform: translateX(100%);
+            }
+
+        }
+
+
+        /* =========================
+           SKELETON HEADER
+           ========================= */
+
+        .skeleton-title {
+            width: 210px;
+            height: 30px;
+            margin-bottom: 9px;
+        }
+
+        .skeleton-subtitle {
+            width: 190px;
+            height: 15px;
+        }
+
+        .skeleton-updated {
+            width: 130px;
+            height: 30px;
+            border-radius: 20px;
+        }
+
+
+        /* =========================
+           SKELETON CLASS SELECT
+           ========================= */
+
+        .skeleton-label {
+            width: 55px;
+            height: 14px;
+            margin-bottom: 8px;
+        }
+
+        .skeleton-select {
+            width: 100%;
+            height: 42px;
+            border-radius: 10px;
+        }
+
+
+        /* =========================
+           SKELETON SEARCH
+           ========================= */
+
+        .skeleton-search {
+            width: 100%;
+            height: 44px;
+            border-radius: 10px;
+        }
+
+
+        /* =========================
+           SKELETON TABLE
+           ========================= */
+
+        .skeleton-table {
+            width: 100%;
+        }
+
+        .skeleton-table-header {
+            width: 100%;
+            height: 45px;
+            border-radius: 7px;
+            margin-bottom: 8px;
+        }
+
+        .skeleton-table-row {
+            width: 100%;
+            height: 52px;
+            border-radius: 7px;
+            margin-bottom: 7px;
+        }
+
+        .skeleton-table-row:nth-child(3) {
+            width: 97%;
+        }
+
+        .skeleton-table-row:nth-child(4) {
+            width: 99%;
+        }
+
+        .skeleton-table-row:nth-child(5) {
+            width: 96%;
+        }
+
+        .skeleton-table-row:nth-child(6) {
+            width: 98%;
+        }
+
+        .skeleton-table-row:nth-child(7) {
+            width: 95%;
+        }
+
+
+        /* =========================
+           FOOTER
+           ========================= */
+
+        .footer-note {
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           MOBILE
+           ========================= */
+
+        @media (max-width: 767px) {
+
+            .container {
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            .card {
+                border-radius: 14px;
+            }
+
+            #leaderboardTitle {
+                font-size: 22px;
+            }
+
+            .badge-top {
+                align-self: flex-start;
+            }
+
+            .table {
+                font-size: 14px;
+            }
+
+            .table thead th,
+            .table tbody td {
+                padding: 10px 8px;
+            }
+
+            .skeleton-title {
+                width: 175px;
+            }
+
+            .skeleton-subtitle {
+                width: 160px;
+            }
+
+        }
+
+
+        /* =========================
+           VERY SMALL PHONES
+           ========================= */
+
+        @media (max-width: 400px) {
+
+            .table {
+                font-size: 13px;
+            }
+
+            .table thead th,
+            .table tbody td {
+                padding: 9px 6px;
+            }
+
+            .badge-top {
+                font-size: 12px;
+                padding: 6px 9px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
 <body>
-<nav class='navbar navbar-dark'><div class='container'><span class='navbar-brand'>AbhraInsight | PES Leaderboard</span></div></nav>
-<div class='container py-4'>
-<div class="card p-4 mb-4">
 
-    <div class="d-flex justify-content-between align-items-center">
 
-        <div>
-            <h2 id="leaderboardTitle">Leaderboard</h2>
-            <p class="text-muted mb-0">
-                Progress Evaluation Series
-            </p>
-        </div>
+<!-- =====================================================
+     NAVBAR
+     ===================================================== -->
 
-        <span class="badge-top">
-            Updated: <span id="updatedDate">-</span>
+<nav class="navbar navbar-dark">
+
+    <div class="container py-2">
+
+        <span class="navbar-brand">
+            AbhraInsight | PES Leaderboard
         </span>
 
     </div>
 
-    <div class="row mt-3">
-        <div class="col-md-4">
-            <label class="form-label">Class</label>
+</nav>
 
-            <select class="form-select" id="leaderboardClass">
-                <option value="">Select Class</option>
-                <option value="5">Class 5</option>
-                <option value="6">Class 6</option>
-                <option value="7">Class 7</option>
-                <option value="8">Class 8</option>
-            </select>
+
+<!-- =====================================================
+     MAIN CONTAINER
+     ===================================================== -->
+
+<div class="container py-4">
+
+
+    <!-- =================================================
+         PROFESSIONAL SKELETON LOADER
+         ================================================= -->
+
+    <div id="leaderboardLoader">
+
+        <!-- HEADER CARD -->
+
+        <div class="card p-4 mb-4">
+
+            <div
+                class="d-flex
+                       justify-content-between
+                       align-items-start
+                       gap-3"
+            >
+
+                <div>
+
+                    <div
+                        class="skeleton skeleton-title"
+                    ></div>
+
+                    <div
+                        class="skeleton skeleton-subtitle"
+                    ></div>
+
+                </div>
+
+
+                <div
+                    class="skeleton skeleton-updated"
+                ></div>
+
+            </div>
+
+
+            <!-- CLASS SELECT SKELETON -->
+
+            <div class="row mt-4">
+
+                <div class="col-md-4">
+
+                    <div
+                        class="skeleton skeleton-label"
+                    ></div>
+
+                    <div
+                        class="skeleton skeleton-select"
+                    ></div>
+
+                </div>
+
+            </div>
+
         </div>
+
+
+        <!-- SEARCH SKELETON -->
+
+        <div
+            class="skeleton skeleton-search mb-3"
+        ></div>
+
+
+        <!-- TABLE SKELETON -->
+
+        <div class="card p-3">
+
+            <div class="table-responsive">
+
+                <div class="skeleton-table">
+
+                    <div
+                        class="skeleton skeleton-table-header"
+                    ></div>
+
+                    <div
+                        class="skeleton skeleton-table-row"
+                    ></div>
+
+                    <div
+                        class="skeleton skeleton-table-row"
+                    ></div>
+
+                    <div
+                        class="skeleton skeleton-table-row"
+                    ></div>
+
+                    <div
+                        class="skeleton skeleton-table-row"
+                    ></div>
+
+                    <div
+                        class="skeleton skeleton-table-row"
+                    ></div>
+
+                    <div
+                        class="skeleton skeleton-table-row"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         REAL LEADERBOARD CONTENT
+         ================================================= -->
+
+    <div
+        id="leaderboardContent"
+        style="display:none;"
+    >
+
+
+        <!-- =================================================
+             HEADER / FILTER CARD
+             ================================================= -->
+
+        <div class="card p-4 mb-4">
+
+            <div
+                class="d-flex
+                       justify-content-between
+                       align-items-center
+                       flex-wrap
+                       gap-3"
+            >
+
+                <div>
+
+                    <h2 id="leaderboardTitle">
+                        Leaderboard
+                    </h2>
+
+                    <p class="subtitle mb-0">
+                        Progress Evaluation Series
+                    </p>
+
+                </div>
+
+
+                <span class="badge-top">
+
+                    Updated:
+                    <span id="updatedDate">
+                        -
+                    </span>
+
+                </span>
+
+            </div>
+
+
+            <!-- CLASS SELECT -->
+
+            <div class="row mt-3">
+
+                <div class="col-md-4">
+
+                    <label
+                        class="form-label"
+                        for="leaderboardClass"
+                    >
+                        Class
+                    </label>
+
+                    <select
+                        class="form-select"
+                        id="leaderboardClass"
+                    >
+
+                        <option value="">
+                            Select Class
+                        </option>
+
+                        <option value="5">
+                            Class 5
+                        </option>
+
+                        <option value="6">
+                            Class 6
+                        </option>
+
+                        <option value="7">
+                            Class 7
+                        </option>
+
+                        <option value="8">
+                            Class 8
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SEARCH
+             ================================================= -->
+
+        <div class="search-wrapper">
+
+            <input
+                id="s"
+                class="form-control search-input"
+                placeholder="Search student"
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <!-- =================================================
+             LEADERBOARD TABLE
+             ================================================= -->
+
+        <div class="card p-3">
+
+            <div class="table-responsive">
+
+                <table
+                    class="table align-middle"
+                >
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Rank
+                            </th>
+
+                            <th>
+                                Student
+                            </th>
+
+                            <th>
+                                Average
+                            </th>
+
+                            <th>
+                                Trend
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="leaderboardTableBody"
+                    >
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             FOOTER
+             ================================================= -->
+
+        <div class="text-center footer-note py-3">
+
+            PES — Progress Evaluation Series
+
+        </div>
+
+
     </div>
 
 </div>
-<input id='s' class='form-control mb-3' placeholder='Search student'>
-<div class='card p-3'><div class='table-responsive'>
-    
-    <table class='table align-middle'>
-<thead><tr><th>Rank</th><th>Student</th><th>Average</th><th>Trend</th></tr></thead>
-<tbody id="leaderboardTableBody">
 
-</tbody></table>
 
-</div></div></div>
-<script type="module" src="js/leaderboard.js"></script></body></html>
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
+
+<script
+    type="module"
+    src="js/leaderboard.js"
+></script>
+
+
+</body>
+
+</html>
