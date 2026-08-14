@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>PES | Science Online Examination</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+
+    <style>
+
+        :root {
+            --primary: #0d6efd;
+            --dark: #172033;
+            --bg: #f4f7fb;
+        }
+
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: #202124;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        /* =========================
+           TOP NAVIGATION
+        ========================= */
+
+        .exam-navbar {
+
+            background: #ffffff;
+
+            border-bottom: 1px solid #e5e7eb;
+
+            box-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.06);
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+        }
+
+
+        .nav-inner {
+
+            min-height: 64px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+
+        .brand-badge {
+
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 10px;
+
+            background: var(--primary);
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-weight: 800;
+
+            font-size: 17px;
+        }
+
+
+        .brand-title {
+
+            line-height: 1.1;
+        }
+
+
+        .brand-title strong {
+
+            display: block;
+
+            font-size: 17px;
+        }
+
+
+        .brand-title span {
+
+            color: #6b7280;
+
+            font-size: 12px;
+        }
+
+
+        .exam-meta {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+
+            font-size: 14px;
+
+            color: #4b5563;
+        }
+
+
+        .teacher {
+
+            font-weight: 600;
+        }
+
+
+        .time {
+
+            color: var(--primary);
+
+            font-weight: 700;
+        }
+
+
+        /* =========================
+           MAIN EXAM AREA
+        ========================= */
+
+        .exam-shell {
+
+            width: 100%;
+
+            max-width: 1500px;
+
+            margin: 0 auto;
+
+            padding: 20px 22px 40px;
+        }
+
+
+        /* =========================
+           EXAM TITLE
+        ========================= */
+
+        .exam-heading {
+
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 14px;
+
+            padding: 18px 22px;
+
+            margin-bottom: 15px;
+
+            box-shadow:
+                0 3px 14px rgba(0, 0, 0, 0.05);
+        }
+
+
+        .heading-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+
+        .heading-row h1 {
+
+            margin: 0;
+
+            font-size: 24px;
+
+            font-weight: 750;
+
+            color: var(--dark);
+        }
+
+
+        .subtitle {
+
+            margin: 5px 0 0;
+
+            color: #6b7280;
+
+            font-size: 14px;
+        }
+
+
+        /* ONLINE STATUS */
+
+        .status {
+
+            white-space: nowrap;
+
+            border-radius: 20px;
+
+            padding: 7px 13px;
+
+            background: #ecfdf3;
+
+            color: #087443;
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================
+           TEST CONTROL BAR
+        ========================= */
+
+        .control-bar {
+
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 12px;
+
+            padding: 12px 15px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .control-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                260px 1fr auto;
+
+            align-items: center;
+
+            gap: 14px;
+        }
+
+
+        .test-label {
+
+            font-size: 12px;
+
+            color: #6b7280;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            margin-bottom: 4px;
+        }
+
+
+        .test-info {
+
+            font-size: 14px;
+
+            font-weight: 600;
+        }
+
+
+        .form-select {
+
+            min-height: 42px;
+        }
+
+
+        /* =========================
+           INSTRUCTIONS
+        ========================= */
+
+        .instructions {
+
+            background: #fffdf5;
+
+            border: 1px solid #f0df9c;
+
+            border-radius: 12px;
+
+            padding: 12px 16px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .instructions strong {
+
+            color: #6b5200;
+
+            font-size: 14px;
+        }
+
+
+        .instructions ul {
+
+            margin: 6px 0 0 18px;
+
+            padding: 0;
+
+            color: #685b2a;
+
+            font-size: 13px;
+        }
+
+
+        .instructions li {
+
+            margin: 2px 0;
+        }
+
+
+        /* =========================
+           OFFLINE CAUTION
+        ========================= */
+
+        #offlineWarning {
+
+            display: none;
+
+            background: #dc3545;
+
+            color: white;
+
+            padding: 15px 20px;
+
+            text-align: center;
+
+            font-weight: bold;
+
+            position: sticky;
+
+            top: 64px;
+
+            z-index: 999;
+
+            box-shadow:
+                0 4px 12px rgba(0, 0, 0, 0.25);
+
+            animation: warningPulse 1.5s infinite;
+        }
+
+
+        #offlineWarning .warning-title {
+
+            font-size: 17px;
+
+            margin-bottom: 4px;
+        }
+
+
+        #offlineWarning .warning-text {
+
+            font-size: 14px;
+
+            font-weight: normal;
+
+            line-height: 1.5;
+        }
+
+
+        @keyframes warningPulse {
+
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .88;
+            }
+
+            100% {
+                opacity: 1;
+            }
+
+        }
+
+
+        /* =========================
+           GOOGLE FORM PAPER
+        ========================= */
+
+        .paper {
+
+            background: white;
+
+            border: 1px solid #dfe3e8;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 4px 18px rgba(0, 0, 0, 0.07);
+
+            overflow: hidden;
+        }
+
+
+        .paper-header {
+
+            padding: 11px 18px;
+
+            border-bottom:
+                1px solid #e8eaed;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            background: #fafbfc;
+        }
+
+
+        .paper-header strong {
+
+            font-size: 14px;
+        }
+
+
+        .paper-header span {
+
+            font-size: 12px;
+
+            color: #6b7280;
+        }
+
+
+        /* =========================
+           GOOGLE FORM
+        ========================= */
+
+        .google-form-frame {
+
+            width: 100%;
+
+            min-height: 1100px;
+
+            height: 1100px;
+
+            border: 0;
+
+            display: block;
+
+            background: white;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .exam-footer {
+
+            text-align: center;
+
+            color: #7a7f87;
+
+            font-size: 12px;
+
+            padding: 20px 0 0;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .exam-shell {
+
+                padding:
+                    12px 10px 25px;
+            }
+
+
+            .nav-inner {
+
+                min-height: 58px;
+            }
+
+
+            .exam-meta {
+
+                gap: 8px;
+
+                font-size: 12px;
+            }
+
+
+            .teacher {
+
+                display: none;
+            }
+
+
+            .heading-row {
+
+                align-items: flex-start;
+            }
+
+
+            .heading-row h1 {
+
+                font-size: 20px;
+            }
+
+
+            .control-grid {
+
+                grid-template-columns: 1fr;
+
+                gap: 8px;
+            }
+
+
+            .status {
+
+                font-size: 11px;
+
+                padding: 6px 10px;
+            }
+
+
+            .google-form-frame {
+
+                height: 1150px;
+
+                min-height: 1150px;
+            }
+
+
+            #offlineWarning {
+
+                top: 58px;
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .brand-badge {
+
+                width: 36px;
+
+                height: 36px;
+
+                border-radius: 8px;
+
+                font-size: 14px;
+            }
+
+
+            .brand-title strong {
+
+                font-size: 15px;
+            }
+
+
+            .brand-title span {
+
+                font-size: 10px;
+            }
+
+
+            .exam-meta {
+
+                display: block;
+
+                text-align: right;
+            }
+
+
+            .heading-row h1 {
+
+                font-size: 18px;
+            }
+
+
+            .subtitle {
+
+                font-size: 12px;
+            }
+
+
+            .exam-heading {
+
+                padding: 15px;
+            }
+
+
+            .paper {
+
+                border-radius: 8px;
+            }
+
+
+            .paper-header {
+
+                padding: 9px 12px;
+            }
+
+
+            .google-form-frame {
+
+                height: 1200px;
+
+                min-height: 1200px;
+            }
+
+
+            #offlineWarning .warning-title {
+
+                font-size: 15px;
+            }
+
+
+            #offlineWarning .warning-text {
+
+                font-size: 12px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+
+<header class="exam-navbar">
+
+    <div class="container-fluid px-3 px-md-4">
+
+        <div class="nav-inner">
+
+
+            <div class="brand">
+
+                <div class="brand-badge">
+                    PES
+                </div>
+
+
+                <div class="brand-title">
+
+                    <strong>
+                        Progress Evaluation Series
+                    </strong>
+
+                    <span>
+                        Online Examination
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="exam-meta">
+
+                <span class="teacher">
+                    Teacher: Abhradeep Das
+                </span>
+
+
+                <span>
+
+                    Time:
+
+                    <span
+                        id="indiaTime"
+                        class="time">
+
+                    </span>
+
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     OFFLINE WARNING
+===================================================== -->
+
+<div id="offlineWarning">
+
+    <div class="warning-title">
+
+        ⚠️ INTERNET CONNECTION LOST!
+
+    </div>
+
+
+    <div class="warning-text">
+
+        <strong>
+            DO NOT SUBMIT THE EXAM.
+        </strong>
+
+        <br>
+
+        DO NOT REFRESH, CLOSE OR LEAVE THIS PAGE.
+
+        <br>
+
+        Please <strong>WAIT</strong> until the internet
+        connection is restored.
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     MAIN EXAM
+===================================================== -->
+
+<main class="exam-shell">
+
+
+    <!-- EXAM TITLE -->
+
+    <section class="exam-heading">
+
+        <div class="heading-row">
+
+
+            <div>
+
+                <h1>
+                    Science – MCQ Examination
+                </h1>
+
+
+                <p class="subtitle">
+
+                    Complete the examination carefully.
+                    Your responses will be recorded through
+                    Google Forms.
+
+                </p>
+
+            </div>
+
+
+            <div class="status">
+
+                ●
+
+                <span id="connectionStatus">
+                    ONLINE
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         CONTROL BAR
+    ================================================= -->
+
+    <section class="control-bar">
+
+
+        <div class="control-grid">
+
+
+            <div>
+
+                <div class="test-label">
+                    Examination
+                </div>
+
+
+                <div class="test-info">
+
+                    Science MCQ
+                    • 70 Questions
+                    • 70 Marks
+
+                </div>
+
+            </div>
+
+
+
+            <div>
+
+                <label
+                    for="formSelector"
+                    class="test-label">
+
+                    Select Test
+
+                </label>
+
+
+                <select
+                    id="formSelector"
+                    class="form-select"
+                    onchange="updateForm()">
+
+
+                    <option value="S1">
+
+                        MATHS Test – 1
+
+                    </option>
+
+
+                   
+
+                </select>
+
+            </div>
+
+
+
+            <div class="text-md-end">
+
+                <div class="test-label">
+                    Mode
+                </div>
+
+
+                <div class="test-info">
+
+                    Online MCQ
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         INSTRUCTIONS
+    ================================================= -->
+
+    <section class="instructions">
+
+
+        <strong>
+            Exam Instructions
+        </strong>
+
+
+        <ul>
+
+            <li>
+                Answer each question carefully.
+            </li>
+
+
+            <li>
+                Select the appropriate option
+                in the Google Form.
+            </li>
+
+
+            <li>
+                Do not refresh the examination page
+                unnecessarily.
+            </li>
+
+
+            <li>
+                Keep your internet connection active
+                while submitting.
+            </li>
+
+
+            <li>
+                If the internet goes OFFLINE,
+                <strong>DO NOT SUBMIT.</strong>
+                Wait until the connection returns.
+            </li>
+
+
+            <li>
+                Click the Google Form's Submit button
+                only after completing the examination.
+            </li>
+
+        </ul>
+
+    </section>
+
+
+
+    <!-- =================================================
+         GOOGLE FORM
+    ================================================= -->
+
+    <section class="paper">
+
+
+        <div class="paper-header">
+
+
+            <strong>
+                Science MCQ Question Paper
+            </strong>
+
+
+            <span>
+                Google Form Examination
+            </span>
+
+
+        </div>
+
+
+
+        <iframe
+
+            id="googleFormIframe"
+
+            class="google-form-frame"
+            
+
+            src="  https://docs.google.com/forms/d/e/1FAIpQLSeA_zwwcSCZqNxNqyEezC5fqpmULC4CuoKoXjPolctw-svVKQ/viewform?embedded=true"
+
+            title="Science MCQ Examination"
+
+            loading="eager">
+
+        </iframe>
+
+
+    </section>
+
+
+
+    <!-- FOOTER -->
+
+    <footer class="exam-footer">
+
+        Progress Evaluation Series
+        •
+        Teacher: Abhradeep Das
+
+    </footer>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+/* =====================================================
+   GOOGLE FORM URLs
+===================================================== */
+
+const formUrls = {
+
+
+    S1:
+    "https://docs.google.com/forms/d/e/1FAIpQLSeA_zwwcSCZqNxNqyEezC5fqpmULC4CuoKoXjPolctw-svVKQ/viewform?embedded=true",
+
+
+    /*
+       Replace S2 with your actual Test 2 form.
+    */
+
+    S2:
+    "https://docs.google.com/forms/d/e/1FAIpQLSeA_zwwcSCZqNxNqyEezC5fqpmULC4CuoKoXjPolctw-svVKQ/viewform?embedded=true",
+
+
+    /*
+       Replace S3 with your actual Test 3 form.
+    */
+
+    S3:
+    "https://docs.google.com/forms/d/e/1FAIpQLSeA_zwwcSCZqNxNqyEezC5fqpmULC4CuoKoXjPolctw-svVKQ/viewform?embedded=true",
+
+
+    /*
+       Replace S4 with your actual Test 4 form.
+    */
+
+    S4:
+    "https://docs.google.com/forms/d/e/1FAIpQLSeA_zwwcSCZqNxNqyEezC5fqpmULC4CuoKoXjPolctw-svVKQ/viewform?embedded=true"
+
+};
+
+
+
+/* =====================================================
+   CHANGE GOOGLE FORM
+===================================================== */
+
+function updateForm() {
+
+
+    const selected =
+
+        document.getElementById(
+            "formSelector"
+        ).value;
+
+
+    const iframe =
+
+        document.getElementById(
+            "googleFormIframe"
+        );
+
+
+    iframe.src =
+        formUrls[selected];
+
+}
+
+
+
+/* =====================================================
+   INDIA TIME
+===================================================== */
+
+function updateIndiaTime() {
+
+
+    const options = {
+
+        timeZone:
+            "Asia/Kolkata",
+
+        hour:
+            "2-digit",
+
+        minute:
+            "2-digit",
+
+        second:
+            "2-digit",
+
+        hour12:
+            true
+
+    };
+
+
+    document.getElementById(
+        "indiaTime"
+    ).innerText =
+
+        new Date().toLocaleTimeString(
+            "en-IN",
+            options
+        );
+
+}
+
+
+updateIndiaTime();
+
+
+setInterval(
+    updateIndiaTime,
+    1000
+);
+
+
+
+/* =====================================================
+   INTERNET CONNECTION STATUS
+===================================================== */
+
+function updateConnectionStatus() {
+
+
+    const status =
+
+        document.getElementById(
+            "connectionStatus"
+        );
+
+
+    const warning =
+
+        document.getElementById(
+            "offlineWarning"
+        );
+
+
+    if (navigator.onLine) {
+
+
+        /* ONLINE */
+
+        status.innerText =
+            "ONLINE";
+
+
+        status.style.color =
+            "#087443";
+
+
+        warning.style.display =
+            "none";
+
+
+    }
+
+    else {
+
+
+        /* OFFLINE */
+
+        status.innerText =
+            "OFFLINE";
+
+
+        status.style.color =
+            "#dc3545";
+
+
+        warning.style.display =
+            "block";
+
+    }
+
+}
+
+
+
+/* INTERNET RESTORED */
+
+window.addEventListener(
+    "online",
+    function () {
+
+
+        updateConnectionStatus();
+
+
+        alert(
+
+            "Internet connection restored!\n\n" +
+
+            "You may now continue the examination " +
+
+            "and submit the Google Form."
+
+        );
+
+    }
+);
+
+
+
+/* INTERNET LOST */
+
+window.addEventListener(
+    "offline",
+    function () {
+
+
+        updateConnectionStatus();
+
+
+    }
+);
+
+
+
+/* INITIAL STATUS */
+
+updateConnectionStatus();
+
+
+
+/* =====================================================
+   DISABLE RIGHT CLICK
+===================================================== */
+
+document.addEventListener(
+    "contextmenu",
+    function(event) {
+
+        event.preventDefault();
+
+    }
+);
+
+
+</script>
+
+
+</body>
+
+</html>
