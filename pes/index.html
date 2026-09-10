@@ -25,19 +25,34 @@
             color: #1e293b;
         }
 
-
         /* =========================
            NAVBAR
         ========================= */
 
-        .navbar {
-            background: #1e3a8a;
-        }
+       /* =========================
+   STICKY NAVBAR
+========================= */
 
-        .navbar-brand {
-            font-weight: 700;
-            letter-spacing: 0.3px;
-        }
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+
+    background: rgba(30, 58, 138, 0.96);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    box-shadow:
+        0 4px 18px rgba(15, 23, 42, 0.12);
+
+    border-bottom: 1px solid
+        rgba(255, 255, 255, 0.10);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
 
 
         /* =========================
@@ -122,13 +137,8 @@
 
 
         /* =========================
-           EXPLORE SECTION
+           COMMON SECTION
         ========================= */
-
-        .explore-section {
-            padding-top: 55px;
-            padding-bottom: 45px;
-        }
 
         .section-title {
             font-weight: 800;
@@ -142,6 +152,16 @@
             color: #64748b;
 
             margin-bottom: 0;
+        }
+
+
+        /* =========================
+           EXPLORE SECTION
+        ========================= */
+
+        .explore-section {
+            padding-top: 55px;
+            padding-bottom: 45px;
         }
 
 
@@ -228,45 +248,734 @@
 
 
         /* =========================
-           ADMIN AREA
+           FINAL SEASON RESULTS
         ========================= */
 
-        .admin-section {
-            padding-bottom: 35px;
+        .season-section {
+            padding: 55px 0;
+
+            background: #eef4ff;
         }
 
-        .admin-box {
+        .season-badge {
+            display: inline-block;
+
+            background: #ffffff;
+
+            color: #1e3a8a;
+
+            border: 1px solid #dbe4ff;
+
+            padding: 7px 15px;
+
+            border-radius: 50px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+        }
+
+
+        /* =========================
+           TOPPER CARDS
+        ========================= */
+
+        .topper-card-link {
+            text-decoration: none;
+
+            color: inherit;
+
+            display: block;
+
+            height: 100%;
+        }
+
+        .topper-card {
+            background: #ffffff;
+
+            border-radius: 22px;
+
+            padding: 30px 20px;
+
+            text-align: center;
+
+            border: 1px solid #e5e7eb;
+
+            box-shadow:
+                0 8px 22px
+                rgba(15, 23, 42, 0.07);
+
+            height: 100%;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .topper-card:hover {
+            transform: translateY(-7px);
+
+            box-shadow:
+                0 14px 30px
+                rgba(15, 23, 42, 0.12);
+        }
+
+        .topper-medal {
+            font-size: 44px;
+
+            margin-bottom: 12px;
+        }
+
+        .topper-class {
+            font-size: 13px;
+
+            font-weight: 800;
+
+            color: #1e3a8a;
+
+            letter-spacing: 0.8px;
+
+            margin-bottom: 8px;
+        }
+
+        .topper-title {
+            font-size: 12px;
+
+            font-weight: 800;
+
+            color: #64748b;
+
+            letter-spacing: 0.6px;
+
+            margin-bottom: 7px;
+        }
+
+        .topper-name {
+            font-size: 20px;
+
+            font-weight: 800;
+
+            color: #1e293b;
+
+            margin-bottom: 12px;
+        }
+
+        .topper-score {
+            font-size: 24px;
+
+            font-weight: 800;
+
+            color: #1e3a8a;
+        }
+
+        .topper-score span {
+            font-size: 30px;
+        }
+
+        .topper-label {
+            font-size: 12px;
+
+            color: #64748b;
+
+            margin-top: 3px;
+        }
+
+        .topper-award {
+            margin-top: 15px;
+
+            padding: 7px 10px;
+
+            border-radius: 10px;
+
+            background: #fff7ed;
+
+            color: #c2410c;
+
+            font-size: 11px;
+
+            font-weight: 800;
+        }
+
+        .topper-no-award {
+            background: #f8fafc;
+
+            color: #64748b;
+        }
+
+        .topper-attendance {
+            margin-top: 12px;
+
+            padding: 7px 10px;
+
+            border-radius: 10px;
+
+            background: #f0fdf4;
+
+            color: #15803d;
+
+            border: 1px solid #bbf7d0;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================
+           PERFORMANCE TROPHY
+        ========================= */
+
+        .topper-performance {
+            position: relative;
+
+            overflow: hidden;
+
+            border: 2px solid #f4c542;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #fffdf4,
+                    #ffffff,
+                    #fff8df
+                );
+
+            box-shadow:
+                0 10px 30px
+                rgba(245, 158, 11, 0.18),
+                0 0 0
+                rgba(245, 158, 11, 0);
+
+            animation:
+                topperFloat 4s ease-in-out infinite;
+
+            transition:
+                transform 0.35s ease,
+                box-shadow 0.35s ease,
+                border-color 0.35s ease;
+        }
+
+        .topper-performance::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+
+            height: 6px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #d97706,
+                    #facc15,
+                    #fde68a,
+                    #facc15,
+                    #d97706
+                );
+
+            background-size: 200% 100%;
+
+            animation:
+                goldShine 3s linear infinite;
+        }
+
+        .topper-performance::after {
+            content: "";
+
+            position: absolute;
+
+            top: -60%;
+            left: -80%;
+
+            width: 50%;
+            height: 220%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255,255,255,0.7),
+                    transparent
+                );
+
+            transform: rotate(20deg);
+
+            animation:
+                cardShine 5s ease-in-out infinite;
+
+            pointer-events: none;
+        }
+
+
+
+        /* =========================
+   SOURANIL — DOUBLE TROPHY CARD
+========================= */
+
+.topper-champion {
+    border: 2px solid #eab308;
+
+    background:
+        linear-gradient(
+            145deg,
+            #fffdf2,
+            #ffffff 48%,
+            #fff8dc
+        );
+
+    box-shadow:
+        0 12px 32px rgba(234, 179, 8, 0.20),
+        0 0 0 1px rgba(250, 204, 21, 0.12);
+}
+
+
+/* Champion ribbon */
+
+.topper-champion .performance-ribbon {
+    background:
+        linear-gradient(
+            135deg,
+            #fef3c7,
+            #fde68a,
+            #fef3c7
+        );
+
+    color: #854d0e;
+
+    border-color: #eab308;
+
+    box-shadow:
+        0 4px 14px rgba(234, 179, 8, 0.20);
+}
+
+
+/* Second trophy badge */
+
+.double-award-badge {
+    position: relative;
+
+    z-index: 3;
+
+    display: table;
+
+    margin:
+        -8px auto
+        18px;
+
+    padding: 6px 13px;
+
+    border-radius: 50px;
+
+    background: #fff7ed;
+
+    color: #c2410c;
+
+    border: 1px solid #fed7aa;
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.45px;
+}
+
+
+/* Special medal */
+
+.topper-champion .topper-medal {
+    font-size: 46px;
+
+    margin-bottom: 13px;
+
+    filter:
+        drop-shadow(
+            0 5px 7px
+            rgba(234, 179, 8, 0.30)
+        );
+}
+
+
+/* Name */
+
+.topper-champion .topper-name {
+    color: #713f12;
+
+    font-size: 21px;
+}
+
+
+/* Score */
+
+.topper-champion .topper-score {
+    color: #a16207;
+
+    font-weight: 900;
+}
+
+.topper-champion .topper-score span {
+    font-size: 35px;
+}
+
+
+/* Both trophies box */
+
+.both-trophies {
+    position: relative;
+
+    z-index: 3;
+
+    margin-top: 16px;
+
+    padding: 10px 9px;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fffbeb,
+            #fff7ed
+        );
+
+    border: 1px solid #fde68a;
+
+    color: #92400e;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    line-height: 1.8;
+}
+
+.both-trophies div:first-child {
+    color: #854d0e;
+}
+
+.both-trophies div:last-child {
+    color: #c2410c;
+}
+
+
+/* Attendance */
+
+.topper-champion .topper-attendance {
+    margin-top: 12px;
+}
+
+
+/* Hover */
+
+.topper-champion:hover {
+    border-color: #d97706;
+
+    box-shadow:
+        0 22px 48px
+        rgba(234, 179, 8, 0.28),
+        0 0 28px
+        rgba(250, 204, 21, 0.14);
+}
+
+
+/* Mobile */
+
+@media (max-width: 576px) {
+
+    .topper-champion .topper-name {
+        font-size: 20px;
+    }
+
+    .both-trophies {
+        font-size: 10.5px;
+    }
+
+}
+
+        .performance-ribbon {
+            position: relative;
+
+            z-index: 2;
+
+            display: inline-block;
+
+            padding: 7px 14px;
+
+            margin-bottom: 18px;
+
+            border-radius: 50px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff3b0,
+                    #fef3c7
+                );
+
+            color: #92400e;
+
+            font-size: 10px;
+
+            font-weight: 900;
+
+            letter-spacing: 0.6px;
+
+            border: 1px solid #fcd34d;
+
+            box-shadow:
+                0 4px 12px
+                rgba(245, 158, 11, 0.15);
+
+            animation:
+                ribbonPulse 2.5s ease-in-out infinite;
+        }
+
+        .topper-performance .topper-medal {
+            position: relative;
+
+            z-index: 2;
+
+            font-size: 40px;
+
+            margin-top: 4px;
+
+            filter:
+                drop-shadow(
+                    0 5px 5px
+                    rgba(245, 158, 11, 0.25)
+                );
+
+            animation:
+                medalBounce 3s ease-in-out infinite;
+        }
+
+        .topper-performance .topper-class,
+        .topper-performance .topper-title,
+        .topper-performance .topper-name,
+        .topper-performance .topper-score,
+        .topper-performance .topper-label,
+        .topper-performance .topper-award,
+        .topper-performance .topper-attendance {
+            position: relative;
+
+            z-index: 2;
+        }
+
+        .topper-performance .topper-name {
+            color: #78350f;
+        }
+
+        .topper-performance .topper-score {
+            color: #b45309;
+
+            text-shadow:
+                0 2px 10px
+                rgba(245, 158, 11, 0.15);
+        }
+
+        .topper-performance .topper-score span {
+            font-size: 34px;
+        }
+
+        .topper-performance .topper-award {
+            background: #fff7ed;
+
+            color: #9a3412;
+
+            border: 1px solid #fed7aa;
+        }
+
+        .topper-performance .topper-attendance {
+            background: #f0fdf4;
+
+            color: #15803d;
+
+            border: 1px solid #bbf7d0;
+        }
+
+        .topper-performance:hover {
+            transform:
+                translateY(-12px)
+                scale(1.02);
+
+            border-color: #f59e0b;
+
+            box-shadow:
+                0 20px 45px
+                rgba(245, 158, 11, 0.25),
+                0 0 25px
+                rgba(250, 204, 21, 0.15);
+
+            animation-play-state: paused;
+        }
+
+
+        /* =========================
+           STUDENT DP
+        ========================= */
+
+        .topper-photo-wrap {
+            position: relative;
+
+            z-index: 3;
+
+            width: 125px;
+            height: 125px;
+
+            margin: 0 auto 16px;
+
+            padding: 5px;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #d97706,
+                    #facc15,
+                    #fff7b2,
+                    #facc15,
+                    #d97706
+                );
+
+            box-shadow:
+                0 8px 22px
+                rgba(245, 158, 11, 0.25),
+
+                0 0 0 5px
+                rgba(250, 204, 21, 0.10);
+
+            animation:
+                photoGlow 3s ease-in-out infinite;
+        }
+
+        .topper-photo {
+            display: block;
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            border-radius: 50%;
+
+            border: 4px solid #ffffff;
+
+            background: #ffffff;
+        }
+
+
+        /* =========================
+           PRIZES & CERTIFICATES
+        ========================= */
+
+        .prizes-section {
+            padding: 65px 0;
+
+            background: #ffffff;
+        }
+
+        .prize-card {
             background: #ffffff;
 
             border: 1px solid #e5e7eb;
 
-            border-radius: 16px;
+            border-radius: 20px;
 
-            padding: 18px 20px;
+            padding: 30px 24px;
 
-            display: inline-flex;
+            text-align: center;
 
-            align-items: center;
-
-            gap: 15px;
+            height: 100%;
 
             box-shadow:
-                0 5px 15px
-                rgba(15, 23, 42, 0.04);
+                0 6px 18px
+                rgba(15, 23, 42, 0.06);
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
         }
 
-        .admin-text {
+        .prize-card:hover {
+            transform: translateY(-6px);
+
+            box-shadow:
+                0 14px 30px
+                rgba(15, 23, 42, 0.10);
+
+            border-color: #dbe4ff;
+        }
+
+        .prize-icon {
+            width: 68px;
+            height: 68px;
+
+            margin: 0 auto 20px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 18px;
+
+            background: #eef4ff;
+
+            font-size: 32px;
+        }
+
+        .prize-card h4 {
+            font-weight: 750;
+
+            margin-bottom: 14px;
+
+            color: #1e293b;
+        }
+
+        .prize-card p {
             color: #64748b;
 
-            font-size: 14px;
+            line-height: 1.65;
 
-            margin: 0;
+            margin-bottom: 0;
         }
 
-        .admin-box .btn {
-            border-radius: 8px;
+        .prize-note {
+            margin-top: 15px;
 
-            font-weight: 600;
+            padding: 10px 12px;
+
+            border-radius: 10px;
+
+            background: #f8fafc;
+
+            color: #64748b;
+
+            font-size: 12px;
+
+            line-height: 1.55;
+        }
+
+        .prize-highlight {
+            border-color: #f4c542;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #fffdf4,
+                    #ffffff
+                );
+        }
+
+        .prize-highlight .prize-icon {
+            background: #fff7df;
         }
 
 
@@ -283,6 +992,103 @@
                 1px solid #e5e7eb;
 
             background: #ffffff;
+        }
+
+
+        /* =========================
+           ANIMATIONS
+        ========================= */
+
+        @keyframes topperFloat {
+
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+
+        }
+
+        @keyframes goldShine {
+
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+
+        }
+
+        @keyframes cardShine {
+
+            0% {
+                left: -80%;
+            }
+
+            45%, 100% {
+                left: 140%;
+            }
+
+        }
+
+        @keyframes ribbonPulse {
+
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.04);
+            }
+
+        }
+
+        @keyframes medalBounce {
+
+            0%, 100% {
+                transform:
+                    translateY(0)
+                    rotate(0deg);
+            }
+
+            50% {
+                transform:
+                    translateY(-5px)
+                    rotate(-2deg);
+            }
+
+        }
+
+        @keyframes photoGlow {
+
+            0%, 100% {
+
+                transform: scale(1);
+
+                box-shadow:
+                    0 8px 22px
+                    rgba(245, 158, 11, 0.25),
+
+                    0 0 0 5px
+                    rgba(250, 204, 21, 0.10);
+            }
+
+            50% {
+
+                transform: scale(1.035);
+
+                box-shadow:
+                    0 10px 28px
+                    rgba(245, 158, 11, 0.35),
+
+                    0 0 0 8px
+                    rgba(250, 204, 21, 0.13);
+            }
+
         }
 
 
@@ -310,7 +1116,8 @@
                 padding-top: 40px;
             }
 
-            .feature-card {
+            .feature-card,
+            .prize-card {
                 padding: 28px 20px;
             }
 
@@ -318,12 +1125,38 @@
                 min-height: auto;
             }
 
-            .admin-box {
-                flex-direction: column;
+        }
 
-                width: 100%;
+        @media (max-width: 576px) {
 
-                max-width: 340px;
+            .topper-photo-wrap {
+                width: 110px;
+                height: 110px;
+            }
+
+        }
+
+
+        /* =========================
+           REDUCED MOTION
+        ========================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .topper-performance,
+            .performance-ribbon,
+            .topper-performance .topper-medal,
+            .topper-performance::before,
+            .topper-performance::after,
+            .topper-photo-wrap {
+                animation: none;
+            }
+
+            .topper-performance,
+            .topper-card,
+            .feature-card,
+            .prize-card {
+                transition: none;
             }
 
         }
@@ -403,6 +1236,512 @@
 </section>
 
 
+
+<!-- =========================
+     FINAL SEASON RESULTS
+========================= -->
+
+<section class="season-section">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+
+            <div class="season-badge">
+                🏆 FINAL SEASON RESULTS (EDITION 1)
+            </div>
+
+            <h2 class="section-title">
+                Class Toppers
+            </h2>
+
+            <p class="section-subtitle">
+                Celebrating the top performer from each class.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4 justify-content-center">
+
+
+          <!-- CLASS 5 — CHAMPION + PERFORMANCE TROPHY -->
+
+<div class="col-12 col-sm-6 col-lg-3">
+
+    <a
+        href="student.html?id=xIIgKFC1gezgGYn2N9Ow"
+        class="topper-card-link"
+    >
+
+        <div class="topper-card topper-performance topper-champion">
+
+            <!-- DOUBLE TROPHY BADGE -->
+            <div class="performance-ribbon">
+                🏆 CHAMPION TROPHY
+            </div>
+
+            <div class="double-award-badge">
+                🥇 PERFORMANCE TROPHY
+            </div>
+
+
+            <!-- STUDENT DP -->
+            <div class="topper-photo-wrap">
+
+                <img
+                    src="assets/souranil-biswas-dp.png"
+                    alt="Souranil Biswas"
+                    class="topper-photo"
+                >
+
+            </div>
+
+
+            <!-- CHAMPION MEDAL -->
+            <div class="topper-medal">
+                🥇
+            </div>
+
+
+            <div class="topper-class">
+                CLASS 5
+            </div>
+
+
+            <div class="topper-title">
+                CLASS TOPPER
+            </div>
+
+
+            <div class="topper-name">
+                Souranil Biswas
+            </div>
+
+
+            <div class="topper-score">
+                <span>8.15</span> / 10
+            </div>
+
+
+            <div class="topper-label">
+                Final Average
+            </div>
+
+
+            <!-- BOTH TROPHIES -->
+            <div class="both-trophies">
+
+                <div>
+                    🏆 Champion Trophy Holder
+                </div>
+
+                <div>
+                    🥇 Performance Trophy Holder
+                </div>
+
+            </div>
+
+
+            <!-- ATTENDANCE -->
+            <div class="topper-attendance">
+                ✓ 100% Attendance &amp; Punctuality
+            </div>
+
+        </div>
+
+    </a>
+
+</div>
+
+
+
+            <!-- CLASS 6 -->
+
+            <div class="col-12 col-sm-6 col-lg-3">
+
+                <a
+                    href="student.html?id=rtREszZYvHusFZdVtAyR"
+                    class="topper-card-link"
+                >
+
+                    <div class="topper-card">
+
+                        <div class="topper-medal">
+                            🥇
+                        </div>
+
+
+                        <div class="topper-class">
+                            CLASS 6
+                        </div>
+
+
+                        <div class="topper-title">
+                            CLASS TOPPER
+                        </div>
+
+
+                        <div class="topper-name">
+                            Shivam Debnath
+                        </div>
+
+
+                        <div class="topper-score">
+                            <span>6.74</span> / 10
+                        </div>
+
+
+                        <div class="topper-label">
+                            Final Average
+                        </div>
+
+
+                        <div class="topper-award topper-no-award">
+                            Class Rank 1
+                        </div>
+
+
+                        <div class="topper-attendance">
+                             ✓ 100% Attendance &amp; Punctuality
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+
+            <!-- CLASS 7 -->
+
+            <div class="col-12 col-sm-6 col-lg-3">
+
+                <a
+                    href="student.html?id=aXaQz3r2Emu7KMOELvFA"
+                    class="topper-card-link"
+                >
+
+                    <div class="topper-card">
+
+                        <div class="topper-medal">
+                            🥇
+                        </div>
+
+
+                        <div class="topper-class">
+                            CLASS 7
+                        </div>
+
+
+                        <div class="topper-title">
+                            CLASS TOPPER
+                        </div>
+
+
+                        <div class="topper-name">
+                            Samprikta Sarkar
+                        </div>
+
+
+                        <div class="topper-score">
+                            <span>6.90</span> / 10
+                        </div>
+
+
+                        <div class="topper-label">
+                            Final Average
+                        </div>
+
+
+                        <div class="topper-award topper-no-award">
+                            Class Rank 1
+                        </div>
+
+
+                        <div class="topper-attendance">
+                            ✓ 80% Attendance
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+
+            <!-- CLASS 8 -->
+
+            <div class="col-12 col-sm-6 col-lg-3">
+
+                <a
+                    href="student.html?id=npibH4CW2TOsBqP9yYLv"
+                    class="topper-card-link"
+                >
+
+                    <div class="topper-card">
+
+                        <div class="topper-medal">
+                            🥇
+                        </div>
+
+
+                        <div class="topper-class">
+                            CLASS 8
+                        </div>
+
+
+                        <div class="topper-title">
+                            CLASS TOPPER
+                        </div>
+
+
+                        <div class="topper-name">
+                            Adrita Giri
+                        </div>
+
+
+                        <div class="topper-score">
+                            <span>6.56</span> / 10
+                        </div>
+
+
+                        <div class="topper-label">
+                            Final Average
+                        </div>
+
+
+                        <div class="topper-award topper-no-award">
+                            Class Rank 1
+                        </div>
+
+
+                        <div class="topper-attendance">
+                              ✓ 100% Attendance &amp; Punctuality
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     PRIZES & CERTIFICATES
+========================= -->
+
+<section class="prizes-section">
+
+    <div class="container">
+
+
+        <div class="text-center mb-5">
+
+            <div class="season-badge">
+                🏆 RECOGNITION &amp; AWARDS
+            </div>
+
+            <h2 class="section-title">
+                PRIZES &amp; CERTIFICATES
+            </h2>
+
+            <p class="section-subtitle">
+                Official recognition based on final average score,
+                rank and attendance.
+            </p>
+
+        </div>
+
+
+
+        <div class="row g-4 justify-content-center">
+
+
+            <!-- CHAMPION TROPHY -->
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="prize-card prize-highlight">
+
+                    <div class="prize-icon">
+                        🏆
+                    </div>
+
+                    <h4>
+                        Champion Trophy
+                    </h4>
+
+                    <p>
+
+                        Awarded to the
+                        <strong>Rank 1 holder</strong>
+                        on the final leaderboard only if they secure
+                        a minimum average score of
+                        <strong>7.50 Points or above</strong>.
+
+                    </p>
+
+                    <div class="prize-note">
+
+                        If Rank 1 falls below 7.50 Points,
+                        no Champion Trophy is awarded.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PERFORMANCE TROPHY -->
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="prize-card prize-highlight">
+
+                    <div class="prize-icon">
+                        🥇
+                    </div>
+
+                    <h4>
+                        Performance Trophy
+                    </h4>
+
+                    <p>
+
+                        Awarded to
+                        <strong>every student</strong>
+                        who maintains an average score of
+                        <strong>8.00 Points or above</strong>.
+
+                    </p>
+
+                    <div class="prize-note">
+
+                        If Rank 1 achieves 8.00+ Points,
+                        they earn both the Champion Trophy
+                        and the Performance Trophy.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- CERTIFICATE OF EXCELLENCE -->
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="prize-card">
+
+                    <div class="prize-icon">
+                        🎓
+                    </div>
+
+                    <h4>
+                        Certificate of Excellence
+                    </h4>
+
+                    <p>
+
+                        Awarded to
+                        <strong>top rank holders</strong>
+                        maintaining an average score of
+                        <strong>8.50 Points or above</strong>.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- MERIT CERTIFICATE -->
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="prize-card">
+
+                    <div class="prize-icon">
+                        📜
+                    </div>
+
+                    <h4>
+                        Merit Certificate
+                    </h4>
+
+                    <p>
+
+                        Awarded to every student maintaining
+                        an average score between
+                        <strong>7.50 and 8.49 Points</strong>.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- 100% ATTENDANCE & PUNCTUALITY -->
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="prize-card">
+
+                    <div class="prize-icon">
+                        ⏱️
+                    </div>
+
+                    <h4>
+                        100% Attendance &amp; Punctuality Certificate
+                    </h4>
+
+                    <p>
+
+                        An additional, dedicated certificate
+                        awarded to any student who attends
+                        <strong>every exam on schedule</strong>.
+
+                    </p>
+
+                    <div class="prize-note">
+
+                        A student can earn two certificates in total
+                        if they qualify for both academic performance
+                        and full attendance.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
 <!-- =========================
      EXPLORE PES
 ========================= -->
@@ -410,6 +1749,7 @@
 <section class="explore-section">
 
     <div class="container">
+
 
         <div class="text-center mb-5">
 
@@ -422,6 +1762,7 @@
             </p>
 
         </div>
+
 
 
         <div class="row g-4 justify-content-center">
@@ -442,9 +1783,11 @@
                     </h4>
 
                     <p>
+
                         View class rankings, student
                         averages and performance trends
                         across published tests.
+
                     </p>
 
                     <a
@@ -457,6 +1800,7 @@
                 </div>
 
             </div>
+
 
 
             <!-- STUDENT PROFILE -->
@@ -474,9 +1818,11 @@
                     </h4>
 
                     <p>
+
                         Open a student's profile from
                         the leaderboard to view detailed
                         performance and progress.
+
                     </p>
 
                     <a
@@ -499,19 +1845,16 @@
 
 
 
-
-
-
-
 <!-- =========================
      FOOTER
 ========================= -->
 
 <footer class="text-center footer py-4">
 
-    Progress Evaluation Series | Teacher:Abhradeep Das 
+    Progress Evaluation Series | Teacher:Abhradeep Das
 
 </footer>
+
 
 
 <script
