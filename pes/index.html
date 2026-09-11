@@ -1457,8 +1457,255 @@ body {
 @keyframes cardSweep{0%,58%{transform:translateX(-65%) rotate(8deg);opacity:0}68%{opacity:1}82%,100%{transform:translateX(65%) rotate(8deg);opacity:0}}
 @media (max-width:390px){.topper-card.topper-champion:hover{transform:translateY(-4px) scale(1.006)}}
 </style>
+
+<style id="pes-opening-modal-style">
+/* =========================================================
+   PES — PROFESSIONAL OPENING MODAL
+   ========================================================= */
+#pesOpeningModal{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(10,20,35,.62);
+  backdrop-filter:blur(9px);
+  -webkit-backdrop-filter:blur(9px);
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .35s ease, visibility .35s ease;
+}
+#pesOpeningModal.is-visible{
+  opacity:1;
+  visibility:visible;
+}
+.pes-modal-card{
+  position:relative;
+  width:min(560px,100%);
+  max-height:92vh;
+  overflow:auto;
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:24px;
+  background:linear-gradient(145deg,#ffffff,#f7faff);
+  box-shadow:0 30px 90px rgba(0,0,0,.28);
+  transform:translateY(22px) scale(.96);
+  transition:transform .45s cubic-bezier(.2,.8,.2,1);
+}
+#pesOpeningModal.is-visible .pes-modal-card{
+  transform:translateY(0) scale(1);
+}
+.pes-modal-topline{
+  height:5px;
+  background:linear-gradient(90deg,#1d4ed8,#60a5fa,#1d4ed8);
+  background-size:200% 100%;
+  animation:pesModalGradient 3s linear infinite;
+}
+.pes-modal-content{padding:28px 28px 24px;text-align:center}
+.pes-modal-kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:7px 12px;
+  border-radius:999px;
+  background:#eef5ff;
+  color:#315b91;
+  border:1px solid #d9e7fb;
+  font-size:10px;
+  font-weight:850;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+.pes-modal-icon{
+  width:66px;height:66px;
+  margin:17px auto 13px;
+  display:grid;place-items:center;
+  border-radius:50%;
+  background:linear-gradient(145deg,#fff,#edf3fa);
+  border:1px solid #dfe7f1;
+  box-shadow:0 10px 28px rgba(37,99,235,.12);
+  font-size:32px;
+  animation:pesModalMedal 2.8s ease-in-out infinite;
+}
+.pes-modal-title{
+  margin:0;
+  color:#162238;
+  font-size:clamp(24px,5vw,34px);
+  line-height:1.08;
+  font-weight:900;
+  letter-spacing:-.035em;
+}
+.pes-modal-subtitle{
+  margin:8px 0 0;
+  color:#617089;
+  font-size:12px;
+  line-height:1.55;
+  font-weight:650;
+}
+.pes-modal-divider{
+  width:56px;height:2px;
+  margin:18px auto;
+  border-radius:2px;
+  background:#3b82f6;
+}
+.pes-modal-message{
+  margin:0 auto;
+  max-width:460px;
+  color:#35445b;
+  font-size:14px;
+  line-height:1.75;
+}
+.pes-modal-message strong{color:#172033}
+.pes-modal-thanks{
+  margin:18px 0 0;
+  color:#1d4ed8;
+  font-size:13px;
+  font-weight:850;
+}
+.pes-modal-sign{
+  margin:17px 0 0;
+  color:#718096;
+  font-size:10px;
+  line-height:1.55;
+  font-weight:700;
+}
+.pes-modal-sign strong{color:#34445c}
+.pes-modal-close{
+  position:absolute;
+  top:13px;right:13px;
+  width:32px;height:32px;
+  border:1px solid #e0e7ef;
+  border-radius:50%;
+  background:#fff;
+  color:#68758a;
+  cursor:pointer;
+  font-size:18px;
+  line-height:1;
+  transition:transform .2s ease,background .2s ease,color .2s ease;
+}
+.pes-modal-close:hover{
+  transform:rotate(90deg);
+  background:#f1f5f9;
+  color:#172033;
+}
+.pes-modal-footer{
+  padding:11px 18px;
+  border-top:1px solid #e7edf4;
+  background:#fbfcfe;
+  color:#8a94a5;
+  text-align:center;
+  font-size:8px;
+  font-weight:750;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+@keyframes pesModalGradient{
+  0%{background-position:0% 50%}
+  100%{background-position:200% 50%}
+}
+@keyframes pesModalMedal{
+  0%,100%{transform:translateY(0) rotate(-2deg)}
+  50%{transform:translateY(-5px) rotate(3deg)}
+}
+@media(max-width:480px){
+  #pesOpeningModal{padding:12px}
+  .pes-modal-card{border-radius:20px}
+  .pes-modal-content{padding:24px 20px 21px}
+  .pes-modal-icon{width:58px;height:58px;font-size:28px;margin-top:15px}
+  .pes-modal-message{font-size:13px;line-height:1.7}
+}
+@media(prefers-reduced-motion:reduce){
+  #pesOpeningModal,.pes-modal-card{transition:none}
+  .pes-modal-icon,.pes-modal-topline{animation:none}
+}
+</style>
+
 </head>
 <body>
+
+<!-- =========================================================
+     PES — OPENING THANK-YOU MODAL
+     ========================================================= -->
+<div id="pesOpeningModal" role="dialog" aria-modal="true" aria-labelledby="pesModalTitle">
+  <div class="pes-modal-card">
+    <div class="pes-modal-topline"></div>
+    <button class="pes-modal-close" type="button" aria-label="Close" onclick="closePESOpeningModal()">×</button>
+
+    <div class="pes-modal-content">
+      <div class="pes-modal-kicker">✦ AbhraInsight Official</div>
+
+      <div class="pes-modal-icon">🏆</div>
+
+      <h2 class="pes-modal-title" id="pesModalTitle">
+        Progress Evaluation Series
+      </h2>
+
+      <p class="pes-modal-subtitle">
+        Edition I — August 2026<br>
+        Results Are Now Out
+      </p>
+
+      <div class="pes-modal-divider"></div>
+
+      <p class="pes-modal-message">
+        Thank you to every student for participating in
+        <strong>PES — Edition I</strong>. Your effort, regular participation
+        and willingness to improve made this evaluation series meaningful.
+      </p>
+
+      <p class="pes-modal-thanks">
+        Thank you for participating in this edition. ✨
+      </p>
+
+      <p class="pes-modal-sign">
+        Presented by <strong>AbhraInsight</strong><br>
+        Designed &amp; Conducted by <strong>Abhradeep Das</strong><br>
+        B.Tech (ECE)
+      </p>
+    </div>
+
+    <div class="pes-modal-footer">
+      Learn Consistently. Improve Continuously. Excel Confidently.
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  function openModal(){
+    var modal=document.getElementById('pesOpeningModal');
+    if(modal){
+      modal.classList.add('is-visible');
+      document.body.classList.add('pes-modal-open');
+    }
+  }
+
+  window.closePESOpeningModal=function(){
+    var modal=document.getElementById('pesOpeningModal');
+    if(modal){
+      modal.classList.remove('is-visible');
+      document.body.classList.remove('pes-modal-open');
+    }
+  };
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape') window.closePESOpeningModal();
+  });
+
+  document.addEventListener('click',function(e){
+    var modal=document.getElementById('pesOpeningModal');
+    if(modal && e.target===modal) window.closePESOpeningModal();
+  });
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',function(){setTimeout(openModal,350);});
+  }else{
+    setTimeout(openModal,350);
+  }
+})();
+</script>
+
 <!-- =========================
      NAVBAR
 ========================= -->
