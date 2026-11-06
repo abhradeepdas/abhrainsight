@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Formula Challenge — Student</title>
+<style>
+:root{--bg:#0b1220;--panel:#151f32;--line:#2b3b55;--text:#edf3ff;--muted:#9eb0ca;--blue:#5aa7ff;--green:#39c98a;--gold:#f4c76b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px system-ui,Arial;padding:20px}main{max-width:720px;margin:auto}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0}label{display:block;color:var(--muted);margin:10px 0 5px}input,select{width:100%;padding:13px;border-radius:9px;border:1px solid var(--line);background:#0d1728;color:var(--text);font:inherit}button{padding:13px 18px;border:0;border-radius:9px;background:var(--blue);font-weight:800;margin-top:12px;width:100%;cursor:pointer}.muted{color:var(--muted)}.question{font-size:25px;font-weight:750;white-space:pre-wrap;line-height:1.4}.score{font-size:32px;font-weight:800}.status{padding:12px;background:#0d1728;border-radius:10px;margin:12px 0;white-space:pre-wrap}.answer-box{border:1px solid #8a7136;background:#282313;border-radius:12px;padding:16px;margin-top:16px}.answer-title{color:var(--gold);font-weight:800;margin-bottom:8px}.answer-text{font-size:21px;font-weight:750;line-height:1.45;white-space:pre-wrap}
+</style>
+</head>
+<body><main>
+<h1>⚗️ The Formula Challenge</h1><div class="muted">Student screen</div>
+<div class="card"><label>Room code</label><input id="room" value="FORMULA26"><label>Your group</label><select id="group"><option value="A">Group A</option><option value="B">Group B</option></select><button id="join">Join quiz</button><div id="connection" class="muted">Not connected</div></div>
+<div class="card"><div class="muted">LIVE SCORES</div><div style="display:flex;justify-content:space-between"><div>Group A<div class="score" id="scoreA">0</div></div><div>Group B<div class="score" id="scoreB">0</div></div></div></div>
+<div class="card"><div id="round" class="muted"></div><div id="status" class="status">Waiting for the quizmaster…</div><div id="question" class="question"></div>
+<div id="answerBox" class="answer-box" hidden><div class="answer-title">ANSWER / EXPLANATION</div><div id="answerText" class="answer-text"></div></div>
+</div>
+</main>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import {getAuth,signInAnonymously} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import {getDatabase,ref,onValue} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
+const firebaseConfig={
+ apiKey:"AIzaSyDEty6lQVH-f_oCsODaGi8M5BUAmgYIcVI",
+ authDomain:"chemistry-formula-challenge.firebaseapp.com",
+ databaseURL:"https://chemistry-formula-challenge-default-rtdb.asia-southeast1.firebasedatabase.app/",
+ projectId:"chemistry-formula-challenge",
+ storageBucket:"chemistry-formula-challenge.firebasestorage.app",
+ messagingSenderId:"1005256489362",
+ appId:"1:1005256489362:web:13d8f2d071feaaf879294b",
+ measurementId:"G-0WR28RKCW8"
+};
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getDatabase(app),$=id=>document.getElementById(id);
+let room="FORMULA26",group="A",state={},unsubscribers=[];
+const path=p=>ref(db,`quizRooms/${room}/${p}`);
+function render(){
+ $("round").textContent=state.round||"";
+ $("question").textContent=state.question||"";
+ if(state.status==="question")$("status").textContent=`Question for Group ${state.target}. Listen carefully.`;
+ else if(state.status==="bonus")$("status").textContent=`Bonus chance for Group ${state.bonusGroup}.`;
+ else if(state.status==="finished")$("status").textContent="This question is complete. Waiting for the next one…";
+ else $("status").textContent="Waiting for the quizmaster…";
+ if(state.status==="waiting"){$("question").textContent="";$("round").textContent="";}
+ const visible=state.answerVisible===true&&!!state.answerText;
+ $("answerBox").hidden=!visible;
+ $("answerText").textContent=visible?state.answerText:"";
+}
+$("join").onclick=async()=>{
+ room=$("room").value.trim().toUpperCase()||"FORMULA26";group=$("group").value;$("room").value=room;
+ $("connection").textContent="Connecting…";$("join").disabled=true;
+ try{
+  await signInAnonymously(auth);
+  unsubscribers.forEach(fn=>fn());unsubscribers=[];
+  $("connection").textContent=`Connected · ${room} · Group ${group}`;
+  unsubscribers.push(onValue(path("state"),snap=>{state=snap.val()||{};render();}));
+  unsubscribers.push(onValue(path("scores"),snap=>{const v=snap.val()||{};$("scoreA").textContent=v.A||0;$("scoreB").textContent=v.B||0;}));
+ }catch(e){$("connection").textContent="Connection error: "+e.message;}
+ finally{$("join").disabled=false;}
+};
+</script></body></html>

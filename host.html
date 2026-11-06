@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Formula Challenge — Quizmaster</title>
+<style>
+:root{--bg:#0b1220;--panel:#151f32;--line:#2b3b55;--text:#edf3ff;--muted:#9eb0ca;--blue:#5aa7ff;--green:#39c98a;--red:#ff7070}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px system-ui,Arial;padding:18px}
+main{max-width:1000px;margin:auto}h1{margin:0 0 5px}.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin:14px 0}
+label{display:block;color:var(--muted);font-size:14px;margin:10px 0 5px}
+input,textarea,select{width:100%;padding:12px;border-radius:9px;border:1px solid var(--line);background:#0d1728;color:var(--text);font:inherit}
+textarea{min-height:100px;resize:vertical}button{border:0;border-radius:9px;padding:11px 14px;margin:5px 5px 5px 0;font-weight:750;cursor:pointer;background:var(--blue);color:#071322}
+button.secondary{background:#34445d;color:white}button.good{background:var(--green)}button.bad{background:var(--red);color:#250909}button:disabled{opacity:.4;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}.row>div{flex:1;min-width:130px}.score{font-size:32px;font-weight:850}.status{padding:11px;border-radius:9px;background:#0d1728;margin-top:10px;white-space:pre-wrap}
+.question{font-size:21px;font-weight:750;line-height:1.45;white-space:pre-wrap}.answer{padding:12px;border:1px solid var(--line);border-radius:10px;margin:8px 0;background:#0d1728}
+</style></head><body><main>
+<h1>⚗️ The Formula Challenge</h1><div class="muted">Quizmaster control · Abhradeep Das</div>
+
+<section class="card">
+ <div class="row">
+  <div><label>Firebase room code</label><input id="room" value="FORMULA26"></div>
+  <div><button id="connect">Connect to live room</button><div id="connection" class="muted">Not connected</div></div>
+ </div>
+</section>
+
+<section class="card">
+ <h2>Question bank — 64 questions ready</h2>
+ <div class="row">
+  <div><label>Round</label><select id="bankRound">
+   <option value="0">Round 1 — Reactants & Initial Formulas</option>
+   <option value="1">Round 2 — Products, Precipitates & Gases</option>
+   <option value="2">Round 3 — Reaction Conditions & Formula Challenge</option>
+   <option value="3">Round 4 — Advanced Formulas, Oxides & Redox</option>
+  </select></div>
+  <div><label>Question group</label><select id="bankGroup"><option value="A">Group A questions</option><option value="B">Group B questions</option></select></div>
+  <div><label>Question number</label><select id="bankNumber"></select></div>
+ </div>
+ <button id="loadQuestion" class="good">Load selected question</button>
+ <button id="loadNext" class="secondary">Load next question in this group</button>
+ <div class="muted" id="bankInfo">Round 1 · 10 marks · 20 seconds per question</div>
+</section>
+
+<div class="grid">
+ <section class="card">
+  <h2>Publish question</h2>
+  <label>Round / question label</label><input id="roundLabel" placeholder="Round 1 · Question 1">
+  <label>Question (editable)</label><textarea id="question" placeholder="Choose a question above or type your own"></textarea>
+  <label>Correct answer / explanation (auto-filled; editable)</label><textarea id="correct" placeholder="The correct answer will appear here when you select a bank question."></textarea>
+  <label>Which group gets this question?</label><select id="target"><option value="A">Group A</option><option value="B">Group B</option></select>
+  <button id="publish" class="good" disabled>Show question to students</button>
+  <button id="showAnswer" class="good" disabled>Show answer to students</button>
+  <button id="hideAnswer" class="secondary" disabled>Hide answer from students</button>
+  <button id="clearQuestion" class="secondary" disabled>Finish / clear question</button>
+  <div class="status" id="liveStatus">Connect to the room to begin.</div>
+  <div class="question" id="liveQuestion"></div>
+  <div class="status" id="hostAnswerStatus">The answer is hidden from students.</div>
+ </section>
+ <section class="card">
+  <h2>Live scoreboard</h2>
+  <div class="grid"><div><div class="muted">GROUP A</div><div class="score" id="scoreA">0</div></div><div><div class="muted">GROUP B</div><div class="score" id="scoreB">0</div></div></div>
+  <button id="reset" class="bad" disabled>Reset both scores</button>
+  <div class="muted">Students answer verbally. No answer submission is required.</div>
+ </section>
+</div>
+
+<section class="card">
+ <h2>Judge and award points</h2>
+ <p class="muted">Listen to the group's verbal answer and judge it yourself. Primary correct: +2. Primary incorrect: −1 and the other group gets a bonus attempt. Correct bonus answer: +1.</p>
+ <div id="marking" class="status">Waiting for a question.</div>
+ <button id="primaryCorrect" class="good" disabled>Primary correct (+2)</button>
+ <button id="primaryWrong" class="bad" disabled>Primary wrong (−1), open bonus</button>
+ <button id="bonusCorrect" class="good" disabled>Bonus correct (+1)</button>
+ <button id="bonusWrong" class="secondary" disabled>Bonus incorrect (0)</button>
+ <div id="answerReveal" class="status" hidden></div>
+</section>
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getDatabase, ref, onValue, set, update, get } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDEty6lQVH-f_oCsODaGi8M5BUAmgYIcVI",
+  authDomain: "chemistry-formula-challenge.firebaseapp.com",
+  databaseURL: "https://chemistry-formula-challenge-default-rtdb.asia-southeast1.firebasedatabase.app/",
+  projectId: "chemistry-formula-challenge",
+  storageBucket: "chemistry-formula-challenge.firebasestorage.app",
+  messagingSenderId: "1005256489362",
+  appId: "1:1005256489362:web:13d8f2d071feaaf879294b",
+  measurementId: "G-0WR28RKCW8"
+};
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getDatabase(app);
+const $=id=>document.getElementById(id);
+const bank = [
+ {title:"ROUND 1: REACTANTS & INITIAL FORMULAS",marks:10,time:20,A:[
+ "What is the chemical formula of the substance that forms a bright yellow precipitate when added to lead (II) nitrate?",
+ "Write the chemical formula of the compound whose thermal decomposition produces lead oxide and a reddish-brown gas.",
+ "What is the chemical formula of the negative catalyst used to decrease the rate of decomposition of hydrogen peroxide?",
+ "Identify the chemical formula of the substance that combines with sulphur dioxide to form sulphurous acid.",
+ "What is the chemical formula of the green-coloured compound that decomposes on heating to form a black residue and carbon dioxide?",
+ "What is the chemical formula of the salt formed when zinc oxide reacts with nitric acid?",
+ "Give the chemical formula of the compound formed when ammonia and hydrogen chloride gases combine directly.",
+ "What is the chemical formula of the positive catalyst used in the laboratory preparation of oxygen from potassium chlorate?"
+ ],B:[
+ "What is the chemical formula of the lead compound that reacts with potassium iodide to produce a brilliant yellow precipitate?",
+ "Write the chemical formula of the solid compound that produces calcium oxide and carbon dioxide on strong heating.",
+ "What is the chemical formula of the catalyst used in Haber’s process for the manufacture of ammonia?",
+ "What is the chemical formula of the liquid compound electrolysed to produce hydrogen and oxygen gases?",
+ "Identify the chemical formula of the acid present in vinegar that reacts with baking soda.",
+ "What is the chemical formula of the salt produced when potassium hydroxide reacts with sulphuric acid?",
+ "Give the chemical formula of the compound that decomposes into potassium nitrite and oxygen on heating.",
+ "What is the chemical formula of the acid that reacts with barium chloride to form a white precipitate?"
+ ]},
+ {title:"ROUND 2: PRODUCTS, PRECIPITATES & GASES",marks:10,time:20,A:[
+ "What is the chemical formula of the reddish-brown gas evolved when lead nitrate undergoes thermal decomposition?",
+ "What is the chemical formula of the brilliant yellow precipitate formed when potassium iodide reacts with lead (II) nitrate?",
+ "What is the chemical formula of the gas liberated when zinc reacts with sodium hydroxide?",
+ "What is the chemical formula of the green salt formed when an iron nail displaces copper from copper sulphate solution?",
+ "What is the chemical formula of the white precipitate formed when barium chloride reacts with dilute sulphuric acid?",
+ "What is the chemical formula of the gaseous product formed when carbon burns in an insufficient supply of oxygen?",
+ "What is the chemical formula of the sodium salt formed when acetic acid reacts with sodium bicarbonate?",
+ "What is the chemical formula of the black residue remaining when copper carbonate is heated?"
+ ],B:[
+ "What is the chemical formula of the curdy white precipitate formed when silver nitrate reacts with hydrochloric acid?",
+ "What is the chemical formula of the gas that turns lime water milky during the thermal decomposition of copper carbonate?",
+ "What is the chemical formula of the solid product formed when iron and sulphur powder are heated together?",
+ "What is the chemical formula of the sodium zincate salt formed when zinc reacts with sodium hydroxide?",
+ "What is the chemical formula of the gaseous product released during the thermal decomposition of potassium chlorate?",
+ "What is the chemical formula of the yellow solid oxide formed when lead nitrate decomposes on heating?",
+ "What is the chemical formula of the salt produced when zinc oxide reacts with nitric acid?",
+ "What is the chemical formula of the gaseous product formed when nitrogen and hydrogen react under suitable conditions in Haber’s process?"
+ ]},
+ {title:"ROUND 3: REACTION CONDITIONS & FORMULA CHALLENGE",marks:15,time:30,A:[
+ "What is the chemical formula of the compound that decomposes into silver and chlorine when exposed to sunlight?",
+ "What is the chemical formula of the catalyst used in the industrial preparation of nitric oxide from ammonia and oxygen?",
+ "What is the chemical formula of the salt formed when sodium hydroxide neutralises hydrochloric acid?",
+ "What is the chemical formula of the compound that decomposes on heating to produce mercury and oxygen?",
+ "What is the chemical formula of the product formed when phosphorus trichloride reacts with chlorine?",
+ "What is the chemical formula of the gas evolved when magnesium reacts with dilute sulphuric acid?",
+ "What is the chemical formula of the solid product formed when carbon monoxide burns in oxygen?",
+ "What is the chemical formula of the product formed when magnesium reacts with boiling water?"
+ ],B:[
+ "What is the chemical formula of the compound decomposed by electricity during the electrolysis of acidified water?",
+ "What is the chemical formula of the promoter used alongside iron in Haber’s process?",
+ "What is the chemical formula of the compound that decomposes into potassium chloride and oxygen when heated in the presence of manganese dioxide?",
+ "What are the chemical formulae of the two products formed when carbon reacts with steam at high temperature?",
+ "What is the chemical formula of the gas released when copper carbonate undergoes thermal decomposition?",
+ "What is the chemical formula of the solid reactant burned in oxygen to produce carbon dioxide during complete combustion?",
+ "What is the chemical formula of the product formed when sulphur combines with oxygen?",
+ "What is the chemical formula of the gas that combines with hydrogen in the presence of sunlight to form hydrogen chloride?"
+ ]},
+ {title:"ROUND 4: ADVANCED FORMULAS, OXIDES & REDOX",marks:20,time:30,A:[
+ "What is the chemical formula of the neutral oxide of nitrogen known as nitrous oxide?",
+ "Write the chemical formula of the amphoteric oxide that reacts with sodium hydroxide to form sodium zincate?",
+ "In the following reaction, identify the chemical formula of the substance acting as the oxidising agent: 3CuO + 2NH₃ → 3Cu + 3H₂O + N₂",
+ "What is the chemical formula of the neutral oxide of carbon?",
+ "What is the chemical formula of the positive ion formed when a sodium atom loses one electron?",
+ "What is the chemical formula of the alkaline hydroxide formed when potassium oxide reacts with water?",
+ "What is the chemical formula of the lead monoxide used to prepare sodium plumbite by reacting with sodium hydroxide?",
+ "What is the chemical formula of the acidic oxide that dissolves in water to form carbonic acid?"
+ ],B:[
+ "What is the chemical formula of the neutral oxide of nitrogen known as nitric oxide?",
+ "Write the chemical formula of the amphoteric oxide that reacts with sodium hydroxide to form sodium meta-aluminate?",
+ "In the following reaction, identify the chemical formula of the substance acting as the reducing agent: 3CuO + 2NH₃ → 3Cu + 3H₂O + N₂",
+ "What is the chemical formula of the metallic oxide formed when calcium reacts with oxygen?",
+ "What is the chemical formula of sodium plumbite formed when lead monoxide reacts with sodium hydroxide?",
+ "What is the chemical formula of the negative ion formed when a chlorine atom gains one electron?",
+ "What is the chemical formula of the alkaline hydroxide formed when sodium oxide reacts with water?",
+ "What is the chemical formula of the acidic oxide that dissolves in water to form sulphurous acid?"
+ ]}
+];
+const answerBank = [
+ {A:["KI (potassium iodide)","Pb(NO₃)₂ (lead(II) nitrate)","Acetanilide (C₆H₅NHCOCH₃)","H₂O (water)","CuCO₃ (copper(II) carbonate)","Zn(NO₃)₂ (zinc nitrate)","NH₄Cl (ammonium chloride)","MnO₂ (manganese(IV) oxide)"],B:["Pb(NO₃)₂ (lead(II) nitrate)","CaCO₃ (calcium carbonate)","Fe (iron)","H₂O (water)","CH₃COOH (ethanoic acid)","K₂SO₄ (potassium sulphate)","KNO₃ (potassium nitrate)","H₂SO₄ (sulphuric acid)"]},
+ {A:["NO₂ (nitrogen dioxide)","PbI₂ (lead(II) iodide)","H₂ (hydrogen)","FeSO₄ (iron(II) sulphate)","BaSO₄ (barium sulphate)","CO (carbon monoxide)","CH₃COONa (sodium ethanoate)","CuO (copper(II) oxide)"],B:["AgCl (silver chloride)","CO₂ (carbon dioxide)","FeS (iron(II) sulphide)","Na₂ZnO₂ (sodium zincate; traditional school formula)","O₂ (oxygen)","PbO (lead(II) oxide)","Zn(NO₃)₂ (zinc nitrate)","NH₃ (ammonia)"]},
+ {A:["AgCl (silver chloride)","Pt (platinum; usually Pt/Rh catalyst)","NaCl (sodium chloride)","HgO (mercury(II) oxide)","PCl₅ (phosphorus pentachloride)","H₂ (hydrogen)","CO₂ (carbon dioxide)","Mg(OH)₂ (magnesium hydroxide; hydrogen is also released)"] ,B:["H₂O (water)","K₂O (potassium oxide; promoter)","KClO₃ (potassium chlorate)","CO and H₂ (carbon monoxide and hydrogen)","CO₂ (carbon dioxide)","C (carbon)","SO₂ (sulphur dioxide)","Cl₂ (chlorine)"]},
+ {A:["N₂O (nitrous oxide)","ZnO (zinc oxide)","CuO (copper(II) oxide)","CO (carbon monoxide)","Na⁺ (sodium ion)","KOH (potassium hydroxide)","PbO (lead(II) oxide)","CO₂ (carbon dioxide)"],B:["NO (nitric oxide)","Al₂O₃ (aluminium oxide)","NH₃ (ammonia)","CaO (calcium oxide)","Na₂PbO₂ (sodium plumbite; traditional school formula)","Cl⁻ (chloride ion)","NaOH (sodium hydroxide)","SO₂ (sulphur dioxide)"]}
+];
+
+let room="FORMULA26",connected=false,state={},scores={A:0,B:0},privateCorrect="",unsubscribers=[];
+const path=p=>ref(db,`quizRooms/${room}/${p}`);
+function fillQuestionNumbers(){ $("bankNumber").innerHTML=Array.from({length:8},(_,i)=>`<option value="${i}">Question ${i+1}</option>`).join(""); }
+function bankMeta(){const r=bank[+$("bankRound").value];$("bankInfo").textContent=`${r.title} · ${r.marks} marks · ${r.time} seconds per question`;}
+function loadBankQuestion(){const ri=+$("bankRound").value;const r=bank[ri],g=$("bankGroup").value,n=+$("bankNumber").value;$("question").value=r[g][n];$("correct").value=answerBank[ri][g][n];$("roundLabel").value=`Round ${ri+1} · Group ${g} · Question ${n+1}`;$("target").value=g;bankMeta();}
+$("bankRound").onchange=bankMeta;
+$("loadQuestion").onclick=loadBankQuestion;
+$("loadNext").onclick=()=>{let n=+$("bankNumber").value;if(n<7){$("bankNumber").value=String(n+1)}else if(+$("bankRound").value<3){$("bankRound").value=String(+$("bankRound").value+1);$("bankNumber").value="0"}else{return alert("That group has reached the end of the question bank.")}loadBankQuestion();};
+fillQuestionNumbers();bankMeta();loadBankQuestion();
+
+function render(){
+ $("scoreA").textContent=scores.A||0;$("scoreB").textContent=scores.B||0;
+ $("liveQuestion").textContent=state.question||"";
+ $("liveStatus").textContent=state.status==="bonus"?`Bonus chance: Group ${state.bonusGroup}`:(state.status==="question"?`Question assigned to Group ${state.target}.`:state.status||"Ready");
+ $("marking").textContent=state.status==="bonus"?`Group ${state.bonusGroup} has the bonus chance. Primary group: ${state.target}.`:state.status==="question"?`Question assigned to Group ${state.target}. Listen to the verbal answer and judge it.`:"No active question.";
+ const active=state.status==="question"||state.status==="bonus";
+ $("primaryCorrect").disabled=!connected||state.status!=="question";
+ $("primaryWrong").disabled=!connected||state.status!=="question";
+ $("bonusCorrect").disabled=!connected||state.status!=="bonus";
+ $("bonusWrong").disabled=!connected||state.status!=="bonus";
+ $("showAnswer").disabled=!connected||!active;
+ $("hideAnswer").disabled=!connected||!state.answerVisible;
+ $("hostAnswerStatus").textContent=state.answerVisible?"Answer is currently visible to students.":"The answer is hidden from students.";
+}
+
+async function connect(){
+ room=$("room").value.trim().toUpperCase()||"FORMULA26";
+ $("room").value=room;$("connection").textContent="Connecting…";$("connect").disabled=true;
+ try{
+  await signInAnonymously(auth);
+  unsubscribers.forEach(unsubscribe=>unsubscribe());unsubscribers=[];
+  connected=true;$("connection").textContent="Connected · "+room;
+  ["publish","clearQuestion","reset"].forEach(id=>$(id).disabled=false);
+  unsubscribers.push(onValue(path("state"),s=>{state=s.val()||{};render();}));
+  unsubscribers.push(onValue(path("scores"),s=>{scores=s.val()||{A:0,B:0};render();}));
+ }catch(e){connected=false;$("connection").textContent="Connection error: "+e.message;}
+ finally{$("connect").disabled=false;}
+}
+$("connect").onclick=connect;
+$("publish").onclick=async()=>{
+ const q=$("question").value.trim();if(!q)return alert("Load or type a question first.");
+ if(!connected)return alert("Connect to the live room first.");
+ const qid=String(Date.now());privateCorrect=$("correct").value.trim();
+ $("publish").disabled=true;
+ try{
+  await set(path("state"),{qid,round:$("roundLabel").value.trim(),question:q,target:$("target").value,status:"question",bonusGroup:null,answerText:"",answerVisible:false});
+  $("answerReveal").hidden=true;$("answerReveal").textContent="";
+ }catch(e){alert("Could not publish question: "+e.message);}
+ finally{$("publish").disabled=false;}
+};
+$("showAnswer").onclick=async()=>{
+ if(!connected)return alert("Connect to the live room first.");
+ const answer=$("correct").value.trim();if(!answer)return alert("Enter the answer first.");
+ try{await update(path("state"),{answerText:answer,answerVisible:true});}
+ catch(e){alert("Could not show the answer: "+e.message);}
+};
+$("hideAnswer").onclick=async()=>{
+ if(!connected)return;
+ try{await update(path("state"),{answerVisible:false});}
+ catch(e){alert("Could not hide the answer: "+e.message);}
+};
+$("clearQuestion").onclick=async()=>{
+ if(!connected)return alert("Connect to the live room first.");
+ $("clearQuestion").disabled=true;
+ try{
+  await set(path("state"),{status:"waiting",question:"",target:"A",bonusGroup:null,qid:String(Date.now()),answerText:"",answerVisible:false});
+  privateCorrect="";$("answerReveal").hidden=true;$("answerReveal").textContent="";render();
+ }catch(e){alert("Could not clear question: "+e.message);}
+ finally{$("clearQuestion").disabled=false;}
+};
+async function award(group,delta){
+ const snap=await get(path("scores"));
+ const s=snap.val()||{A:0,B:0};
+ await update(path("scores"),{[group]:(s[group]||0)+delta});
+}
+async function finishAction(buttonIds,action){
+ buttonIds.forEach(id=>$(id).disabled=true);
+ try{
+  await action();
+ }catch(e){
+  alert("Could not update the quiz: "+e.message);
+  render();
+ }
+}
+$("primaryCorrect").onclick=()=>finishAction(
+ ["primaryCorrect","primaryWrong"],
+ async()=>{await award(state.target,2);await update(path("state"),{status:"finished"});}
+);
+$("primaryWrong").onclick=()=>finishAction(
+ ["primaryCorrect","primaryWrong"],
+ async()=>{await award(state.target,-1);await update(path("state"),{status:"bonus",bonusGroup:state.target==="A"?"B":"A"});}
+);
+$("bonusCorrect").onclick=()=>finishAction(
+ ["bonusCorrect","bonusWrong"],
+ async()=>{await award(state.bonusGroup,1);await update(path("state"),{status:"finished"});}
+);
+$("bonusWrong").onclick=()=>finishAction(
+ ["bonusCorrect","bonusWrong"],
+ async()=>{await update(path("state"),{status:"finished"});}
+);
+$("reset").onclick=async()=>{if(confirm("Reset both group scores to zero?"))await set(path("scores"),{A:0,B:0});};
+</script></body></html>
