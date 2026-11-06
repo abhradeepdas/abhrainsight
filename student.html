@@ -2,20 +2,25 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Formula Challenge — Student</title>
+<title>AbhraInsight | The Formula Challenge — Student</title>
 <style>
 :root{--bg:#0b1220;--panel:#151f32;--line:#2b3b55;--text:#edf3ff;--muted:#9eb0ca;--blue:#5aa7ff;--green:#39c98a;--gold:#f4c76b}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px system-ui,Arial;padding:20px}main{max-width:720px;margin:auto}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0}label{display:block;color:var(--muted);margin:10px 0 5px}input,select{width:100%;padding:13px;border-radius:9px;border:1px solid var(--line);background:#0d1728;color:var(--text);font:inherit}button{padding:13px 18px;border:0;border-radius:9px;background:var(--blue);font-weight:800;margin-top:12px;width:100%;cursor:pointer}.muted{color:var(--muted)}.question{font-size:25px;font-weight:750;white-space:pre-wrap;line-height:1.4}.score{font-size:32px;font-weight:800}.status{padding:12px;background:#0d1728;border-radius:10px;margin:12px 0;white-space:pre-wrap}.answer-box{border:1px solid #8a7136;background:#282313;border-radius:12px;padding:16px;margin-top:16px}.answer-title{color:var(--gold);font-weight:800;margin-bottom:8px}.answer-text{font-size:21px;font-weight:750;line-height:1.45;white-space:pre-wrap}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px system-ui,Arial;padding:20px}main{max-width:720px;margin:auto}.brandbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:5px 2px 16px;border-bottom:1px solid var(--line);margin-bottom:18px}.brandmark{font-weight:950;letter-spacing:.08em;font-size:18px;color:#f4c76b}.brandtag{font-size:12px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase}.brandfoot{text-align:center;color:var(--muted);font-size:12px;padding:18px 8px 8px;letter-spacing:.04em}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0}label{display:block;color:var(--muted);margin:10px 0 5px}input,select{width:100%;padding:13px;border-radius:9px;border:1px solid var(--line);background:#0d1728;color:var(--text);font:inherit}button{padding:13px 18px;border:0;border-radius:9px;background:var(--blue);font-weight:800;margin-top:12px;width:100%;cursor:pointer}.muted{color:var(--muted)}.question{font-size:25px;font-weight:750;white-space:pre-wrap;line-height:1.4}.score{font-size:32px;font-weight:800}.status{padding:12px;background:#0d1728;border-radius:10px;margin:12px 0;white-space:pre-wrap}.answer-box{border:1px solid #8a7136;background:#282313;border-radius:12px;padding:16px;margin-top:16px}.answer-title{color:var(--gold);font-weight:800;margin-bottom:8px}.answer-text{font-size:21px;font-weight:750;line-height:1.45;white-space:pre-wrap}
+.feedback-pop{position:fixed;z-index:50;left:50%;top:18px;transform:translate(-50%,-160%);padding:16px 24px;border-radius:16px;font-size:20px;font-weight:900;text-align:center;box-shadow:0 12px 40px #0008;pointer-events:none;min-width:min(90vw,320px)}.feedback-pop.show{animation:feedbackIn 5s ease both}.feedback-pop.correct{background:#123f32;color:#aaffd5;border:2px solid #39c98a}.feedback-pop.wrong{background:#481f2a;color:#ffd0d0;border:2px solid #ff7070}.feedback-pop.wrong.show{animation:wrongShake 5s ease both}.winner-panel{position:fixed;inset:0;z-index:60;display:none;place-items:center;background:#050b18ed;padding:20px;overflow:hidden}.winner-panel.show{display:grid}.winner-card{position:relative;z-index:2;text-align:center;max-width:560px;width:100%;padding:34px 24px;border:2px solid #f4c76b;border-radius:24px;background:linear-gradient(145deg,#202c46,#101a2d);box-shadow:0 0 55px #f4c76b55;animation:winnerPop .75s cubic-bezier(.2,1.5,.5,1) both}.winner-cup{font-size:76px;animation:cupBounce 1.2s ease-in-out infinite}.winner-title{font-size:clamp(30px,7vw,52px);font-weight:950;color:#ffe08a;margin:8px 0}.winner-name{font-size:clamp(25px,5vw,38px);font-weight:900}.winner-score{color:#c5d5ef;font-size:18px;margin-top:10px}.confetti{position:absolute;inset:-20%;background-image:radial-gradient(circle,#ffd166 2px,transparent 3px),radial-gradient(circle,#39c98a 2px,transparent 3px),radial-gradient(circle,#5aa7ff 2px,transparent 3px),radial-gradient(circle,#ff7070 2px,transparent 3px);background-size:83px 97px,113px 127px,71px 89px,137px 107px;animation:confettiFall 5s linear infinite;opacity:.8}@keyframes feedbackIn{0%{transform:translate(-50%,-160%) scale(.7);opacity:0}8%{transform:translate(-50%,0) scale(1);opacity:1}88%{transform:translate(-50%,0) scale(1);opacity:1}100%{transform:translate(-50%,-30%) scale(.95);opacity:0}}@keyframes wrongShake{0%{transform:translate(-50%,-160%);opacity:0}5%{transform:translate(calc(-50% - 12px),0);opacity:1}8%{transform:translate(calc(-50% + 10px),0);opacity:1}11%{transform:translate(calc(-50% - 7px),0);opacity:1}14%{transform:translate(calc(-50% + 5px),0);opacity:1}17%,88%{transform:translate(-50%,0);opacity:1}100%{transform:translate(-50%,-30%);opacity:0}}@keyframes winnerPop{from{transform:scale(.35) rotate(-8deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}@keyframes cupBounce{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-12px) rotate(5deg)}}@keyframes confettiFall{from{transform:translateY(-10%) rotate(0)}to{transform:translateY(15%) rotate(20deg)}}
 </style>
 </head>
 <body><main>
+<header class="brandbar"><div><div class="brandmark">ABHRAINSIGHT</div><div class="brandtag">Learn · Grow</div></div><div class="muted">An interactive learning challenge</div></header>
 <h1>⚗️ The Formula Challenge</h1><div class="muted">Student screen</div>
 <div class="card"><label>Room code</label><input id="room" value="FORMULA26"><label>Your group</label><select id="group"><option value="A">Group A</option><option value="B">Group B</option></select><button id="join">Join quiz</button><div id="connection" class="muted">Not connected</div></div>
-<div class="card"><div class="muted">LIVE SCORES</div><div style="display:flex;justify-content:space-between"><div>Group A<div class="score" id="scoreA">0</div></div><div>Group B<div class="score" id="scoreB">0</div></div></div></div>
+<div class="card"><div class="muted">LIVE SCORES</div><div style="display:flex;justify-content:space-between"><div><div id="teamLabelA">Group A</div><div class="score" id="scoreA">0</div></div><div><div id="teamLabelB">Group B</div><div class="score" id="scoreB">0</div></div></div></div>
 <div class="card"><div id="round" class="muted"></div><div id="status" class="status">Waiting for the quizmaster…</div><div id="question" class="question"></div>
 <div id="answerBox" class="answer-box" hidden><div class="answer-title">ANSWER / EXPLANATION</div><div id="answerText" class="answer-text"></div></div>
 </div>
 </main>
+<footer class="brandfoot">ABHRAINSIGHT · Learn · Grow · The Formula Challenge</footer>
+<div id="feedbackPop" class="feedback-pop" aria-live="assertive"></div>
+<div id="winnerPanel" class="winner-panel" role="dialog" aria-modal="true"><div class="confetti"></div><div class="winner-card"><div class="brandmark">ABHRAINSIGHT</div><div class="brandtag">The Formula Challenge</div><div class="winner-cup">🏆</div><div class="winner-title" id="winnerHeading">WINNER!</div><div class="winner-name" id="winnerName"></div><div class="winner-score" id="winnerScore"></div></div></div>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {getAuth,signInAnonymously} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
@@ -31,16 +36,27 @@ const firebaseConfig={
  measurementId:"G-0WR28RKCW8"
 };
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getDatabase(app),$=id=>document.getElementById(id);
-let room="FORMULA26",group="A",state={},unsubscribers=[];
+let room="FORMULA26",group="A",state={},teamNames={A:"Group A",B:"Group B"},unsubscribers=[],feedbackTimer=null;
 const path=p=>ref(db,`quizRooms/${room}/${p}`);
+function showFeedback(type,message){const el=$("feedbackPop");el.className=`feedback-pop ${type}`;el.textContent=message;void el.offsetWidth;el.classList.add("show");clearTimeout(feedbackTimer);feedbackTimer=setTimeout(()=>{el.className="feedback-pop";},5200);}
 function render(){
  $("round").textContent=state.round||"";
+ $("teamLabelA").textContent=teamNames.A;$("teamLabelB").textContent=teamNames.B;
  $("question").textContent=state.question||"";
- if(state.status==="question")$("status").textContent=`Question for Group ${state.target}. Listen carefully.`;
- else if(state.status==="bonus")$("status").textContent=`Bonus chance for Group ${state.bonusGroup}.`;
+ if(state.status==="question")$("status").textContent=`Question for ${teamNames[state.target]||"Group "+state.target}. Listen carefully.`;
+ else if(state.status==="bonus")$("status").textContent=`Bonus chance for ${teamNames[state.bonusGroup]||"Group "+state.bonusGroup}.`;
  else if(state.status==="finished")$("status").textContent="This question is complete. Waiting for the next one…";
+ else if(state.status==="quizFinished")$("status").textContent="The quiz has ended. Final results are announced!";
  else $("status").textContent="Waiting for the quizmaster…";
  if(state.status==="waiting"){$("question").textContent="";$("round").textContent="";}
+ if(state.feedbackNonce&&state.feedbackNonce!==window.lastFeedbackNonce){window.lastFeedbackNonce=state.feedbackNonce;showFeedback(state.feedbackType||"correct",state.feedbackText||"");}
+ if(state.status==="quizFinished"){
+  const tie=state.winnerGroup==="TIE";
+  $("winnerHeading").textContent=tie?"IT’S A TIE!":"CHAMPIONS!";
+  $("winnerName").textContent=tie?"Both teams performed equally!":(state.winnerName||teamNames[state.winnerGroup]||"Winner");
+  $("winnerScore").textContent=`Final score · ${teamNames.A}: ${state.finalScoreA??window.finalScores?.A??0}  |  ${teamNames.B}: ${state.finalScoreB??window.finalScores?.B??0}`;
+  $("winnerPanel").classList.add("show");
+ }else $("winnerPanel").classList.remove("show");
  const visible=state.answerVisible===true&&!!state.answerText;
  $("answerBox").hidden=!visible;
  $("answerText").textContent=visible?state.answerText:"";
@@ -53,7 +69,8 @@ $("join").onclick=async()=>{
   unsubscribers.forEach(fn=>fn());unsubscribers=[];
   $("connection").textContent=`Connected · ${room} · Group ${group}`;
   unsubscribers.push(onValue(path("state"),snap=>{state=snap.val()||{};render();}));
-  unsubscribers.push(onValue(path("scores"),snap=>{const v=snap.val()||{};$("scoreA").textContent=v.A||0;$("scoreB").textContent=v.B||0;}));
+  unsubscribers.push(onValue(path("scores"),snap=>{const v=snap.val()||{};window.finalScores={A:v.A||0,B:v.B||0};$("scoreA").textContent=v.A||0;$("scoreB").textContent=v.B||0;}));
+  unsubscribers.push(onValue(path("teamNames"),snap=>{teamNames={A:"Group A",B:"Group B",...(snap.val()||{})};const sel=$("group"),chosen=sel.value;sel.innerHTML=`<option value="A">${teamNames.A}</option><option value="B">${teamNames.B}</option>`;sel.value=chosen;render();}));
  }catch(e){$("connection").textContent="Connection error: "+e.message;}
  finally{$("join").disabled=false;}
 };
