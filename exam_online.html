@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AbhraInsight | CBSE Class 10 IT (402) Examination</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+:root{--primary:#2457a7;--dark:#172033;--bg:#f4f6fa}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#202124;font-family:Arial,Helvetica,sans-serif}
+.exam-navbar{background:#fff;border-bottom:1px solid #e5e7eb;box-shadow:0 2px 10px rgba(0,0,0,.06);position:sticky;top:0;z-index:1000}
+.nav-inner{min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:12px}.brand-badge{width:44px;height:42px;border-radius:10px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
+.brand-title{line-height:1.1}.brand-title strong{display:block;font-size:17px}.brand-title span{color:#6b7280;font-size:12px}
+.exam-meta{display:flex;align-items:center;gap:18px;font-size:14px;color:#4b5563}.teacher{font-weight:600}.time{color:var(--primary);font-weight:700}
+.exam-shell{width:100%;max-width:1500px;margin:0 auto;padding:20px 22px 40px}
+.exam-heading{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:18px 22px;margin-bottom:15px;box-shadow:0 3px 14px rgba(0,0,0,.05)}
+.heading-row{display:flex;justify-content:space-between;align-items:center;gap:15px}.heading-row h1{margin:0;font-size:24px;font-weight:750;color:var(--dark)}
+.subtitle{margin:5px 0 0;color:#6b7280;font-size:14px}.status{white-space:nowrap;border-radius:20px;padding:7px 13px;background:#ecfdf3;color:#087443;font-size:13px;font-weight:700}
+.control-bar{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:12px 15px;margin-bottom:15px}
+.control-grid{display:grid;grid-template-columns:280px 1fr auto;align-items:center;gap:14px}.test-label{font-size:12px;color:#6b7280;font-weight:700;text-transform:uppercase;margin-bottom:4px}
+.test-info{font-size:14px;font-weight:600}.form-select{min-height:42px}
+.instructions{background:#fffdf5;border:1px solid #f0df9c;border-radius:12px;padding:12px 16px;margin-bottom:15px}
+.instructions strong{color:#6b5200;font-size:14px}.instructions ul{margin:6px 0 0 18px;padding:0;color:#685b2a;font-size:13px}.instructions li{margin:3px 0}
+#offlineWarning{display:none;background:#c62828;color:#fff;padding:15px 20px;text-align:center;font-weight:bold;position:sticky;top:64px;z-index:999;box-shadow:0 4px 12px rgba(0,0,0,.25);animation:pulse 1.5s infinite}
+.warning-title{font-size:17px;margin-bottom:4px}.warning-text{font-size:14px;font-weight:normal;line-height:1.5}@keyframes pulse{50%{opacity:.88}}
+.paper{background:#fff;border:1px solid #dfe3e8;border-radius:14px;box-shadow:0 4px 18px rgba(0,0,0,.07);overflow:hidden}
+.paper-header{padding:11px 18px;border-bottom:1px solid #e8eaed;display:flex;justify-content:space-between;align-items:center;background:#fafbfc}
+.paper-header strong{font-size:14px}.paper-header span{font-size:12px;color:#6b7280}
+.google-form-frame{width:100%;height:1200px;min-height:1200px;border:0;display:block;background:#fff}
+.exam-footer{text-align:center;color:#7a7f87;font-size:12px;padding:20px 0 0}
+@media(max-width:900px){.exam-shell{padding:12px 10px 25px}.nav-inner{min-height:58px}.exam-meta{gap:8px;font-size:12px}.teacher{display:none}.heading-row{align-items:flex-start}.heading-row h1{font-size:20px}.control-grid{grid-template-columns:1fr;gap:8px}.status{font-size:11px;padding:6px 10px}#offlineWarning{top:58px}.google-form-frame{height:1250px;min-height:1250px}}
+@media(max-width:500px){.brand-badge{width:38px;height:36px;font-size:12px}.brand-title strong{font-size:15px}.brand-title span{font-size:10px}.exam-meta{display:block;text-align:right}.heading-row h1{font-size:18px}.subtitle{font-size:12px}.exam-heading{padding:15px}.paper{border-radius:8px}.paper-header{padding:9px 12px}#offlineWarning .warning-title{font-size:15px}#offlineWarning .warning-text{font-size:12px}}.navbar-brand img {
+    width: 150px;
+    height: auto;
+}
+</style>
+</head>
+<body>
+<header class="exam-navbar"><div class="container-fluid px-3 px-md-4"><div class="nav-inner">
+<a class="navbar-brand d-flex align-items-center gap-2" href="#">
+    <img src="my_logo.png" alt="AbhraInsight Logo">
+    <span>Online Exam</span>
+</a>
+<div class="exam-meta"><span class="teacher">Teacher: Abhradeep Das</span><span>Time: <span id="indiaTime" class="time"></span></span></div>
+</div></div></header>
+
+<div id="offlineWarning" role="alert" aria-live="assertive">
+<div class="warning-title">⚠️ INTERNET CONNECTION LOST!</div>
+<div class="warning-text"><strong>DO NOT SUBMIT THE EXAM.</strong><br>Do not refresh, close, or leave this page. Please <strong>WAIT</strong> until the internet connection is restored.</div>
+</div>
+
+<main class="exam-shell">
+<section class="exam-heading"><div class="heading-row"><div>
+<h1>CBSE Class 10 – Information Technology (402)</h1>
+<p class="subtitle">Online MCQ Examination · Select your question paper set and complete the examination carefully.</p>
+</div><div class="status">● <span id="connectionStatus">ONLINE</span></div></div></section>
+
+<section class="control-bar"><div class="control-grid">
+<div><div class="test-label">Subject</div><div class="test-info">Information Technology (402)</div></div>
+<div><label for="formSelector" class="test-label">Select Question Paper</label>
+<select id="formSelector" class="form-select">
+    <option value="" selected disabled>Choose Your Set</option>
+    <option value="A">SET A</option>
+    <option value="B">SET B</option>
+</select></div>
+<div class="text-md-end"><div class="test-label">Class</div><div class="test-info">CBSE Class 10</div></div>
+</div></section>
+
+<section class="instructions"><strong>Exam Instructions: 70 MCQs</strong><ul>
+<li>Confirm that you have selected the correct question paper set before starting.</li>
+<li>Read each question carefully and select the most appropriate answer.</li>
+<li>Keep your internet connection active throughout the examination.</li>
+<li>If the connection goes OFFLINE, <strong>DO NOT SUBMIT.</strong> Wait until it is restored.</li>
+<li>Do not refresh, close, or leave this page while the examination is in progress.</li>
+<li>Submit the Google Form only after completing the examination.</li>
+</ul></section>
+
+<section class="paper"><div class="paper-header"><strong id="paperTitle">CBSE Class 10 IT (402) – SET A</strong><span>Google Form Examination</span></div>
+<iframe id="googleFormIframe" class="google-form-frame"
+src="https://docs.google.com/forms/d/e/1FAIpQLSfKb6ha6x7PXZ7fxjGsIQIVHoM329t2Z04H-oJXuhOPFjWLlg/viewform?embedded=true"
+title="CBSE Class 10 Information Technology Set A" loading="eager"></iframe>
+</section>
+<footer class="exam-footer">AbhraInsight © 2026</footer>
+</main>
+
+<script>
+const formUrls={
+   
+ A:"https://docs.google.com/forms/d/e/1FAIpQLSfKb6ha6x7PXZ7fxjGsIQIVHoM329t2Z04H-oJXuhOPFjWLlg/viewform?embedded=true",
+ B:"https://docs.google.com/forms/d/e/1FAIpQLSeLJVSDTZh--h14vatNtdA-2UZN_J6Ra2hJxxvYhupsGeefHw/viewform?embedded=true"
+};
+const selector=document.getElementById("formSelector");
+const frame=document.getElementById("googleFormIframe");
+const paperTitle=document.getElementById("paperTitle");
+selector.addEventListener("change", () => {
+    const set = selector.value;
+
+    if (!set || selector.disabled) return;
+
+    // Lock immediately after the first selection
+    selector.disabled = true;
+
+    frame.src = formUrls[set];
+    paperTitle.textContent = `CBSE Class 10 IT (402) – SET ${set}`;
+    frame.title = `CBSE Class 10 Information Technology Set ${set}`;
+});
+function updateIndiaTime(){
+ const options={timeZone:"Asia/Kolkata",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:true};
+ document.getElementById("indiaTime").textContent=new Date().toLocaleTimeString("en-IN",options);
+}
+updateIndiaTime();setInterval(updateIndiaTime,1000);
+function updateConnectionStatus(){
+ const online=navigator.onLine;
+ const status=document.getElementById("connectionStatus");
+ document.getElementById("offlineWarning").style.display=online?"none":"block";
+ status.textContent=online?"ONLINE":"OFFLINE";
+ status.style.color=online?"#087443":"#c62828";
+}
+window.addEventListener("online",()=>{
+ updateConnectionStatus();
+ alert("Internet connection restored. Please check that the Google Form is available before continuing or submitting.");
+});
+window.addEventListener("offline",updateConnectionStatus);
+updateConnectionStatus();
+document.addEventListener("contextmenu",event=>event.preventDefault());
+</script>
+</body>
+</html>
